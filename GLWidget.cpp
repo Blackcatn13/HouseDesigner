@@ -5,7 +5,6 @@
 GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent)
 {
     setMouseTracking(true);
-    shaders = true;
 }
 
 GLWidget::~GLWidget()
@@ -74,11 +73,8 @@ void GLWidget::initializeGL()
 
     // 3) Init shaders
     //----------------------------------------------------------
-    if( shaders)
-    {
-        shader =    new QGLShaderProgram();
-        initializeShaders(QString("gouraud"));
-    }
+    //shader =    new QGLShaderProgram();
+    //initializeShaders(QString("gouraud"));
 }
 
 /*****************************************************************************
@@ -126,11 +122,12 @@ void GLWidget::paintGL()
 void GLWidget::mousePressEvent(QMouseEvent *event)
 {
 
-    if (event->buttons() & Qt::LeftButton)
+    // Crear funcio per fer parets
+    /*if (event->buttons() & Qt::LeftButton)
     {
         posCam.x = event->x();
         posCam.y = event->y();
-    }
+    }*/
 
 }
 
@@ -142,7 +139,8 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
 void GLWidget::mouseMoveEvent(QMouseEvent *event)
 {
 
-    bool update = false;
+    // moure per crear parets
+   /* bool update = false;
 
     if (event->buttons() & Qt::LeftButton)
     {
@@ -157,17 +155,17 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
 
     if(update)
         updateGL();
-
+        */
 }
 
 void GLWidget::wheelEvent(QWheelEvent *event)
 {
-    qDebug() << event->delta();
+    /*qDebug() << event->delta();
     if (event->delta() > 0)
         model ->zoomIn();
     else
         model->zoomOut();
-    updateGL();
+    updateGL();*/
 }
 
 /*****************************************************************************
@@ -177,7 +175,7 @@ void GLWidget::wheelEvent(QWheelEvent *event)
 void GLWidget::keyPressEvent(QKeyEvent* event)
 {
 
-    bool update = true;
+    /*bool update = true;
 
     switch(event->key()) {
     case Qt::Key_W:
@@ -203,7 +201,7 @@ void GLWidget::keyPressEvent(QKeyEvent* event)
     }
 
     if(update)
-        updateGL();
+        updateGL();*/
 
 }
 
@@ -294,67 +292,4 @@ void GLWidget::renderScene(int camera_index)
     // Draw sample model
     model->Dibuixa2();
 
-}
-
-/*****************************************************************************
- * resizeGL()
- *      Called automatically after init, on possible clock events,
- *      or after UpdateGL requests. Controls context painting.
- *****************************************************************************/
-void GLWidget::changeShaders(int isCheck)
-{
-    if(isCheck)
-    {
-        //shader->bind();
-        initializeShaders(QString("gouraud"));
-
-    }
-    else
-    {
-        //shader->release();
-        releaseAllShaders();
-    }
-    updateGL();
-    this->setFocus();
-}
-
-/*****************************************************************************
- * resizeGL()
- *      Called automatically after init, on possible clock events,
- *      or after UpdateGL requests. Controls context painting.
- *****************************************************************************/
-void GLWidget::zoomIn(){
-    model->zoomIn();
-    updateGL();
-    this->setFocus();
-}
-
-/*****************************************************************************
- * resizeGL()
- *      Called automatically after init, on possible clock events,
- *      or after UpdateGL requests. Controls context painting.
- *****************************************************************************/
-void GLWidget::zoomOut(){
-    model->zoomOut();
-    updateGL();
-    this->setFocus();
-}
-
-/*****************************************************************************
- * resizeGL()
- *      Called automatically after init, on possible clock events,
- *      or after UpdateGL requests. Controls context painting.
- *****************************************************************************/
-void GLWidget::changeTextures(int isCheck)
-{
-    if(isCheck)
-    {
-        glEnable(GL_TEXTURE_2D);
-    }
-    else
-    {
-        glDisable(GL_TEXTURE_2D);
-    }
-    updateGL();
-    this->setFocus();
 }

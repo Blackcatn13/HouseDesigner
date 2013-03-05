@@ -1,22 +1,10 @@
-#ifndef _MODEL_H
-#define _MODEL_H
-
-#include "Util.h"
-
-class Model
+#pragma once
+class CModel
 {
 public:
-	Model();
-	~Model();
-	void Dibuixa();
-        void Dibuixa2();
-    void Eixos();
-    void LoadTexture(const char *name, const char *name1);
-    void zoomIn();
-    void zoomOut();
+    CModel(void);
+    ~CModel(void);
+    virtual void render() = 0;
 
-private:
-    float scale;
-    GLuint textures[2];
 };
-#endif /* _MODEL_H */
+

@@ -19,10 +19,6 @@ public:
 public slots:
     void usePerspective();
     void useMultiview();
-    void changeShaders(int isCheck);
-    void changeTextures(int isCheck);
-    void zoomIn();
-    void zoomOut();
 
 protected:
     void initializeGL();

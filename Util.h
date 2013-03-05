@@ -26,15 +26,11 @@
 #include <math.h>
 #include <QDebug>
 
-struct Point3D{
-    GLfloat x;
-    GLfloat y;
-    GLfloat z;
-};
 struct Point2D{
     GLfloat x;
     GLfloat y;
 };
 
 enum Views {PERSPECTIVE, MULTIVIEW};
+enum Modes {EDITOR_2D, EXPLORER, EXPLORER_ISO};
 #endif  /* _UTIL_H */
