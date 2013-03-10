@@ -1,6 +1,11 @@
 #ifndef _UTIL_H
 #define _UTIL_H
 
+#include "Point3D.h"
+#include <string>
+
+using namespace std;
+
 #define PI 3.14159
 
 #ifdef __APPLE__
@@ -29,6 +34,14 @@
 struct Point2D{
     GLfloat x;
     GLfloat y;
+};
+
+struct ModelInfo{
+    CPoint3D position;
+    CPoint3D rotation;
+    CPoint3D scale;
+    string modelName;
+    string textureName;
 };
 
 enum Views {PERSPECTIVE, MULTIVIEW};

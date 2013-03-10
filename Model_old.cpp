@@ -1,18 +1,18 @@
-#include "Model.h"
+#include "Model_old.h"
 #include <QImage>
 #include <QDebug>
 #include <QGLWidget>
 
-Model::Model(){
+Model_old::Model_old(){
     scale = 1;
     LoadTexture("normal.png", "textura.png");
 }
 
-Model::~Model(){
+Model_old::~Model_old(){
 	
 }
 
-void Model::Dibuixa(){
+void Model_old::Dibuixa(){
 
     glBindTexture(GL_TEXTURE_2D, textures[1]);
     glColor3f(1.0,1.0,1.0);
@@ -33,7 +33,7 @@ void Model::Dibuixa(){
     glPopMatrix();
 }
 
-void Model::Dibuixa2(){
+void Model_old::Dibuixa2(){
 
     glColor3f(1.0,1.0,1.0);
     glBindTexture(GL_TEXTURE_2D, textures[0]);
@@ -56,7 +56,7 @@ void Model::Dibuixa2(){
     glPopMatrix();
 }
 
-void Model::Eixos(){
+void Model_old::Eixos(){
 
     glDisable(GL_LIGHTING);
 
@@ -85,7 +85,7 @@ void Model::Eixos(){
 
 }
 
-void Model::LoadTexture(const char *name, const char *name1){
+void Model_old::LoadTexture(const char *name, const char *name1){
     QImage img;
     if( ! img.load( name ) )
     {
@@ -129,11 +129,11 @@ void Model::LoadTexture(const char *name, const char *name1){
 
 }
 
- void Model::zoomIn()
+ void Model_old::zoomIn()
 {
     scale += 0.1;
 }
-void Model::zoomOut()
+void Model_old::zoomOut()
 {
     scale -= 0.1;
 }

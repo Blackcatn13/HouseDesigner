@@ -3,7 +3,7 @@
 
 #include "Util.h"
 
-class Model
+class Model_old
 {
 public:
 	Model();

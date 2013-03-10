@@ -1,10 +1,17 @@
-#pragma once
+#ifndef MODEL_H
+#define MODEL_H
+
+#include <string>
+
+using namespace std;
+
 class CModel
 {
 public:
     CModel(void);
     ~CModel(void);
-    virtual void render() = 0;
-
+    bool Draw();
+    bool LoadModel(string modelName);
 };
 
+#endif
