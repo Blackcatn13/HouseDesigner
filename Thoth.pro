@@ -3,7 +3,8 @@ QT += core \
     opengl
 unix:!macx:LIBS += -lglut \
     -lGLEW \
-    -lGLU
+    -lGLU \
+    -lassimp
 win32:LIBS += "C:\Archivos de programa\Microsoft SDKs\Windows\v6.1\Lib\glew32.lib"
 macx:LIBS += -framework \
     GLUT
