@@ -10,8 +10,11 @@ class CModel
 public:
     CModel(void);
     ~CModel(void);
+    void CleanUp();
     bool Draw();
     bool LoadModel(string modelName);
+private:
+    const struct aiScene* scene;
 };
 
 #endif

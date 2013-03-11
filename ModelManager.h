@@ -21,7 +21,7 @@ public:
     ~CModelManager(void);
     static CModelManager * GetInstance();
     bool Draw(string modelName);
-    
+    void CleanUp();
 private:
     static CModelManager*       m_ModelManager;
     MapModel                    m_Models;

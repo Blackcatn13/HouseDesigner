@@ -12,3 +12,33 @@ CPoint3D::CPoint3D(void)
 CPoint3D::~CPoint3D(void)
 {
 }
+
+CPoint3D CPoint3D::operator*(const CPoint3D p)
+{
+    return CPoint3D();
+}
+
+CPoint3D CPoint3D::operator+(const CPoint3D p)
+{
+    return CPoint3D();
+}
+
+CPoint3D & CPoint3D::operator+=(const CPoint3D p)
+{
+    return CPoint3D();
+}
+
+CPoint3D CPoint3D::operator-(const CPoint3D p)
+{
+    return CPoint3D();
+}
+
+CPoint3D & CPoint3D::operator=(const CPoint3D p)
+{
+    return CPoint3D();
+}
+
+bool CPoint3D::operator==(const CPoint3D p)
+{
+    return false;
+}

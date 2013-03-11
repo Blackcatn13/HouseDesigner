@@ -1,6 +1,7 @@
 #include <QtGui/QMouseEvent>
 #include "GLWidget.h"
 #include <QApplication>
+#include "Scenary.h"
 
 GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent)
 {
@@ -13,8 +14,6 @@ GLWidget::~GLWidget()
         delete camera;
     if (illum)
         delete illum;
-    if (model)
-        delete model;
     if (shader)
         delete shader;
 }
@@ -68,8 +67,6 @@ void GLWidget::initializeGL()
     //----------------------------------------------------------
     camera = new Camera();
     illum = new Illumination();
-    model = new Model();
-
 
     // 3) Init shaders
     //----------------------------------------------------------
@@ -279,17 +276,20 @@ void GLWidget::useMultiview()
  *****************************************************************************/
 void GLWidget::renderScene(int camera_index)
 {
+    CScenary *scene = CScenary::getInstance();
     // Update light with its current position
     illum->update();
     // Update camera to its current position
     camera->update(camera_index);
 
     // Draw the coordinate axis to ease user comprehension of the scene
-    model->Eixos();
+    //model->Eixos();
+
     // Draw an sphere representing light position (user interaction purpose)
     illum->draw();
 
+    scene->Draw();
     // Draw sample model
-    model->Dibuixa2();
+    //model->Dibuixa2();
 
 }

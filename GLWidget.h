@@ -4,7 +4,6 @@
 #include "Util.h"
 #include <QtOpenGL/QGLWidget>
 #include <QGLShaderProgram>
-#include "ModelManager.h"
 #include "Camera.h"
 #include "Illumination.h"
 
@@ -33,6 +32,7 @@ private:
     QGLShaderProgram *shader;
     Camera *camera;
     Illumination *illum;
+
 
     Point2D posCam;
     bool texture;

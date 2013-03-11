@@ -11,9 +11,12 @@ public:
     ~CScenary(void);
     bool Draw();
     bool addModel(ModelInfo m_Info);
-
+    bool SaveMap(string fileName);
+    bool LoadMap(string fileName);
+    static CScenary* getInstance();
 private:
-    vector<ModelInfo> m_Models;    
+    vector<ModelInfo> m_Models;  
+    static CScenary* m_Scenary;
 };
 
 #endif

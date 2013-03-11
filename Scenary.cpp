@@ -2,6 +2,8 @@
 #include "Util.h"
 #include "ModelManager.h"
 
+CScenary* CScenary::m_Scenary = 0;
+
 CScenary::CScenary(void)
 {
     m_Models = vector<ModelInfo>();
@@ -10,6 +12,13 @@ CScenary::CScenary(void)
 
 CScenary::~CScenary(void)
 {
+}
+
+CScenary* CScenary::getInstance()
+{
+    if(m_Scenary == NULL)
+        m_Scenary = new CScenary();
+    return m_Scenary;
 }
 
 bool CScenary::addModel(ModelInfo m_Info)
@@ -35,4 +44,16 @@ bool CScenary::Draw()
         glPopMatrix();
     }
     return true;
+}
+
+bool CScenary::SaveMap(string fileName)
+{
+    // Implementation of the save funtion, need to write all the ModelInfo in the m_Info
+    return false;
+}
+
+bool CScenary::LoadMap(string fileName)
+{
+    // Implementation of the read file function, need to read all the ModelInfo to the m_Info
+    return false;
 }
