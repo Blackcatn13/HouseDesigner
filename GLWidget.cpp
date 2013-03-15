@@ -14,8 +14,8 @@ GLWidget::~GLWidget()
         delete camera;
     if (illum)
         delete illum;
-    if (shader)
-        delete shader;
+    //if (shader)
+        //delete shader;
 }
 
 /*****************************************************************************
@@ -172,7 +172,7 @@ void GLWidget::wheelEvent(QWheelEvent *event)
 void GLWidget::keyPressEvent(QKeyEvent* event)
 {
 
-    /*bool update = true;
+    bool update = true;
 
     switch(event->key()) {
     case Qt::Key_W:
@@ -188,17 +188,17 @@ void GLWidget::keyPressEvent(QKeyEvent* event)
         illum->move(0.0,0.2);
         break;
     case Qt::Key_P:
-        shader->bind();
+        //shader->bind();
         break;
     case Qt::Key_O:
-        shader->release();
+        //shader->release();
         break;
     default:
         update = false;
     }
 
     if(update)
-        updateGL();*/
+        updateGL();
 
 }
 
@@ -288,7 +288,7 @@ void GLWidget::renderScene(int camera_index)
     // Draw an sphere representing light position (user interaction purpose)
     illum->draw();
 
-    scene->Draw();
+    scene->DrawAxis();
     // Draw sample model
     //model->Dibuixa2();
 

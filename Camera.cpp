@@ -15,7 +15,7 @@ Camera::Camera()
     anglev = 35;
     Cnear   = .1;
     Cfar    = 500;
-    currentView = MULTIVIEW;
+    currentView = PERSPECTIVE;
 }
 
 Camera::~Camera()

@@ -1,7 +1,5 @@
 #include "Model.h"
-#include <assimp\scene.h>
-#include <assimp\cimport.h>
-#include <assimp\postprocess.h>
+
 
 CModel::CModel(void)
 {

@@ -57,3 +57,32 @@ bool CScenary::LoadMap(string fileName)
     // Implementation of the read file function, need to read all the ModelInfo to the m_Info
     return false;
 }
+
+void CScenary::DrawAxis()
+{
+    glDisable(GL_LIGHTING);
+
+    // Eix X (vermell)
+    glColor3f(1.0,0.0,0.0);
+    glBegin(GL_LINES);
+    glVertex3f(0.0,0.0,0.0);
+    glVertex3f(300.0,0.0,0.0);
+    glEnd();
+
+    // Eix Y (verd)
+    glColor3f(0.0,1.0,0.0);
+    glBegin(GL_LINES);
+    glVertex3f(0.0,0.0,0.0);
+    glVertex3f(0.0,300.0,0.0);
+    glEnd();
+
+    // Eix Z (blau)
+    glColor3f(0.0,0.0,1.0);
+    glBegin(GL_LINES);
+    glVertex3f(0.0,0.0,0.0);
+    glVertex3f(0.0,0.0,300.0);
+    glEnd();
+
+    glEnable(GL_LIGHTING);
+
+}

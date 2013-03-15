@@ -45,7 +45,6 @@
        <attribute name="title">
         <string>Build</string>
        </attribute>
-       <zorder>contextGL</zorder>
       </widget>
       <widget class="QWidget" name="furnish_tab">
        <attribute name="title">
@@ -254,6 +253,22 @@
     <hint type="destinationlabel">
      <x>321</x>
      <y>249</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionExit_2</sender>
+   <signal>triggered()</signal>
+   <receiver>ThothWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>499</x>
+     <y>335</y>
     </hint>
    </hints>
   </connection>

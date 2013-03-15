@@ -2,6 +2,9 @@
 #define MODEL_H
 
 #include <string>
+#include <assimp\scene.h>
+#include <assimp\cimport.h>
+#include <assimp\postprocess.h>
 
 using namespace std;
 
