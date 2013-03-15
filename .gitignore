@@ -20,3 +20,4 @@ Win32/
 *.*~
 *.vspscc
 *.opensdf
+*.lib
