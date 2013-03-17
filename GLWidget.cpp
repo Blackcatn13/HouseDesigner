@@ -2,20 +2,18 @@
 #include "GLWidget.h"
 #include <QApplication>
 #include "Scenary.h"
+#include "Render2D.h"
 
 GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent)
 {
     setMouseTracking(true);
+    actualMode = EDITOR_2D;
 }
 
 GLWidget::~GLWidget()
 {
-    if (camera)
-        delete camera;
-    if (illum)
-        delete illum;
-    //if (shader)
-        //delete shader;
+    // TODO: 
+    // Esborrar els valors del renderMap abans de sortir de l'aplicació
 }
 
 /*****************************************************************************
@@ -63,15 +61,10 @@ void GLWidget::initializeGL()
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
 
-    // 2) Init our own architecture (camera, lights, action!)
-    //----------------------------------------------------------
-    camera = new Camera();
-    illum = new Illumination();
+    // 2) Initi our render modes
+    // Default is Editor_2D
+    initializeRenderMap();
 
-    // 3) Init shaders
-    //----------------------------------------------------------
-    //shader =    new QGLShaderProgram();
-    //initializeShaders(QString("gouraud"));
 }
 
 /*****************************************************************************
@@ -80,14 +73,17 @@ void GLWidget::initializeGL()
  *****************************************************************************/
 void GLWidget::resizeGL(int w, int h)
 {
-
-    camera->setProjection(w,h);
+    // Resize all the render Modes cameras.
+    RenderMapIterator it = renderModes.begin();
+    for(; it != renderModes.end(); ++it)
+    {
+        it->second->SetCameraProjection(w,h);
+    }
 }
 
 /*****************************************************************************
- * resizeGL()
- *      Called automatically after init, on possible clock events,
- *      or after UpdateGL requests. Controls context painting.
+ * paintGL()
+ *      Called to draw the actual render mode scene.
  *****************************************************************************/
 void GLWidget::paintGL()
 {
@@ -97,23 +93,16 @@ void GLWidget::paintGL()
     // DEPTH to ensure correct representation of objects given the depht testing used
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
-    if(camera->getView() == PERSPECTIVE)
+    // Call the draw function of the actual render Mode.
+    RenderMapIterator it = renderModes.find(actualMode);
+    if(it != renderModes.end())
     {
-        camera->setProjection(size().width(), size().height());
-        renderScene();
-    }
-    else
-    {
-        for(int i = 0; i < 4; i++)
-        {
-            camera->setProjection(size().width(), size().height(), i);
-            renderScene(i);
-        }
+        it->second->Draw();
     }
 }
 
 /*****************************************************************************
- * resizeGL()
+ * mousePressEvent()
  *      Called on mouse click. Controls this input.
  *****************************************************************************/
 void GLWidget::mousePressEvent(QMouseEvent *event)
@@ -157,12 +146,15 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
 
 void GLWidget::wheelEvent(QWheelEvent *event)
 {
-    /*qDebug() << event->delta();
-    if (event->delta() > 0)
-        model ->zoomIn();
-    else
-        model->zoomOut();
-    updateGL();*/
+    RenderMapIterator it = renderModes.find(actualMode);
+    if(it != renderModes.end())
+    {
+        if(event->delta() > 0)
+            it->second->AddCameraDistance(0.5);
+        else
+            it->second->AddCameraDistance(-0.5);
+    }
+    updateGL();
 }
 
 /*****************************************************************************
@@ -172,124 +164,31 @@ void GLWidget::wheelEvent(QWheelEvent *event)
 void GLWidget::keyPressEvent(QKeyEvent* event)
 {
 
-    bool update = true;
+    bool update = false;
 
-    switch(event->key()) {
-    case Qt::Key_W:
-        illum->move(-0.2,0.0);
-        break;
-    case Qt::Key_S:
-        illum->move(0.2,0.0);
-        break;
-    case Qt::Key_A:
-        illum->move(0.0,-0.2);
-        break;
-    case Qt::Key_D:
-        illum->move(0.0,0.2);
-        break;
-    case Qt::Key_P:
-        //shader->bind();
-        break;
-    case Qt::Key_O:
-        //shader->release();
-        break;
-    default:
-        update = false;
+    // Call the actual render mode key update to make its changes.
+    RenderMapIterator it = renderModes.find(actualMode);
+    if(it != renderModes.end())
+    {
+        update = it->second->KeyEvent(event->key());
     }
-
+    
     if(update)
         updateGL();
 
 }
 
-/*****************************************************************************
- * initializeShaders()
- *      Loads custom shader by specifying filename (expects frag/vert pair)
- *****************************************************************************/
-void GLWidget::initializeShaders(QString filename)
+void GLWidget::initializeRenderMap()
 {
+    renderModes = RenderMap();
+    renderModes.insert(std::pair<Modes, Render*>(EDITOR_2D, new Render2D()));
+    // TODO:
+    // Afegir els inserts per els renders que falten un cop creats.
 
-    bool result;
-    result = shader->addShaderFromSourceFile( QGLShader::Vertex, filename + ".vert" );
-    if ( !result )
-        qDebug() << "Vertex: " << shader->log();
-    else
-        qDebug() << "Vertex shader works!";
-    result = shader->addShaderFromSourceFile( QGLShader::Fragment, filename + ".frag" );
-    if ( !result )
-        qDebug() << "Fragment: " << shader->log();
-    else
-        qDebug() << "Fragment shader works!";
-    result = shader->link();
-    if ( !result )
-        qDebug() << "Link: " << shader->log();
-    else
-        qDebug() << "Shaders link: OK!";
-    result = shader->bind();
-    if ( !result )
-        qDebug() << "Bind: " << shader->log();
-    else
-        qDebug() << "Shaders bind: OK!";
-
-}
-
-/*****************************************************************************
- * releaseAllShaders()
- *      Unload shaders, return to OpenGL fixed function.
- *****************************************************************************/
-void GLWidget::releaseAllShaders()
-{
-
-    shader->release();
-    shader->removeAllShaders();
-
-}
-
-/*****************************************************************************
- * resizeGL()
- *      Called automatically after init, on possible clock events,
- *      or after UpdateGL requests. Controls context painting.
- *****************************************************************************/
-void GLWidget::usePerspective()
-{
-    camera->setView(PERSPECTIVE);
-    updateGL();
-    this->setFocus();
-}
-
-/*****************************************************************************
- * resizeGL()
- *      Called automatically after init, on possible clock events,
- *      or after UpdateGL requests. Controls context painting.
- *****************************************************************************/
-void GLWidget::useMultiview()
-{
-    camera->setView(MULTIVIEW);
-    updateGL();
-    this->setFocus();
-}
-
-/*****************************************************************************
- * resizeGL()
- *      Called automatically after init, on possible clock events,
- *      or after UpdateGL requests. Controls context painting.
- *****************************************************************************/
-void GLWidget::renderScene(int camera_index)
-{
-    CScenary *scene = CScenary::getInstance();
-    // Update light with its current position
-    illum->update();
-    // Update camera to its current position
-    camera->update(camera_index);
-
-    // Draw the coordinate axis to ease user comprehension of the scene
-    //model->Eixos();
-
-    // Draw an sphere representing light position (user interaction purpose)
-    illum->draw();
-
-    scene->DrawAxis();
-    // Draw sample model
-    //model->Dibuixa2();
-
+    // Resize all the render modes camera.
+    RenderMapIterator it = renderModes.begin();
+    for(; it != renderModes.end(); ++it)
+    {
+        it->second->SetCameraProjection(size().width(), size().height());
+    }
 }

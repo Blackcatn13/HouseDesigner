@@ -9,16 +9,14 @@ public:
     Camera();
     ~Camera();
 
-    void setProjection(int w,int h, int i=0);
+    void setProjection(int w,int h);
     Views getView();
-    void update(int camera_index=0);
+    void update();
     void move(float ah, float av);
-    void setView(Views view);
-
+    void AddDistance(float d);
 private:
     float R,angleh,anglev;
     float Cnear,Cfar;
-    Views currentView;
 };
 
 #endif // CAMERA_H

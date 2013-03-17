@@ -3,9 +3,11 @@
 
 #include "Util.h"
 #include <QtOpenGL/QGLWidget>
-#include <QGLShaderProgram>
-#include "Camera.h"
-#include "Illumination.h"
+#include "Render.h"
+#include <map>
+
+typedef std::map<Modes, Render*> RenderMap;
+typedef std::map<Modes, Render*>::iterator RenderMapIterator;
 
 class GLWidget : public QGLWidget {
 
@@ -14,10 +16,6 @@ class GLWidget : public QGLWidget {
 public:
     GLWidget(QWidget *parent = NULL);
     ~GLWidget();
-
-public slots:
-    void usePerspective();
-    void useMultiview();
 
 protected:
     void initializeGL();
@@ -29,18 +27,11 @@ protected:
     void keyPressEvent(QKeyEvent *event);
 
 private:
-    QGLShaderProgram *shader;
-    Camera *camera;
-    Illumination *illum;
 
+    RenderMap renderModes;
+    Modes actualMode;
 
-    Point2D posCam;
-    bool texture;
-    bool shaders;
-
-    void initializeShaders(QString filename);
-    void releaseAllShaders();
-    void renderScene(int camera_index=0);
+    void initializeRenderMap();
 };
 
 #endif  /* _GLWIDGET_H */

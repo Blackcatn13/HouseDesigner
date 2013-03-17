@@ -5,23 +5,34 @@ unix:!macx:LIBS += -lglut \
     -lGLEW \
     -lGLU \
     -lassimp
-win32:LIBS += "C:\Archivos de programa\Microsoft SDKs\Windows\v6.1\Lib\glew32.lib"
 macx:LIBS += -framework \
     GLUT
 TARGET = Thoth
 TEMPLATE = app
-SOURCES += main.cpp \
-    thothwindow.cpp \
-    Model.cpp \
+SOURCES += Camera.cpp \
+    CameraManager.cpp \
     GLWidget.cpp \
-    Camera.cpp \
-    Illumination.cpp
-HEADERS += thothwindow.h \
-    Util.h \
-    Model.h \
+    Illumination.cpp \
+    main.cpp \
+    Model.cpp \
+    ModelManager.cpp \
+    Point3D.cpp \
+    Render.cpp \
+    Render2D.cpp \
+    Scenary.cpp \
+    thothwindow.cpp
+HEADERS += Camera.h \
+    CameraManager.h \
     GLWidget.h \
-    Camera.h \
-    Illumination.h
+    Illumination.h \
+    Model.h \
+    ModelManager.h \
+    Point3D.h \
+    Render.h \
+    Render2D.h \
+    Scenary.h \
+    thotwindow.h \
+    Util.h 
 FORMS += thothwindow.ui
 OTHER_FILES += simple.vert \
     simple.frag

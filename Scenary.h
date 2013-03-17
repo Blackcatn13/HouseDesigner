@@ -15,6 +15,7 @@ public:
     bool LoadMap(string fileName);
     static CScenary* getInstance();
     void DrawAxis();
+    void DrawGrid();
 private:
     vector<ModelInfo> m_Models;  
     static CScenary* m_Scenary;

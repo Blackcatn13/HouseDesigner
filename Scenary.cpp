@@ -60,8 +60,6 @@ bool CScenary::LoadMap(string fileName)
 
 void CScenary::DrawAxis()
 {
-    glDisable(GL_LIGHTING);
-
     // Eix X (vermell)
     glColor3f(1.0,0.0,0.0);
     glBegin(GL_LINES);
@@ -83,6 +81,38 @@ void CScenary::DrawAxis()
     glVertex3f(0.0,0.0,300.0);
     glEnd();
 
-    glEnable(GL_LIGHTING);
+}
 
+void CScenary::DrawGrid()
+{
+    glColor3f(0.0, 0.0, 0.0);
+    glBegin(GL_POLYGON);
+    glVertex3f(0, 0, -0.01);
+    glVertex3f(25, 0, -0.01);
+    glVertex3f(25, 25, -0.01);
+    glVertex3f(0, 25, -0.01);
+    glEnd();
+    glColor3f(1.0, 1.0, 1.0);
+    glBegin(GL_LINES);
+    for(int i = 0; i < 25; i += 1)
+    {
+        glVertex3f(i, 0, 0);
+        glVertex3f(i, 25, 0);
+        glVertex3f(0, i, 0);
+        glVertex3f(25, i, 0);
+    }
+    glEnd();
+    glEnable (GL_LINE_STIPPLE);
+    glColor3f(0.0, 1.0, 0.0);
+    glLineStipple(1, 0x1111);
+    glBegin(GL_LINES);
+    for(int i = 0; i < 25; i += 1)
+    {
+        glVertex3f((float)i + 0.5, 0, 0);
+        glVertex3f((float)i + 0.5, 25, 0);
+        glVertex3f(0, (float)i + 0.5, 0);
+        glVertex3f(25, (float)i + 0.5, 0);
+    }
+    glEnd();
+    glDisable(GL_LINE_STIPPLE);
 }
