@@ -15,30 +15,36 @@ CPoint3D::~CPoint3D(void)
 
 CPoint3D CPoint3D::operator*(const CPoint3D p)
 {
-    return CPoint3D();
+    return CPoint3D((y*p.z-z*p.y),(z*p.x-x*p.z),(x*p.y-y*p.x));
 }
 
 CPoint3D CPoint3D::operator+(const CPoint3D p)
 {
-    return CPoint3D();
+    return CPoint3D(x + p.x, y + p.y, z + p.z);
 }
 
 CPoint3D & CPoint3D::operator+=(const CPoint3D p)
 {
-    return CPoint3D();
+    x += p.x;
+    y += p.y;
+    z += p.z;
+    return *this;
 }
 
 CPoint3D CPoint3D::operator-(const CPoint3D p)
 {
-    return CPoint3D();
+    return CPoint3D(x - p.x, y - p.y, z - p.z);
 }
 
 CPoint3D & CPoint3D::operator=(const CPoint3D p)
 {
-    return CPoint3D();
+    x = p.x;
+    y = p.y;
+    z = p.z;
+    return *this;
 }
 
 bool CPoint3D::operator==(const CPoint3D p)
 {
-    return false;
+    return (x==p.x && y == p.y && z == p.z);
 }
