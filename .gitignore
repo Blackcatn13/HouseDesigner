@@ -21,3 +21,5 @@ Win32/
 *.vspscc
 *.opensdf
 *.lib
+_UpgradeReport_Files/
+UpgradeLog.xml
