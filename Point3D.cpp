@@ -13,6 +13,13 @@ CPoint3D::~CPoint3D(void)
 {
 }
 
+CPoint3D::CPoint3D(float nx, float ny, float nz)
+{
+    x = nx;
+    y = ny;
+    z = nz;
+}
+
 CPoint3D CPoint3D::operator*(const CPoint3D p)
 {
     return CPoint3D((y*p.z-z*p.y),(z*p.x-x*p.z),(x*p.y-y*p.x));

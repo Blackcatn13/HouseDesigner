@@ -2,9 +2,17 @@
 #include "Scenary.h"
 #include "Camera.h"
 
+
 Render2D::Render2D()
 {
     camera = new Camera();
+    ModelInfo ii;
+    ii.modelName = "Models/ModulParet.obj";
+    ii.position = CPoint3D(0,0,0);
+    ii.scale = CPoint3D(1,1,1);
+    ii.rotation = CPoint3D(0,90,0);
+    CScenary *scene = CScenary::getInstance();
+    scene->addModel(ii);
 }
 
 Render2D::~Render2D()
@@ -19,6 +27,7 @@ void Render2D::Draw()
     CScenary * scene = CScenary::getInstance();
     scene->DrawAxis();
     scene->DrawGrid();
+    scene->Draw();
 }
 
 void Render2D::Update()
@@ -59,4 +68,19 @@ void Render2D::SetCameraProjection(int w, int h)
 void Render2D::AddCameraDistance(float d)
 {
     camera->AddDistance(d);
+}
+
+void Render2D::mousePressEvent(QMouseEvent *event)
+{
+
+}
+
+void Render2D::mouseReleaseEvent(QMouseEvent *event)
+{
+
+}
+    
+void Render2D::mouseMoveEvent(QMouseEvent *event)
+{
+
 }

@@ -16,6 +16,9 @@ public:
     bool KeyEvent(int key);
     void SetCameraProjection(int w, int h);
     void AddCameraDistance(float d);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
 private:
     Camera *camera;
 };

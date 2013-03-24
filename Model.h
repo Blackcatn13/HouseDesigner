@@ -5,6 +5,7 @@
 #include <assimp/scene.h>
 #include <assimp/cimport.h>
 #include <assimp/postprocess.h>
+#include "Util.h"
 
 using namespace std;
 
@@ -18,6 +19,7 @@ public:
     bool LoadModel(string modelName);
 private:
     const struct aiScene* scene;
+    void RecursiveRender(aiNode* node);
 };
 
 #endif

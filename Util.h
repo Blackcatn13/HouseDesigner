@@ -44,6 +44,10 @@ struct ModelInfo{
     string textureName;
 };
 
+#define INIT_WIDTH 800
+#define INIT_HEIGHT 600
+
 enum Views {PERSPECTIVE, MULTIVIEW};
 enum Modes {EDITOR_2D, EXPLORER, EXPLORER_ISO};
+
 #endif  /* _UTIL_H */

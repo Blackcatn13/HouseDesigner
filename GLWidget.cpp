@@ -3,6 +3,7 @@
 #include <QApplication>
 #include "Scenary.h"
 #include "Render2D.h"
+#include "RenderManager.h"
 
 GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent)
 {
@@ -61,10 +62,6 @@ void GLWidget::initializeGL()
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
 
-    // 2) Initi our render modes
-    // Default is Editor_2D
-    initializeRenderMap();
-
 }
 
 /*****************************************************************************
@@ -74,11 +71,8 @@ void GLWidget::initializeGL()
 void GLWidget::resizeGL(int w, int h)
 {
     // Resize all the render Modes cameras.
-    RenderMapIterator it = renderModes.begin();
-    for(; it != renderModes.end(); ++it)
-    {
-        it->second->SetCameraProjection(w,h);
-    }
+    RenderManager* RM = RenderManager::getInstance();
+    RM->setProjection(w, h);
 }
 
 /*****************************************************************************
@@ -94,11 +88,8 @@ void GLWidget::paintGL()
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
     // Call the draw function of the actual render Mode.
-    RenderMapIterator it = renderModes.find(actualMode);
-    if(it != renderModes.end())
-    {
-        it->second->Draw();
-    }
+    RenderManager* RM = RenderManager::getInstance();
+    RM->getRenderMode(actualMode)->Draw();
 }
 
 /*****************************************************************************
@@ -107,14 +98,14 @@ void GLWidget::paintGL()
  *****************************************************************************/
 void GLWidget::mousePressEvent(QMouseEvent *event)
 {
+    RenderManager* RM = RenderManager::getInstance();
+    RM->getRenderMode(actualMode)->mousePressEvent(event);
+}
 
-    // Crear funcio per fer parets
-    /*if (event->buttons() & Qt::LeftButton)
-    {
-        posCam.x = event->x();
-        posCam.y = event->y();
-    }*/
-
+void GLWidget::mouseReleaseEvent(QMouseEvent *event)
+{
+    RenderManager* RM = RenderManager::getInstance();
+    RM->getRenderMode(actualMode)->mouseReleaseEvent(event);
 }
 
 
@@ -124,36 +115,17 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
  *****************************************************************************/
 void GLWidget::mouseMoveEvent(QMouseEvent *event)
 {
-
-    // moure per crear parets
-   /* bool update = false;
-
-    if (event->buttons() & Qt::LeftButton)
-    {
-        camera->move(	posCam.x - event->x(),
-            posCam.y - event->y());
-
-        posCam.x = event->x();
-        posCam.y = event->y();
-
-        update = true;
-    }
-
-    if(update)
-        updateGL();
-        */
+    RenderManager* RM = RenderManager::getInstance();
+    RM->getRenderMode(actualMode)->mouseMoveEvent(event);
 }
 
 void GLWidget::wheelEvent(QWheelEvent *event)
 {
-    RenderMapIterator it = renderModes.find(actualMode);
-    if(it != renderModes.end())
-    {
-        if(event->delta() > 0)
-            it->second->AddCameraDistance(0.5);
-        else
-            it->second->AddCameraDistance(-0.5);
-    }
+    RenderManager* RM = RenderManager::getInstance();
+    if(event->delta() > 0)
+        RM->getRenderMode(actualMode)->AddCameraDistance(0.5);
+    else
+        RM->getRenderMode(actualMode)->AddCameraDistance(-0.5);
     updateGL();
 }
 
@@ -167,28 +139,10 @@ void GLWidget::keyPressEvent(QKeyEvent* event)
     bool update = false;
 
     // Call the actual render mode key update to make its changes.
-    RenderMapIterator it = renderModes.find(actualMode);
-    if(it != renderModes.end())
-    {
-        update = it->second->KeyEvent(event->key());
-    }
+
+    RenderManager* RM = RenderManager::getInstance();
+    RM->getRenderMode(actualMode)->KeyEvent(event->key());
     
     if(update)
         updateGL();
-
-}
-
-void GLWidget::initializeRenderMap()
-{
-    renderModes = RenderMap();
-    renderModes.insert(std::pair<Modes, Render*>(EDITOR_2D, new Render2D()));
-    // TODO:
-    // Afegir els inserts per els renders que falten un cop creats.
-
-    // Resize all the render modes camera.
-    RenderMapIterator it = renderModes.begin();
-    for(; it != renderModes.end(); ++it)
-    {
-        it->second->SetCameraProjection(size().width(), size().height());
-    }
 }

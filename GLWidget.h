@@ -4,10 +4,6 @@
 #include "Util.h"
 #include <QtOpenGL/QGLWidget>
 #include "Render.h"
-#include <map>
-
-typedef std::map<Modes, Render*> RenderMap;
-typedef std::map<Modes, Render*>::iterator RenderMapIterator;
 
 class GLWidget : public QGLWidget {
 
@@ -25,13 +21,10 @@ protected:
     void mouseMoveEvent(QMouseEvent *event);
     void wheelEvent(QWheelEvent *event);
     void keyPressEvent(QKeyEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
 
 private:
-
-    RenderMap renderModes;
     Modes actualMode;
-
-    void initializeRenderMap();
 };
 
 #endif  /* _GLWIDGET_H */

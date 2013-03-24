@@ -7,7 +7,6 @@
 class CScenary
 {
 public:
-    CScenary(void);
     ~CScenary(void);
     bool Draw();
     bool addModel(ModelInfo m_Info);
@@ -17,6 +16,7 @@ public:
     void DrawAxis();
     void DrawGrid();
 private:
+    CScenary(void);
     vector<ModelInfo> m_Models;  
     static CScenary* m_Scenary;
 };

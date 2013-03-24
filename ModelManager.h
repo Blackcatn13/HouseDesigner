@@ -17,7 +17,6 @@ typedef pair<string, CModel*> Model_Pair;
 class CModelManager
 {
 public:
-    CModelManager(void);
     ~CModelManager(void);
     static CModelManager * GetInstance();
     bool Draw(string modelName);
@@ -26,6 +25,7 @@ private:
     static CModelManager*       m_ModelManager;
     MapModel                    m_Models;
 
+    CModelManager(void);
     bool LoadModel(string modelName);
 
 };

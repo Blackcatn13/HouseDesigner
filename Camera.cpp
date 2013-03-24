@@ -51,9 +51,12 @@ void Camera::update()
     cam[0]=R*cos(anglex)*cos(angley);
     cam[1]=R*sin(anglex)*cos(angley);
     cam[2]=R*sin(angley);
-    up[0]=-cos(anglex)*sin(angley);
-    up[1]=-sin(anglex)*sin(angley);
-    up[2]=cos(angley);
+    //up[0]=-cos(anglex)*sin(angley);
+    //up[1]=-sin(anglex)*sin(angley);
+    //up[2]=cos(angley);
+    up[0] = 0;
+    up[1] = 1;
+    up[2] = 0;
 
     // Set camera in OpenGL
     gluLookAt(cam[0],cam[1],cam[2],

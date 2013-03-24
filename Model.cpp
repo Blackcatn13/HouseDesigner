@@ -22,11 +22,68 @@ bool CModel::LoadModel(string modelName)
 
 bool CModel::Draw()
 {
-    // Make the recursive call to draw the scene
-    return false;
+    RecursiveRender(scene->mRootNode);
+    return true;
 }
 
 void CModel::CleanUp()
 {
     aiReleaseImport(scene);
+}
+
+void CModel::RecursiveRender(aiNode* node)
+{
+    glPushMatrix();
+    
+    for(unsigned int n = 0; n < node->mNumMeshes; ++n)
+    {
+        const struct aiMesh* mesh = scene->mMeshes[node->mMeshes[n]];
+
+        // TODO:
+        // Apply material code here when needed
+
+        // TODO:
+        // Ligth code here when needed
+
+        for(unsigned int t = 0; t < mesh->mNumFaces; ++t)
+        {
+            const struct aiFace* face = &mesh->mFaces[t];
+            GLenum face_mode;
+
+            switch(face->mNumIndices)
+            {
+            case 1:
+                face_mode = GL_POINTS;
+                break;
+            case 2:
+                face_mode = GL_LINES;
+                break;
+            case 3:
+                face_mode = GL_TRIANGLES;
+                break;
+            default:
+                face_mode = GL_POLYGON;
+                break;
+            }
+
+        glBegin(face_mode);
+            for(unsigned int i = 0; i < face->mNumIndices; ++i)
+            {
+                int index = face->mIndices[i];
+                if(mesh->mColors[0] != NULL)
+                    glColor4fv((GLfloat*)&mesh->mColors[0][index]);
+                if(mesh->mNormals != NULL)
+                    glNormal3fv(&mesh->mNormals[index].x);
+                glVertex3fv(&mesh->mVertices[index].x);
+            }
+        glEnd();
+        }
+    }
+
+    for(unsigned n = 0; n < node->mNumChildren; ++n)
+    {
+        RecursiveRender(node->mChildren[n]);
+    }
+
+    glPopMatrix();
 }

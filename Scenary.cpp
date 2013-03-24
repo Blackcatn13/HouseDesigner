@@ -87,19 +87,19 @@ void CScenary::DrawGrid()
 {
     glColor3f(0.0, 0.0, 0.0);
     glBegin(GL_POLYGON);
-    glVertex3f(0, 0, -0.01);
-    glVertex3f(25, 0, -0.01);
-    glVertex3f(25, 25, -0.01);
-    glVertex3f(0, 25, -0.01);
+    glVertex3f(0, -0.01, 0);
+    glVertex3f(25, -0.01, 0);
+    glVertex3f(25, -0.01, 25);
+    glVertex3f(0, -0.01, 25);
     glEnd();
     glColor3f(1.0, 1.0, 1.0);
     glBegin(GL_LINES);
     for(int i = 0; i < 25; i += 1)
     {
         glVertex3f(i, 0, 0);
-        glVertex3f(i, 25, 0);
-        glVertex3f(0, i, 0);
-        glVertex3f(25, i, 0);
+        glVertex3f(i, 0, 25);
+        glVertex3f(0, 0, i);
+        glVertex3f(25, 0, i);
     }
     glEnd();
     glEnable (GL_LINE_STIPPLE);
@@ -109,9 +109,9 @@ void CScenary::DrawGrid()
     for(int i = 0; i < 25; i += 1)
     {
         glVertex3f((float)i + 0.5, 0, 0);
-        glVertex3f((float)i + 0.5, 25, 0);
-        glVertex3f(0, (float)i + 0.5, 0);
-        glVertex3f(25, (float)i + 0.5, 0);
+        glVertex3f((float)i + 0.5, 0, 25);
+        glVertex3f(0, 0, (float)i + 0.5);
+        glVertex3f(25, 0, (float)i + 0.5);
     }
     glEnd();
     glDisable(GL_LINE_STIPPLE);
