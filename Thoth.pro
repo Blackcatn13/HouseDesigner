@@ -20,7 +20,8 @@ SOURCES += Camera.cpp \
     Render.cpp \
     Render2D.cpp \
     Scenary.cpp \
-    thothwindow.cpp
+    thothwindow.cpp \
+    RenderManager.cpp
 HEADERS += Camera.h \
     CameraManager.h \
     GLWidget.h \
@@ -32,7 +33,9 @@ HEADERS += Camera.h \
     Render2D.h \
     Scenary.h \
     thotwindow.h \
-    Util.h 
+    Util.h \ 
+    RenderManager.h \
+    thothwindow.h
 FORMS += thothwindow.ui
 OTHER_FILES += simple.vert \
     simple.frag
