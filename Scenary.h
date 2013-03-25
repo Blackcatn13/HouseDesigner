@@ -15,6 +15,7 @@ public:
     static CScenary* getInstance();
     void DrawAxis();
     void DrawGrid();
+    void CleanUp();
 private:
     CScenary(void);
     vector<ModelInfo> m_Models;  

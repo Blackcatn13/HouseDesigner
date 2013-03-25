@@ -12,9 +12,10 @@ class RenderManager
 {
 public:
     ~RenderManager();
-    static RenderManager* getInstance();
-    Render* getRenderMode(Modes m);
-    void setProjection(int w, int h);
+    static RenderManager* GetInstance();
+    Render* GetRenderMode(Modes m);
+    void SetProjection(int w, int h);
+    void CleanUp();
 private:
     RenderManager();
     static RenderManager*   m_RenderManager;

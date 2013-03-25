@@ -54,4 +54,6 @@ void CModelManager::CleanUp()
     {
         modelIt->second->CleanUp();
     }
+
+    m_Models.clear();
 }

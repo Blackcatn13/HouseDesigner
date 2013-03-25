@@ -13,8 +13,8 @@ GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent)
 
 GLWidget::~GLWidget()
 {
-    // TODO: 
-    // Esborrar els valors del renderMap abans de sortir de l'aplicació
+    CScenary::getInstance()->CleanUp();
+    RenderManager::GetInstance()->CleanUp();
 }
 
 /*****************************************************************************
@@ -71,8 +71,8 @@ void GLWidget::initializeGL()
 void GLWidget::resizeGL(int w, int h)
 {
     // Resize all the render Modes cameras.
-    RenderManager* RM = RenderManager::getInstance();
-    RM->setProjection(w, h);
+    RenderManager* RM = RenderManager::GetInstance();
+    RM->SetProjection(w, h);
 }
 
 /*****************************************************************************
@@ -88,8 +88,8 @@ void GLWidget::paintGL()
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
     // Call the draw function of the actual render Mode.
-    RenderManager* RM = RenderManager::getInstance();
-    RM->getRenderMode(actualMode)->Draw();
+    RenderManager* RM = RenderManager::GetInstance();
+    RM->GetRenderMode(actualMode)->Draw();
 }
 
 /*****************************************************************************
@@ -98,14 +98,14 @@ void GLWidget::paintGL()
  *****************************************************************************/
 void GLWidget::mousePressEvent(QMouseEvent *event)
 {
-    RenderManager* RM = RenderManager::getInstance();
-    RM->getRenderMode(actualMode)->mousePressEvent(event);
+    RenderManager* RM = RenderManager::GetInstance();
+    RM->GetRenderMode(actualMode)->mousePressEvent(event);
 }
 
 void GLWidget::mouseReleaseEvent(QMouseEvent *event)
 {
-    RenderManager* RM = RenderManager::getInstance();
-    RM->getRenderMode(actualMode)->mouseReleaseEvent(event);
+    RenderManager* RM = RenderManager::GetInstance();
+    RM->GetRenderMode(actualMode)->mouseReleaseEvent(event);
 }
 
 
@@ -115,17 +115,17 @@ void GLWidget::mouseReleaseEvent(QMouseEvent *event)
  *****************************************************************************/
 void GLWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    RenderManager* RM = RenderManager::getInstance();
-    RM->getRenderMode(actualMode)->mouseMoveEvent(event);
+    RenderManager* RM = RenderManager::GetInstance();
+    RM->GetRenderMode(actualMode)->mouseMoveEvent(event);
 }
 
 void GLWidget::wheelEvent(QWheelEvent *event)
 {
-    RenderManager* RM = RenderManager::getInstance();
+    RenderManager* RM = RenderManager::GetInstance();
     if(event->delta() > 0)
-        RM->getRenderMode(actualMode)->AddCameraDistance(0.5);
+        RM->GetRenderMode(actualMode)->AddCameraDistance(0.5);
     else
-        RM->getRenderMode(actualMode)->AddCameraDistance(-0.5);
+        RM->GetRenderMode(actualMode)->AddCameraDistance(-0.5);
     updateGL();
 }
 
@@ -140,8 +140,8 @@ void GLWidget::keyPressEvent(QKeyEvent* event)
 
     // Call the actual render mode key update to make its changes.
 
-    RenderManager* RM = RenderManager::getInstance();
-    RM->getRenderMode(actualMode)->KeyEvent(event->key());
+    RenderManager* RM = RenderManager::GetInstance();
+    RM->GetRenderMode(actualMode)->KeyEvent(event->key());
     
     if(update)
         updateGL();

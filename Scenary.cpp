@@ -116,3 +116,9 @@ void CScenary::DrawGrid()
     glEnd();
     glDisable(GL_LINE_STIPPLE);
 }
+
+void CScenary::CleanUp()
+{
+    CModelManager::GetInstance()->CleanUp();
+    m_Models.clear();
+}
