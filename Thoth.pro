@@ -10,7 +10,6 @@ macx:LIBS += -framework \
 TARGET = Thoth
 TEMPLATE = app
 SOURCES += Camera.cpp \
-    CameraManager.cpp \
     GLWidget.cpp \
     Illumination.cpp \
     main.cpp \
@@ -23,7 +22,6 @@ SOURCES += Camera.cpp \
     thothwindow.cpp \
     RenderManager.cpp
 HEADERS += Camera.h \
-    CameraManager.h \
     GLWidget.h \
     Illumination.h \
     Model.h \
