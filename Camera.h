@@ -14,9 +14,11 @@ public:
     void update();
     void move(float ah, float av);
     void AddDistance(float d);
+	void setView(Views view);
 private:
     float R,angleh,anglev;
     float Cnear,Cfar;
+	Views currentView;
 };
 
 #endif // CAMERA_H
