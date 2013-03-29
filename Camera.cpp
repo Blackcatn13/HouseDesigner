@@ -38,7 +38,7 @@ void Camera::setProjection(int w, int h)
 			gluPerspective(60.0*h/w,1.0*w/h,Cnear,Cfar);
 		break;
 	case ORTHOGONAL:
-		glOrtho(-1, 1, -1, 1, 0.1f, 1000);
+		glOrtho(-100, 100, -100, 100, -1000, 1000);
 		break;
 	}
 }
@@ -76,9 +76,9 @@ void Camera::update()
 					up[0],up[1],up[2]);
 		break;
 	case ORTHOGONAL:
-		gluLookAt(0.0, 0.0, 100.0,
-                      0.0, 0.0, 0.0,
-                      -1.0, 0.0, 0.0);
+		gluLookAt(0.0, 0.0, 1.0,
+                  0.0, 0.0, 0.0,
+                  -1.0, 0.0, 0.0);
         break;
 	}
 }
