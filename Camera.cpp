@@ -45,12 +45,12 @@ void Camera::setProjection(int w, int h)
 
 void Camera::update()
 {
+    glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
     switch(currentView)
 	{
 	case PERSPECTIVE:
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-
 		float anglex,angley;
 		GLfloat cam[3],up[3];
 
