@@ -76,7 +76,7 @@ void Camera::update()
 					up[0],up[1],up[2]);
 		break;
 	case ORTHOGONAL:
-		gluLookAt(0.0, 0.0, 1.0,
+		gluLookAt(0.0, 1.0, 0.0,
                   0.0, 0.0, 0.0,
                   -1.0, 0.0, 0.0);
         break;
