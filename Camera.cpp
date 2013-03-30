@@ -80,7 +80,7 @@ void Camera::update()
 	case ORTHOGONAL:
         glMatrixMode(GL_PROJECTION);
 	    glLoadIdentity();
-        glOrtho(-1 + orthoZoom, 1 - orthoZoom, -1 + orthoZoom, 1 - orthoZoom, -1, 3.5);
+        glOrtho(-1 + orthoZoom, 1 - orthoZoom, -1 + orthoZoom, 1 - orthoZoom, -10, 50);
 
 		glMatrixMode(GL_MODELVIEW);
 	    glLoadIdentity();
