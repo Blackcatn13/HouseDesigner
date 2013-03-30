@@ -87,7 +87,7 @@ void Camera::update()
 
         gluLookAt(orthoAngleH, 1.0, orthoAngleV,
                   orthoAngleH, 0.0, orthoAngleV,
-                  0.0, 0.0, 1.0);
+                  -1.0, 0.0, 0.0);
         break;
 	}
 }
