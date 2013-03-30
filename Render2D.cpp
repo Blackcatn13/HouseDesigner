@@ -42,16 +42,16 @@ bool Render2D::KeyEvent(int key)
     switch(key)
     {
     case Qt::Key_A:
-        camera->move(0.0,-0.2);
+        camera->move(0.0,-0.6);
         break;
     case Qt::Key_S:
-        camera->move(0.2,0.0);
+        camera->move(0.6,0.0);
         break;
     case Qt::Key_D:
-        camera->move(0.0,0.2);
+        camera->move(0.0,0.6);
         break;
     case Qt::Key_W:
-        camera->move(-0.2,0.0);
+        camera->move(-0.6,0.0);
         break;
     default:
         update = false;

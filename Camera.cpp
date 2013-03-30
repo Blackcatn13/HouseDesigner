@@ -17,6 +17,8 @@ Camera::Camera()
     Cfar    = 500;
 	currentView = ORTHOGONAL;
     orthoZoom = 2.5;
+    orthoAngleH = 0;
+    orthoAngleV = 0;
 }
 
 Camera::~Camera()
@@ -83,17 +85,18 @@ void Camera::update()
 		glMatrixMode(GL_MODELVIEW);
 	    glLoadIdentity();
 
-        gluLookAt(0.0, 1.0, 0.0,
-                  0.0, 0.0, 0.0,
-                  -1.0, 0.0, 0.0);
+        gluLookAt(orthoAngleH, 1.0, orthoAngleV,
+                  orthoAngleH, 0.0, orthoAngleV,
+                  0.0, 0.0, 1.0);
         break;
 	}
 }
 
 void Camera::move(float ah, float av)
 {
-    if(currentView == PERSPECTIVE)
+    switch(currentView)
     {
+    case PERSPECTIVE:
         angleh += ah/2;
         anglev -= av/2;
 
@@ -101,6 +104,11 @@ void Camera::move(float ah, float av)
         if(anglev<0)	anglev=anglev+360;
         if(angleh>=360)	angleh=angleh-360;
         if(angleh<0)	angleh=angleh+360;
+        break;
+    case ORTHOGONAL:
+        orthoAngleH += ah;
+        orthoAngleV += av;
+        break;
     }
 }
 

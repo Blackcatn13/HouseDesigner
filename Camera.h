@@ -16,7 +16,8 @@ public:
     void AddDistance(float d);
 	void setView(Views view);
 private:
-    float R,angleh,anglev,orthoZoom;
+    float R,angleh,anglev;
+    float orthoZoom, orthoAngleH, orthoAngleV;
     float Cnear,Cfar;
 	Views currentView;
 };
