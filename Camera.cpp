@@ -16,6 +16,7 @@ Camera::Camera()
     Cnear   = .1;
     Cfar    = 500;
 	currentView = ORTHOGONAL;
+    orthoZoom = 2.5;
 }
 
 Camera::~Camera()
@@ -38,27 +39,26 @@ void Camera::setProjection(int w, int h)
 			gluPerspective(60.0*h/w,1.0*w/h,Cnear,Cfar);
 		break;
 	case ORTHOGONAL:
-		glOrtho(-100, 100, -100, 100, -1000, 1000);
+        glOrtho(-1 + orthoZoom, 1 - orthoZoom, -1 + orthoZoom, 1 - orthoZoom, -1, 3.5);
 		break;
 	}
 }
 
 void Camera::update()
 {
-    glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
     switch(currentView)
 	{
 	case PERSPECTIVE:
+        glMatrixMode(GL_MODELVIEW);
+	    glLoadIdentity();
+
 		float anglex,angley;
 		GLfloat cam[3],up[3];
 
 		// Rad -> Deg
 		anglex=angleh*PI/180;
 		angley=anglev*PI/180;
-		if(R<1.0) R=1.0;
-
+		
 		// Cam position and up-vector
 		cam[0]=R*cos(anglex)*cos(angley);
 		cam[1]=R*sin(anglex)*cos(angley);
@@ -76,7 +76,14 @@ void Camera::update()
 					up[0],up[1],up[2]);
 		break;
 	case ORTHOGONAL:
-		gluLookAt(0.0, 1.0, 0.0,
+        glMatrixMode(GL_PROJECTION);
+	    glLoadIdentity();
+        glOrtho(-1 + orthoZoom, 1 - orthoZoom, -1 + orthoZoom, 1 - orthoZoom, -1, 3.5);
+
+		glMatrixMode(GL_MODELVIEW);
+	    glLoadIdentity();
+
+        gluLookAt(0.0, 1.0, 0.0,
                   0.0, 0.0, 0.0,
                   -1.0, 0.0, 0.0);
         break;
@@ -99,7 +106,19 @@ void Camera::move(float ah, float av)
 
 void Camera::AddDistance(float d)
 {
-    R += d;
+    switch(currentView)
+    {
+    case PERSPECTIVE:
+        R += d;
+        if(R < 1.0)
+            R = 1.0;
+        break;
+    case ORTHOGONAL:
+        orthoZoom += d;
+        if(orthoZoom < 1.5)
+            orthoZoom = 1.5;
+        break;
+    }
 }
 
 void Camera::setView(Views view)
