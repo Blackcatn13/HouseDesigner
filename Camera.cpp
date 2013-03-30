@@ -85,8 +85,8 @@ void Camera::update()
 		glMatrixMode(GL_MODELVIEW);
 	    glLoadIdentity();
 
-        gluLookAt(orthoAngleH, 1.0, orthoAngleV,
-                  orthoAngleH, 0.0, orthoAngleV,
+        gluLookAt(-orthoAngleH, 1.0, orthoAngleV,
+                  -orthoAngleH, 0.0, orthoAngleV,
                   -1.0, 0.0, 0.0);
         break;
 	}
