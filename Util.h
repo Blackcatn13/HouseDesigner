@@ -47,7 +47,7 @@ struct ModelInfo{
 #define INIT_WIDTH 800
 #define INIT_HEIGHT 600
 
-enum Views {PERSPECTIVE, MULTIVIEW};
+enum Views {PERSPECTIVE, ORTHOGONAL};
 enum Modes {EDITOR_2D, EXPLORER, EXPLORER_ISO};
 
 #endif  /* _UTIL_H */

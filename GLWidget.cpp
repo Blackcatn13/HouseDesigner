@@ -136,13 +136,9 @@ void GLWidget::wheelEvent(QWheelEvent *event)
 void GLWidget::keyPressEvent(QKeyEvent* event)
 {
 
-    bool update = false;
-
     // Call the actual render mode key update to make its changes.
-
     RenderManager* RM = RenderManager::GetInstance();
     RM->GetRenderMode(actualMode)->KeyEvent(event->key());
-    
-    if(update)
-        updateGL();
+
+    updateGL();
 }

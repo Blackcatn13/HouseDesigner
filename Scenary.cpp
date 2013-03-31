@@ -94,7 +94,7 @@ void CScenary::DrawGrid()
     glEnd();
     glColor3f(1.0, 1.0, 1.0);
     glBegin(GL_LINES);
-    for(int i = 0; i < 25; i += 1)
+    for(int i = 0; i < 26; i += 1)
     {
         glVertex3f(i, 0, 0);
         glVertex3f(i, 0, 25);

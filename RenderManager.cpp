@@ -13,11 +13,7 @@ RenderManager::RenderManager()
     // Afegir els inserts per els renders que falten un cop creats.
 
     // Resize all the render modes camera.
-    RenderMapIterator it = m_Renders.begin();
-    for(; it != m_Renders.end(); ++it)
-    {
-        it->second->SetCameraProjection(INIT_WIDTH, INIT_HEIGHT);
-    }
+    SetProjection(INIT_WIDTH, INIT_HEIGHT);
 }
 
 RenderManager::~RenderManager()
