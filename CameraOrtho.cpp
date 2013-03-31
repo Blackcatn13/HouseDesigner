@@ -21,19 +21,19 @@ CameraOrtho::~CameraOrtho()
 
 void CameraOrtho::setProjection(int, int)
 {
-    glOrtho(-1 + orthoZoom, 1 - orthoZoom, -1 + orthoZoom, 1 - orthoZoom, -1, 3.5);
+    glOrtho(-1 + orthoZoom, 1 - orthoZoom, -1 + orthoZoom, 1 - orthoZoom, 0.1, 50);
 }
 
 void CameraOrtho::update()
 {
     glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-    glOrtho(-1 + orthoZoom, 1 - orthoZoom, -1 + orthoZoom, 1 - orthoZoom, -10, 50);
+    glOrtho(-1 + orthoZoom, 1 - orthoZoom, -1 + orthoZoom, 1 - orthoZoom, 0.1, 50);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-    gluLookAt(-orthoAngleH, 1.0, orthoAngleV,
+    gluLookAt(-orthoAngleH, 3.0, orthoAngleV,
                 -orthoAngleH, 0.0, orthoAngleV,
                 -1.0, 0.0, 0.0);
 }

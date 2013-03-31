@@ -71,17 +71,18 @@ void Render2D::AddCameraDistance(float d)
     camera->AddDistance(d);
 }
 
-void Render2D::mousePressEvent(QMouseEvent *)
+void Render2D::mousePressEvent(QMouseEvent *event)
 {
-
+    qDebug() << "Global" << event->globalX();
+    qDebug() << "Local" << event->x();
 }
 
-void Render2D::mouseReleaseEvent(QMouseEvent *)
+void Render2D::mouseReleaseEvent(QMouseEvent *event)
 {
 
 }
     
-void Render2D::mouseMoveEvent(QMouseEvent *)
+void Render2D::mouseMoveEvent(QMouseEvent *event)
 {
 
 }
