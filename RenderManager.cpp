@@ -45,14 +45,14 @@ void RenderManager::SetProjection(int w, int h)
 
 void RenderManager::CleanUp()
 {
-    if(m_RenderManager != NULL)
-        delete m_RenderManager;
     RenderMapIterator it;
     for(it = m_Renders.begin(); it != m_Renders.end(); ++it)
     {
         delete it->second;
     }
     m_Renders.clear();
+    if(m_RenderManager != NULL)
+        delete m_RenderManager;
 }
 
 

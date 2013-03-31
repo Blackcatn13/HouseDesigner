@@ -47,13 +47,14 @@ bool CModelManager::LoadModel(string modelName)
 
 void CModelManager::CleanUp()
 {
-    if(m_ModelManager != NULL)
-        delete m_ModelManager;
+    
     MapModel::iterator modelIt;
     for(modelIt = m_Models.begin(); modelIt != m_Models.end(); ++modelIt)
     {
         modelIt->second->CleanUp();
     }
-
     m_Models.clear();
+    if(m_ModelManager != NULL)
+        delete m_ModelManager;
+    
 }
