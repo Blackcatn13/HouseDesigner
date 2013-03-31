@@ -1,11 +1,12 @@
 #include "Render2D.h"
 #include "Scenary.h"
+#include "CameraManager.h"
 #include "Camera.h"
 
 
 Render2D::Render2D()
 {
-    camera = new Camera();
+    camera = CameraManager::GetInstance()->GetCamera(ORTHOGONAL);
     ModelInfo ii;
     ii.modelName = "Models/ModulParet.obj";
     ii.position = CPoint3D(0,0,0);
@@ -70,17 +71,17 @@ void Render2D::AddCameraDistance(float d)
     camera->AddDistance(d);
 }
 
-void Render2D::mousePressEvent(QMouseEvent *event)
+void Render2D::mousePressEvent(QMouseEvent *)
 {
 
 }
 
-void Render2D::mouseReleaseEvent(QMouseEvent *event)
+void Render2D::mouseReleaseEvent(QMouseEvent *)
 {
 
 }
     
-void Render2D::mouseMoveEvent(QMouseEvent *event)
+void Render2D::mouseMoveEvent(QMouseEvent *)
 {
 
 }

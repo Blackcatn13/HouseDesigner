@@ -9,17 +9,10 @@ public:
     Camera();
     ~Camera();
 
-    void setProjection(int w,int h);
-    Views getView();
-    void update();
-    void move(float ah, float av);
-    void AddDistance(float d);
-	void setView(Views view);
-private:
-    float R,angleh,anglev;
-    float orthoZoom, orthoAngleH, orthoAngleV;
-    float Cnear,Cfar;
-	Views currentView;
+    void virtual setProjection(int w,int h) = 0;
+    void virtual update() = 0;
+    void virtual move(float ah, float av) = 0;
+    void virtual AddDistance(float d) = 0;
 };
 
 #endif // CAMERA_H
