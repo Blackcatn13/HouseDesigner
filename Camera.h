@@ -13,6 +13,7 @@ public:
     void virtual update() = 0;
     void virtual move(float ah, float av) = 0;
     void virtual AddDistance(float d) = 0;
+    float virtual getZoom() = 0;
 };
 
 #endif // CAMERA_H

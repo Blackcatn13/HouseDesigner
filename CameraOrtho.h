@@ -14,6 +14,7 @@ public:
     void update();
     void move(float ah, float av);
     void AddDistance(float d);
+    float getZoom() {return orthoZoom;}
 private:
     float orthoZoom, orthoAngleH, orthoAngleV;
 };

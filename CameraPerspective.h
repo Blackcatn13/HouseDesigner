@@ -14,6 +14,7 @@ public:
     void update();
     void move(float ah, float av);
     void AddDistance(float d);
+    float getZoom() {return R;}
 private:
     float R,angleh,anglev;
     float Cnear,Cfar;

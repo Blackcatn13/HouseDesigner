@@ -14,6 +14,9 @@ Render2D::Render2D()
     ii.rotation = CPoint3D(0,90,0);
     CScenary *scene = CScenary::getInstance();
     scene->addModel(ii);
+    gridX = -400;
+    gridY = -300;
+    titleSize = 100;
 }
 
 Render2D::~Render2D()
@@ -44,15 +47,19 @@ bool Render2D::KeyEvent(int key)
     {
     case Qt::Key_A:
         camera->move(0.0,-0.6);
+        gridX -= 0.6;
         break;
     case Qt::Key_S:
         camera->move(0.6,0.0);
+        gridY += 0.6;
         break;
     case Qt::Key_D:
         camera->move(0.0,0.6);
+        gridX += 0.6;
         break;
     case Qt::Key_W:
         camera->move(-0.6,0.0);
+        gridY -= 0.6;
         break;
     default:
         update = false;
@@ -73,8 +80,15 @@ void Render2D::AddCameraDistance(float d)
 
 void Render2D::mousePressEvent(QMouseEvent *event)
 {
-    qDebug() << "Global" << event->globalX();
-    qDebug() << "Local" << event->x();
+    int x = event->x();
+    int y = event->y();
+    int stx = (titleSize * ASPECT_RATIO) * camera->getZoom();
+    int sty = titleSize * camera->getZoom();
+    int tx = (gridX + x) / stx;
+    int ty = (gridY + y) / sty;
+    qDebug() << "X: " << x << ", Y: " << y;
+    qDebug() << "Tile " << tx << ", " << ty;
+    qDebug() << camera->getZoom();
 }
 
 void Render2D::mouseReleaseEvent(QMouseEvent *event)

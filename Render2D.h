@@ -4,6 +4,7 @@
 #include "Util.h"
 #include "Render.h"
 
+#define ASPECT_RATIO (4/3)
 class Camera;
 
 class Render2D : public Render
@@ -21,6 +22,9 @@ public:
     void mouseMoveEvent(QMouseEvent *event);
 private:
     Camera *camera;
+    int gridX;
+    int gridY;
+    int titleSize;
 };
 
 #endif
