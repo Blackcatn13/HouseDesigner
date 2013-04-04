@@ -21,21 +21,21 @@ CameraOrtho::~CameraOrtho()
 
 void CameraOrtho::setProjection(int, int)
 {
-    glOrtho(-1 + orthoZoom, 1 - orthoZoom, -1 + orthoZoom, 1 - orthoZoom, 0.1, 50);
+    glOrtho(0, 10 - orthoZoom, 0, 10 - orthoZoom, 0.1, 50);
 }
 
 void CameraOrtho::update()
 {
     glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-    glOrtho(-1 + orthoZoom, 1 - orthoZoom, -1 + orthoZoom, 1 - orthoZoom, 0.1, 50);
+    glOrtho(0, 10 - orthoZoom, 0, 10 - orthoZoom, 0.1, 50);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-    gluLookAt(-orthoAngleH, 3.0, orthoAngleV,
-                -orthoAngleH, 0.0, orthoAngleV,
-                -1.0, 0.0, 0.0);
+    gluLookAt(orthoAngleH, 3.0, orthoAngleV,
+                orthoAngleH, 0.0, orthoAngleV,
+                1.0, 0.0, 0.0);
 }
 
 void CameraOrtho::move(float ah, float av)
@@ -47,6 +47,8 @@ void CameraOrtho::move(float ah, float av)
 void CameraOrtho::AddDistance(float d)
 {
     orthoZoom += d;
-    if(orthoZoom < 1.5)
-        orthoZoom = 1.5;
+    if(orthoZoom >= 4)
+        orthoZoom = 4;
+    if(orthoZoom <= -20)
+        orthoZoom = -20;
 }

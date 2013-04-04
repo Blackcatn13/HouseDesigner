@@ -50,7 +50,7 @@ void GLWidget::initializeGL()
     //----------------------------------------------------------
 
     // 1a) Setting default values to clean buffers
-    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+    glClearColor(0.2f, 0.08f, 0.75f, 1.0f);
     glClearDepth(1.0f); // This is the default OpenGL value, but I'm making it explicit for you
 
     // 1b) Backface culling enabled
