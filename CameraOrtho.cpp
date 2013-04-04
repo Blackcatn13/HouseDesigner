@@ -21,14 +21,17 @@ CameraOrtho::~CameraOrtho()
 
 void CameraOrtho::setProjection(int, int)
 {
-    glOrtho(-1 + orthoZoom, 1 - orthoZoom, -1 + orthoZoom, 1 - orthoZoom, 0.1, 50);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(-1 + orthoZoom, 1 - orthoZoom, -1 + orthoZoom, 1 - orthoZoom, 0.1, 100);
+    glMatrixMode(GL_MODELVIEW);
 }
 
 void CameraOrtho::update()
 {
     glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-    glOrtho(-1 + orthoZoom, 1 - orthoZoom, -1 + orthoZoom, 1 - orthoZoom, 0.1, 50);
+    glOrtho(-1 + orthoZoom, 1 - orthoZoom, -1 + orthoZoom, 1 - orthoZoom, 0.1, 100);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();

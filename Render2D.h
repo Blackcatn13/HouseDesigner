@@ -25,6 +25,10 @@ private:
     int gridX;
     int gridY;
     int titleSize;
+    Point2D firstClick;
+    Point2D vecDir;
+    bool clicked;
+    void getWorldMouseCoord(int x, int y, float &wx, float &wz);
 };
 
 #endif

@@ -7,16 +7,7 @@
 Render2D::Render2D()
 {
     camera = CameraManager::GetInstance()->GetCamera(ORTHOGONAL);
-    ModelInfo ii;
-    ii.modelName = "Models/ModulParet.obj";
-    ii.position = CPoint3D(0,0,0);
-    ii.scale = CPoint3D(1,1,1);
-    ii.rotation = CPoint3D(0,90,0);
-    CScenary *scene = CScenary::getInstance();
-    scene->addModel(ii);
-    gridX = -400;
-    gridY = -300;
-    titleSize = 100;
+    clicked = false;
 }
 
 Render2D::~Render2D()
@@ -80,23 +71,80 @@ void Render2D::AddCameraDistance(float d)
 
 void Render2D::mousePressEvent(QMouseEvent *event)
 {
+
     int x = event->x();
     int y = event->y();
-    int stx = (titleSize * ASPECT_RATIO) * camera->getZoom();
-    int sty = titleSize * camera->getZoom();
-    int tx = (gridX + x) / stx;
-    int ty = (gridY + y) / sty;
-    qDebug() << "X: " << x << ", Y: " << y;
+    float wx, wz;
+
+    getWorldMouseCoord(x, y, wx, wz);
+
+    int tx = wx;
+    int ty = wz;
+
+    if(!clicked)
+    {
+        firstClick.x = wx;
+        firstClick.y = wz;
+        clicked = true;
+    }
+    
     qDebug() << "Tile " << tx << ", " << ty;
-    qDebug() << camera->getZoom();
+    qDebug() << "WX: " << wx << ", WZ: " << wz;
 }
 
 void Render2D::mouseReleaseEvent(QMouseEvent *event)
 {
-
+    if(clicked)
+    {
+        clicked = false;
+    }
 }
     
 void Render2D::mouseMoveEvent(QMouseEvent *event)
 {
+    qDebug() << "in";
+    int x = event->x();
+    int y = event->y();
+    float wx, wz;
 
+    getWorldMouseCoord(x, y, wx, wz);
+    qDebug() << "moved to " << wx << ", " << wz;
+    int tx = wx;
+    int ty = wz;
+    int px, py;
+
+    if(clicked)
+    {
+        qDebug() << "drawing";
+        px = firstClick.x - tx;
+        py = firstClick.y - ty;
+        vecDir.x = px;
+        vecDir.y = py;
+        glColor3f(1.0, 0.0, 1.0);
+        glBegin(GL_LINE);
+            glVertex3f(firstClick.x, 1, firstClick.y);
+            glVertex3f(wx, 1, wz);
+        glEnd();
+    }
+}
+
+void Render2D::getWorldMouseCoord(int x, int y, float &wx, float &wz)
+{
+    GLfloat MWX, MWY;
+    GLdouble rx, ry, rz;
+
+    GLdouble modelview[16];
+    GLdouble projection[16];
+    GLint viewport[4];
+
+    glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
+    glGetDoublev(GL_PROJECTION_MATRIX, projection);
+    glGetIntegerv(GL_VIEWPORT, viewport);
+
+    MWX = (float)x;
+    MWY = (float)viewport[3] - (float)y;
+
+    gluUnProject(MWX, MWY, 0, modelview, projection, viewport, &rx, &ry, &rz);
+    wx = rx;
+    wz = rz;
 }
