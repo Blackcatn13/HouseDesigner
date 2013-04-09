@@ -100,12 +100,14 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
 {
     RenderManager* RM = RenderManager::GetInstance();
     RM->GetRenderMode(actualMode)->mousePressEvent(event);
+    updateGL();
 }
 
 void GLWidget::mouseReleaseEvent(QMouseEvent *event)
 {
     RenderManager* RM = RenderManager::GetInstance();
     RM->GetRenderMode(actualMode)->mouseReleaseEvent(event);
+    updateGL();
 }
 
 
@@ -117,6 +119,7 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
 {
     RenderManager* RM = RenderManager::GetInstance();
     RM->GetRenderMode(actualMode)->mouseMoveEvent(event);
+    updateGL();
 }
 
 void GLWidget::wheelEvent(QWheelEvent *event)

@@ -8,6 +8,18 @@ Render2D::Render2D()
 {
     camera = CameraManager::GetInstance()->GetCamera(ORTHOGONAL);
     clicked = false;
+    ModelInfo ii;
+    ii.modelName = "Models/ModulParet.obj";
+    ii.position = CPoint3D(0,0,0);
+    ii.scale = CPoint3D(1,1,1);
+    ii.rotation = CPoint3D(0,90,0);
+    CScenary *scene = CScenary::getInstance();
+    scene->addModel(ii);
+    ii.modelName = "Models/radio.obj";
+    ii.position = CPoint3D(1,0,1);
+    ii.scale = CPoint3D(1,1,1);
+    ii.rotation = CPoint3D(0,0,0);
+    scene->addModel(ii);
 }
 
 Render2D::~Render2D()
@@ -23,6 +35,16 @@ void Render2D::Draw()
     scene->DrawAxis();
     scene->DrawGrid();
     scene->Draw();
+    if(clicked)
+    {
+        glLineWidth(5);
+        glColor3f(1.0, 0.0, 1.0);
+        glBegin(GL_LINES);
+            glVertex3f(firstTile.x, 0.05, firstTile.y);
+            glVertex3f(secondTile.x, 0.05, secondTile.y);
+        glEnd();
+        glLineWidth(1);
+    }
 }
 
 void Render2D::Update()
@@ -78,18 +100,23 @@ void Render2D::mousePressEvent(QMouseEvent *event)
 
     getWorldMouseCoord(x, y, wx, wz);
 
-    int tx = wx;
-    int ty = wz;
-
-    if(!clicked)
+    if (wx > 0.0 && wz > 0.0)
     {
-        firstClick.x = wx;
-        firstClick.y = wz;
-        clicked = true;
-    }
+        int rtx = (int)(wx*2)/2.0 + 0.5;
+        int rty = (int)(wz*2)/2.0 + 0.5;
     
-    qDebug() << "Tile " << tx << ", " << ty;
-    qDebug() << "WX: " << wx << ", WZ: " << wz;
+        if(!clicked)
+        {
+            firstClick.x = wx;
+            firstClick.y = wz;
+            firstTile.x = rtx;
+            firstTile.y = rty;
+            secondTile.x = rtx;
+            secondTile.y = rty;
+            clicked = true;
+        }
+    }
+
 }
 
 void Render2D::mouseReleaseEvent(QMouseEvent *event)
@@ -102,29 +129,35 @@ void Render2D::mouseReleaseEvent(QMouseEvent *event)
     
 void Render2D::mouseMoveEvent(QMouseEvent *event)
 {
-    qDebug() << "in";
+
     int x = event->x();
     int y = event->y();
     float wx, wz;
 
     getWorldMouseCoord(x, y, wx, wz);
-    qDebug() << "moved to " << wx << ", " << wz;
-    int tx = wx;
-    int ty = wz;
-    int px, py;
 
-    if(clicked)
+    if(wx > 0.0 && wz > 0.0)
     {
-        qDebug() << "drawing";
-        px = firstClick.x - tx;
-        py = firstClick.y - ty;
-        vecDir.x = px;
-        vecDir.y = py;
-        glColor3f(1.0, 0.0, 1.0);
-        glBegin(GL_LINE);
-            glVertex3f(firstClick.x, 1, firstClick.y);
-            glVertex3f(wx, 1, wz);
-        glEnd();
+        if(clicked)
+        {
+            int rtx = (int)(wx*2)/2.0 + 0.5;
+            int rty = (int)(wz*2)/2.0 + 0.5;
+            float nx, ny;
+            nx = wx - firstClick.x;
+            ny = wz - firstClick.y;
+            float length = sqrt(nx*nx+ny*ny);
+            float sin = abs(nx)/length;
+            if(sin < SIN_45)
+            {
+                rtx = firstTile.x;
+            }
+            else
+            {
+                rty = firstTile.y;
+            }
+            secondTile.x = rtx;
+            secondTile.y = rty;
+        }
     }
 }
 

@@ -5,6 +5,7 @@
 #include "Render.h"
 
 #define ASPECT_RATIO (4/3)
+#define SIN_45 0.707106781
 class Camera;
 
 class Render2D : public Render
@@ -24,9 +25,11 @@ private:
     Camera *camera;
     int gridX;
     int gridY;
-    int titleSize;
     Point2D firstClick;
+    Point2D firstTile;
+    Point2D secondTile;
     Point2D vecDir;
+    Point2D actPos;
     bool clicked;
     void getWorldMouseCoord(int x, int y, float &wx, float &wz);
 };
