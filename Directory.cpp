@@ -2,18 +2,10 @@
 
 #include "iostream"
 #include "vector"
-Directory *Directory::m_Directory = 0;
 
 Directory::Directory()
 {
     m_dir = QDir::currentPath();
-}
-
-Directory* Directory::GetInstance()
-{
-    if (m_Directory == NULL)
-        m_Directory = new Directory();
-    return m_Directory;
 }
 
 void Directory::SetPath(std::string path)
