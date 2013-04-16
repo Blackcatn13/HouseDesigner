@@ -5,10 +5,7 @@
 #include <QtCore>
 #include <QtGui>
 
-#include "Directory.h"
-#include "vector"
-#include "iostream"
-
+#include "TreeFile.h"
 namespace Ui {
 class ThothWindow;
 }

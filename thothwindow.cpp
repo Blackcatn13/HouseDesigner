@@ -14,10 +14,13 @@ ThothWindow::ThothWindow(QWidget *parent) :
     ui->contextGL->setFocus();
 
     //Tree file.
+    TreeFile *tf = new TreeFile(ui);
+
+    //Tree file.
     ui->treeWidget->setColumnCount(1);
     ui->treeWidget->setHeaderLabel(QString::fromStdString("Model explorer"));
 
-    Directory *direct = Directory::GetInstance();
+    Directory *direct = new Directory();
     direct->SetPath(direct->GetCurrentPath()+"/Models/");
     std::vector<std::string> models = direct->GetModels();
     for (int i = 0; i < models.size(); ++i)
