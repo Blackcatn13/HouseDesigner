@@ -1,17 +1,8 @@
 #include "TreeFile.h"
 
-TreeFile *TreeFile::m_TreeFile = 0;
-
-TreeFile::TreeFile()
+TreeFile::TreeFile(Ui::ThothWindow *ui)
 {
-    m_dir->GetInstance();
-
-}
-
-TreeFile* TreeFile::GetInstance()
-{
-    if (m_TreeFile == NULL)
-        m_TreeFile = new TreeFile();
-    return m_TreeFile;
+    m_dir = new Directory();
+    m_ui = ui;
 }
 

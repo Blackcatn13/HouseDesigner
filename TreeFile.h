@@ -3,19 +3,19 @@
 
 #include <QtCore>
 #include <QtGui>
+#include "ui_thothwindow.h"
 #include "Directory.h"
 
-#define NULL 0
 class TreeFile;
 
 class TreeFile
 {
 public:
-    static TreeFile*    GetInstance();
+    TreeFile(Ui::ThothWindow *ui);
+    ~TreeFile();
 private:
-    TreeFile();
-    static TreeFile*    m_TreeFile;
     Directory*          m_dir;
+    Ui::ThothWindow*    m_ui;
 };
 
 #endif // TREEFILE_H
