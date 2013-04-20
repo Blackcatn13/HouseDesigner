@@ -1,0 +1,1 @@
+In this folder we include all different Architecture elements like Stairs, Fieplates... Note that textures would be in Models/Decorate folder.
