@@ -8,6 +8,10 @@ Directory::Directory()
     m_dir = QDir::currentPath();
 }
 
+Directory::~Directory()
+{
+}
+
 void Directory::SetPath(std::string path)
 {
     m_dir.setPath(QString::fromStdString(path));
