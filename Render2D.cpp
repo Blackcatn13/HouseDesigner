@@ -123,7 +123,59 @@ void Render2D::mouseReleaseEvent(QMouseEvent *event)
 {
     if(clicked)
     {
+        CScenary *scene = CScenary::getInstance();
+        ModelInfo ii;
+        ii.modelName = "Models/ModulParet.obj";
+        ii.scale = CPoint3D(1,1,1);
+        qDebug() << "first click x" << firstTile.x;
+        qDebug() << "first click y" << firstTile.y;
+        qDebug() << "second click x" << secondTile.x;
+        qDebug() << "second click y" << secondTile.y;
         clicked = false;
+        int angle;
+        int start, end;
+        if(firstTile.x == secondTile.x)
+        {
+            if(firstTile.y < secondTile.y)
+            {
+                start = firstTile.y;
+                end = secondTile.y;
+                angle = 180;
+            }
+            else
+            {
+                start = secondTile.y;
+                end = firstTile.y;
+                angle = 180;
+            }
+            ii.rotation = CPoint3D(0, 180, 0);
+            for(int i = start; i < end; i++)
+            {
+                ii.position = CPoint3D(firstTile.x - 0.05 , 0, i);
+                scene->addModel(ii);
+            }
+        }
+        else
+        {
+            if(firstTile.x < secondTile.x)
+            {
+                start = firstTile.x;
+                end = secondTile.x;
+                angle = 90;
+            }
+            else
+            {
+                start = secondTile.x;
+                end = firstTile.x;
+                angle = -90;
+            }
+            ii.rotation = CPoint3D(0, -90, 0);
+            for(int i = start; i < end; i++)
+            {
+                ii.position = CPoint3D(i, 0, firstTile.y + 0.05);
+                scene->addModel(ii);
+            }
+        }
     }
 }
     
