@@ -3,6 +3,7 @@
 
 #include "QDir"
 #include <vector>
+#include <QDirIterator>
 
 class Directory;
 
@@ -15,6 +16,7 @@ public:
     std::string                 GetCurrentPath();
     std::vector<std::string>    GetModels();
     void                        ReadModel(std::string modelName);
+    void                        getHierarchy();
 private:
     QDir                        m_dir;
 };

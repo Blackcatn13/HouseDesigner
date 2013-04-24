@@ -26,9 +26,9 @@ std::vector<std::string> Directory::GetModels()
 {
     std::vector<std::string> models;
     //Do a filter only show models.
-    QStringList filters;
-    filters << "*.obj" << "*.skp";
-    m_dir.setNameFilters(filters);
+//    QStringList filters;
+//    filters << "*.obj" << "*.skp";
+//    m_dir.setNameFilters(filters);
     //Ordered by name.
     m_dir.setSorting(QDir::Name);
     //Save all models into output vector.
@@ -40,4 +40,24 @@ std::vector<std::string> Directory::GetModels()
         models.push_back(fileInfo.baseName().toStdString());
     }
     return models;
+}
+
+void Directory::getHierarchy(){
+    QDirIterator iterator(m_dir.absolutePath(), QDirIterator::Subdirectories);
+    while (iterator.hasNext()){
+        iterator.next();
+        QString filename = iterator.fileName();
+        if (!iterator.fileInfo().isDir())
+        {
+            qDebug("Found %s file.", qPrintable(filename));
+        }
+        else
+        {
+            if (filename != "." && filename != "..")
+            {
+
+                qDebug("Found %s dir.", qPrintable(filename));
+            }
+        }
+    }
 }
