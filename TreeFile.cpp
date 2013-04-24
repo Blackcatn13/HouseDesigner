@@ -57,10 +57,3 @@ QTreeWidgetItem* TreeFile::AddChild(QTreeWidgetItem *parent, std::string name)
     parent->addChild(childitem);
     return childitem;
 }
-
-QTreeWidgetItem* TreeFile::AddChildren(QTreeWidgetItem *parent, std::string name)
-{
-    QTreeWidgetItem *childitem = new QTreeWidgetItem();
-    childitem->setText(0, QString::fromStdString(name));
-    return childitem;
-}
