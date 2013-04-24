@@ -14,8 +14,8 @@ ThothWindow::ThothWindow(QWidget *parent) :
     ui->contextGL->setFocus();
 
     //Tree file.
-    TreeFile *tf = new TreeFile(ui->treeWidget);
-    tf->setHeaderName("Model explorer");
+    TreeFile *tf = new TreeFile(ui->treeWidget, "Build");
+    tf->SetHeaderName("Model explorer");
 }
 
 ThothWindow::~ThothWindow()

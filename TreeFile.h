@@ -11,13 +11,16 @@ class TreeFile;
 class TreeFile
 {
 public:
-    TreeFile(QTreeWidget* treeWidget, int nColumns = 1);
+    TreeFile(QTreeWidget* treeWidget, std::string tabName = "");
     ~TreeFile();
-    void setHeaderName(std::string name);
-    void setTree(std::string path, bool recursive = true, bool showRoot = true);
+    void SetHeaderName(std::string name);
+    void SetTree(std::string path, bool recursive = true, bool showRoot = true);
 private:
-    Directory*      m_dir;
-    QTreeWidget*    m_tree;
+    Directory*          m_dir;
+    QTreeWidget*        m_tree;
+    std::string         modelDir = "/Models/";
+    QTreeWidgetItem*     AddRoot(std::string name);
+    QTreeWidgetItem*     AddChild(QTreeWidgetItem *parent, std::string name);
 };
 
 #endif // TREEFILE_H
