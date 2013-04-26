@@ -18,7 +18,7 @@ public:
 private:
     Directory*          m_dir;
     QTreeWidget*        m_tree;
-    std::string         modelDir = "/Models/";
+    std::string         modelDir;
     QTreeWidgetItem*     AddRoot(std::string name);
     QTreeWidgetItem*     AddChild(QTreeWidgetItem *parent, std::string name);
 };

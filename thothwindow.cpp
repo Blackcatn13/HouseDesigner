@@ -23,11 +23,11 @@ ThothWindow::ThothWindow(QWidget *parent) :
     std::string lash = "Furnish";
     QFileSystemModel *model = new QFileSystemModel;
     model->setReadOnly(true);
-    model->setRootPath(QDir::currentPath() % QString::fromStdString("/Models/") % QString::fromStdString(lash));
+    model->setRootPath(QDir::currentPath().append(QString::fromStdString("/Models/")).append(QString::fromStdString(lash)));
 
 
     ui->treeView->setModel(model);
-    QModelIndex index = model->index(QDir::currentPath() % QString::fromStdString("/Models/") % QString::fromStdString(lash));
+    QModelIndex index = model->index(QDir::currentPath().append(QString::fromStdString("/Models/")).append(QString::fromStdString(lash)));
     ui->treeView->setRootIndex(index);
     ui->treeView->expand(index);
 

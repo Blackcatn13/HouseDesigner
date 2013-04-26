@@ -6,6 +6,7 @@
 TreeFile::TreeFile(QTreeWidget* treeWidget, std::string tabName)
 {
     m_dir = new Directory();
+    modelDir = "/Models/";
     m_tree = treeWidget;
     //Set the number of columns.
     m_tree->setColumnCount(nCols);

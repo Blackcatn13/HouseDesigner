@@ -36,7 +36,7 @@
        <enum>QTabWidget::Triangular</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <property name="tabsClosable">
        <bool>false</bool>
@@ -107,8 +107,6 @@
       <property name="styleSheet">
        <string notr="true">background-color:black;</string>
       </property>
-      <zorder>tabWidget</zorder>
-      <zorder>tabWidget</zorder>
      </widget>
     </item>
    </layout>
@@ -119,7 +117,7 @@
      <x>0</x>
      <y>0</y>
      <width>999</width>
-     <height>23</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
