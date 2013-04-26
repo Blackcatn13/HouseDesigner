@@ -21,15 +21,21 @@ ThothWindow::ThothWindow(QWidget *parent) :
     tf->SetHeaderName("Model explorer");
 
     std::string lash = "Furnish";
-    QFileSystemModel *model = new QFileSystemModel;
-    model->setReadOnly(true);
-    model->setRootPath(QDir::currentPath().append(QString::fromStdString("/Models/")).append(QString::fromStdString(lash)));
+    m_model = new QFileSystemModel;
+
+    m_model->setReadOnly(true);
+    m_model->setRootPath(QDir::currentPath().append(QString::fromStdString("/Models/")).append(QString::fromStdString(lash)));
 
 
-    ui->treeView->setModel(model);
-    QModelIndex index = model->index(QDir::currentPath().append(QString::fromStdString("/Models/")).append(QString::fromStdString(lash)));
+    ui->treeView->setModel(m_model);
+    QModelIndex index = m_model->index(QDir::currentPath().append(QString::fromStdString("/Models/")).append(QString::fromStdString(lash)));
     ui->treeView->setRootIndex(index);
     ui->treeView->expand(index);
+    ui->treeView->hideColumn(1);
+    ui->treeView->hideColumn(2);
+    ui->treeView->hideColumn(3);
+
+
 
 }
 
@@ -42,6 +48,11 @@ ThothWindow::~ThothWindow()
 void ThothWindow::on_pushButton_clicked()
 {
     //Select model
+    QModelIndex indx = ui->treeView->currentIndex();
+    if(m_model->fileInfo(indx).isFile())
+    {
+        qDebug("Model path is: %s", qPrintable(m_model->fileInfo(indx).absoluteFilePath()));
+    }
 }
 
 void ThothWindow::on_pushButton_2_clicked()

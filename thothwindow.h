@@ -25,6 +25,7 @@ private slots:
 private:
     Ui::ThothWindow *ui;
     QDirModel *treeModel;
+    QFileSystemModel *m_model;
 };
 
 #endif // THOTHWINDOW_H
