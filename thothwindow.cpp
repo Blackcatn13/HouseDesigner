@@ -17,23 +17,56 @@ ThothWindow::ThothWindow(QWidget *parent) :
     ui->contextGL->setFocus();
 
     //Tree file.
-    TreeFile *tf = new TreeFile(ui->treeWidget, "Build");
-    tf->SetHeaderName("Model explorer");
 
-    std::string lash = "Furnish";
-    m_model = new QFileSystemModel;
+    //Build tab
+    std::string tab1 = "Build";
+    m_buildModel = new QFileSystemModel;
 
-    m_model->setReadOnly(true);
-    m_model->setRootPath(QDir::currentPath().append(QString::fromStdString("/Models/")).append(QString::fromStdString(lash)));
+    m_buildModel->setReadOnly(true);
+    m_buildModel->setRootPath(QDir::currentPath().append(QString::fromStdString("/Models/")).append(QString::fromStdString(tab1)));
 
 
-    ui->treeView->setModel(m_model);
-    QModelIndex index = m_model->index(QDir::currentPath().append(QString::fromStdString("/Models/")).append(QString::fromStdString(lash)));
-    ui->treeView->setRootIndex(index);
-    ui->treeView->expand(index);
-    ui->treeView->hideColumn(1);
-    ui->treeView->hideColumn(2);
-    ui->treeView->hideColumn(3);
+    ui->treeViewBuild->setModel(m_buildModel);
+    QModelIndex index1 = m_buildModel->index(QDir::currentPath().append(QString::fromStdString("/Models/")).append(QString::fromStdString(tab1)));
+    ui->treeViewBuild->setRootIndex(index1);
+    ui->treeViewBuild->expand(index1);
+    ui->treeViewBuild->hideColumn(1);
+    ui->treeViewBuild->hideColumn(2);
+    ui->treeViewBuild->hideColumn(3);
+
+
+    //Furnish tab
+    std::string tab = "Furnish";
+    m_furnishModel = new QFileSystemModel;
+
+    m_furnishModel->setReadOnly(true);
+    m_furnishModel->setRootPath(QDir::currentPath().append(QString::fromStdString("/Models/")).append(QString::fromStdString(tab)));
+
+
+    ui->treeViewFurnish->setModel(m_furnishModel);
+    QModelIndex index = m_furnishModel->index(QDir::currentPath().append(QString::fromStdString("/Models/")).append(QString::fromStdString(tab)));
+    ui->treeViewFurnish->setRootIndex(index);
+    ui->treeViewFurnish->expand(index);
+    ui->treeViewFurnish->hideColumn(1);
+    ui->treeViewFurnish->hideColumn(2);
+    ui->treeViewFurnish->hideColumn(3);
+
+    //Decorate tab
+
+    std::string tab2 = "Decorate";
+    m_decorateModel = new QFileSystemModel;
+
+    m_decorateModel->setReadOnly(true);
+    m_decorateModel->setRootPath(QDir::currentPath().append(QString::fromStdString("/Models/")).append(QString::fromStdString(tab2)));
+
+
+    ui->treeViewDecorate->setModel(m_decorateModel);
+    QModelIndex index2 = m_decorateModel->index(QDir::currentPath().append(QString::fromStdString("/Models/")).append(QString::fromStdString(tab2)));
+    ui->treeViewDecorate->setRootIndex(index2);
+    ui->treeViewDecorate->expand(index2);
+    ui->treeViewDecorate->hideColumn(1);
+    ui->treeViewDecorate->hideColumn(2);
+    ui->treeViewDecorate->hideColumn(3);
 
 
 
@@ -44,18 +77,62 @@ ThothWindow::~ThothWindow()
     delete ui;
 }
 
+void ThothWindow::on_pushButton_4_clicked()
+{
+    //Select build model
+    QModelIndex indx = ui->treeViewBuild->currentIndex();
+    if(m_buildModel->fileInfo(indx).isFile())
+    {
+        qDebug("Create model with path: %s", qPrintable(m_buildModel->fileInfo(indx).absoluteFilePath()));
+    }
+}
+
+void ThothWindow::on_pushButton_5_clicked()
+{
+    //Delete build model
+    QModelIndex indx = ui->treeViewBuild->currentIndex();
+    if(m_buildModel->fileInfo(indx).isFile())
+    {
+        qDebug("Delete model with path: %s", qPrintable(m_buildModel->fileInfo(indx).absoluteFilePath()));
+    }
+}
 
 void ThothWindow::on_pushButton_clicked()
 {
-    //Select model
-    QModelIndex indx = ui->treeView->currentIndex();
-    if(m_model->fileInfo(indx).isFile())
+    //Select furnish model
+    QModelIndex indx = ui->treeViewFurnish->currentIndex();
+    if(m_furnishModel->fileInfo(indx).isFile())
     {
-        qDebug("Model path is: %s", qPrintable(m_model->fileInfo(indx).absoluteFilePath()));
+        qDebug("Create model with path: %s", qPrintable(m_furnishModel->fileInfo(indx).absoluteFilePath()));
     }
 }
 
 void ThothWindow::on_pushButton_2_clicked()
 {
-    //Delete model
+    //Delete furnish model
+    QModelIndex indx = ui->treeViewFurnish->currentIndex();
+    if(m_furnishModel->fileInfo(indx).isFile())
+    {
+        qDebug("Delete model with path: %s", qPrintable(m_furnishModel->fileInfo(indx).absoluteFilePath()));
+    }
+}
+
+void ThothWindow::on_pushButton_6_clicked()
+{
+    //Select decorate model
+    QModelIndex indx = ui->treeViewDecorate->currentIndex();
+    if(m_decorateModel->fileInfo(indx).isFile())
+    {
+        qDebug("Create model with path: %s", qPrintable(m_decorateModel->fileInfo(indx).absoluteFilePath()));
+    }
+}
+
+void ThothWindow::on_pushButton_7_clicked()
+{
+    //Delete decorate model
+    QModelIndex indx = ui->treeViewDecorate->currentIndex();
+    if(m_decorateModel->fileInfo(indx).isFile())
+    {
+        qDebug("Delete model with path: %s", qPrintable(m_decorateModel->fileInfo(indx).absoluteFilePath()));
+    }
 }
