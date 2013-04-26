@@ -17,8 +17,8 @@ ThothWindow::ThothWindow(QWidget *parent) :
     ui->contextGL->setFocus();
 
     //Tree file.
-//    TreeFile *tf = new TreeFile(ui->treeWidget, "Build");
-//    tf->SetHeaderName("Model explorer");
+    TreeFile *tf = new TreeFile(ui->treeWidget, "Build");
+    tf->SetHeaderName("Model explorer");
 
     std::string lash = "Furnish";
     QFileSystemModel *model = new QFileSystemModel;
