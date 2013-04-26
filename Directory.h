@@ -4,6 +4,7 @@
 #include "QDir"
 #include <vector>
 #include <QDirIterator>
+#include <map>
 
 class Directory;
 

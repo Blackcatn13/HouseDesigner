@@ -9,13 +9,11 @@ TreeFile::TreeFile(QTreeWidget* treeWidget, std::string tabName)
     m_tree = treeWidget;
     //Set the number of columns.
     m_tree->setColumnCount(nCols);
-    std::string str = "Hola";
-    std::cout << str[0] << std::endl;
-//    m_dir->SetPath(m_dir->GetCurrentPath() + modelDir + tabName);
-    m_dir->SetPath(m_dir->GetCurrentPath() + modelDir);
-    m_dir->getHierarchy();
-    std::vector<std::string> models = m_dir->GetModels();
 
+//    std::vector<std::string> models = m_dir->GetModels();
+
+        m_dir->SetPath(m_dir->GetCurrentPath() + modelDir + tabName);
+        m_dir->GetModels();
         QTreeWidgetItem *item = AddRoot("padre1");
         AddChild(item, "hijo1");
         QTreeWidgetItem *child = AddChild(item, "hijo2");

@@ -2,7 +2,10 @@
 #include "ui_thothwindow.h"
 #include <QTreeWidget>
 
-
+//Important includes
+#include <QModelIndex>
+#include <QFileSystemModel>
+#include <QDir>
 
 ThothWindow::ThothWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -14,8 +17,20 @@ ThothWindow::ThothWindow(QWidget *parent) :
     ui->contextGL->setFocus();
 
     //Tree file.
-    TreeFile *tf = new TreeFile(ui->treeWidget, "Build");
-    tf->SetHeaderName("Model explorer");
+//    TreeFile *tf = new TreeFile(ui->treeWidget, "Build");
+//    tf->SetHeaderName("Model explorer");
+
+    std::string lash = "Furnish";
+    QFileSystemModel *model = new QFileSystemModel;
+    model->setReadOnly(true);
+    model->setRootPath(QDir::currentPath() % QString::fromStdString("/Models/") % QString::fromStdString(lash));
+
+
+    ui->treeView->setModel(model);
+    QModelIndex index = model->index(QDir::currentPath() % QString::fromStdString("/Models/") % QString::fromStdString(lash));
+    ui->treeView->setRootIndex(index);
+    ui->treeView->expand(index);
+
 }
 
 ThothWindow::~ThothWindow()
@@ -23,3 +38,13 @@ ThothWindow::~ThothWindow()
     delete ui;
 }
 
+
+void ThothWindow::on_pushButton_clicked()
+{
+    //Select model
+}
+
+void ThothWindow::on_pushButton_2_clicked()
+{
+    //Delete model
+}

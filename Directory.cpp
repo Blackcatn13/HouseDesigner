@@ -25,7 +25,7 @@ std::string Directory::GetCurrentPath()
 std::vector<std::string> Directory::GetModels()
 {
     std::vector<std::string> models;
-    //Do a filter only show models.
+    //Do a filter only showing models.
 //    QStringList filters;
 //    filters << "*.obj" << "*.skp";
 //    m_dir.setNameFilters(filters);
@@ -43,20 +43,24 @@ std::vector<std::string> Directory::GetModels()
 }
 
 void Directory::getHierarchy(){
+
     QDirIterator iterator(m_dir.absolutePath(), QDirIterator::Subdirectories);
+    std::map<std::string, std::string> models;
     while (iterator.hasNext()){
         iterator.next();
         QString filename = iterator.fileName();
         if (!iterator.fileInfo().isDir())
         {
-            qDebug("Found %s file.", qPrintable(filename));
+            if (!filename.endsWith(".obj"))
+                models[iterator.fileInfo().baseName().toStdString()] = iterator.fileInfo().absoluteFilePath().toStdString();
+                qDebug("Found %s file.", qPrintable(iterator.fileInfo().baseName() + QString::fromStdString(" ") + iterator.fileInfo().absoluteFilePath() ));
         }
         else
         {
             if (filename != "." && filename != "..")
             {
 
-                qDebug("Found %s dir.", qPrintable(filename));
+                //qDebug("Found %s dir.", qPrintable(filename));
             }
         }
     }
