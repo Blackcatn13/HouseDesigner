@@ -63,7 +63,7 @@ bool Render2D::KeyEvent(int key)
         gridX -= 0.6;
         break;
     case Qt::Key_S:
-        camera->move(0.6,0.0);
+        camera->move(-0.6,0.0);
         gridY += 0.6;
         break;
     case Qt::Key_D:
@@ -71,7 +71,7 @@ bool Render2D::KeyEvent(int key)
         gridX += 0.6;
         break;
     case Qt::Key_W:
-        camera->move(-0.6,0.0);
+        camera->move(0.6,0.0);
         gridY -= 0.6;
         break;
     default:
