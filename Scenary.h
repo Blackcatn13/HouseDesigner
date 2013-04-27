@@ -21,6 +21,8 @@ public:
     void addNewFloor();
     Types getActiveType() {return activeType;}
     string getActiveModel() {return activeModel;}
+    void setActiveModel(string model);
+    void setActiveType(Types t);
 private:
     CScenary(void);
     vector< vector<ModelInfo> > m_Models;  

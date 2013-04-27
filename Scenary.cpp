@@ -8,6 +8,7 @@ CScenary::CScenary(void)
 {
     m_Models = vector<vector<ModelInfo> >();
     addNewFloor();
+    activeFloor = 0;
 }
 
 
@@ -142,4 +143,14 @@ bool CScenary::getWallCollision(ModelInfo mi)
         }
     }
     return col;
+}
+
+void CScenary::setActiveModel(string model)
+{
+    activeModel = model;
+}
+
+void CScenary::setActiveType(Types t)
+{
+    activeType = t;
 }

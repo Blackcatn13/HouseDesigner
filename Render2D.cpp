@@ -134,10 +134,6 @@ void Render2D::mouseReleaseEvent(QMouseEvent *event)
                 ii.modelName = scene->getActiveModel();
                 ii.scale = CPoint3D(1,1,1);
                 ii.type = t;
-                qDebug() << "first click x" << firstTile.x;
-                qDebug() << "first click y" << firstTile.y;
-                qDebug() << "second click x" << secondTile.x;
-                qDebug() << "second click y" << secondTile.y;
                 clicked = false;
                 int angle;
                 int start, end;
