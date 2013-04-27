@@ -1,0 +1,1 @@
+In this folder we include all Living objects like radio, etc... models.

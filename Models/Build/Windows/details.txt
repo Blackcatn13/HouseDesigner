@@ -1,0 +1,1 @@
+In this folder we include all different Windows models. Note that textures would be in Models/Decorate folder.

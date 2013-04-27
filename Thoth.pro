@@ -23,7 +23,9 @@ SOURCES += Camera.cpp \
     RenderManager.cpp \
     CameraManager.cpp \
     CameraOrtho.cpp \
-    CameraPerspective.cpp
+    CameraPerspective.cpp \
+    Directory.cpp \
+    TreeFile.cpp
 HEADERS += Camera.h \
     GLWidget.h \
     Illumination.h \
@@ -39,7 +41,9 @@ HEADERS += Camera.h \
     thothwindow.h \
     CameraManager.h \
     CameraOrtho.h \
-    CameraPerspective.h
+    CameraPerspective.h \
+    Directory.h \
+    TreeFile.h
 FORMS += thothwindow.ui
 OTHER_FILES += simple.vert \
     simple.frag

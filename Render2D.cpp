@@ -51,7 +51,7 @@ bool Render2D::KeyEvent(int key)
         gridX -= 0.6;
         break;
     case Qt::Key_S:
-        camera->move(0.6,0.0);
+        camera->move(-0.6,0.0);
         gridY += 0.6;
         break;
     case Qt::Key_D:
@@ -59,7 +59,7 @@ bool Render2D::KeyEvent(int key)
         gridX += 0.6;
         break;
     case Qt::Key_W:
-        camera->move(-0.6,0.0);
+        camera->move(0.6,0.0);
         gridY -= 0.6;
         break;
     default:
@@ -189,7 +189,10 @@ void Render2D::mouseMoveEvent(QMouseEvent *event)
             nx = wx - firstClick.x;
             ny = wz - firstClick.y;
             float length = sqrt(nx*nx+ny*ny);
-            float sin = abs(nx)/length;
+            //Abs function have problems. let's solve it momentarily.
+            if (nx < 0)
+                nx = nx * -1;
+            float sin = nx/length;
             if(sin < SIN_45)
             {
                 rtx = firstTile.x;

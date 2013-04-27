@@ -1,0 +1,1 @@
+In this folder we include all different Paints, we need to think how do that.
