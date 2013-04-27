@@ -10,6 +10,6 @@ int main(int argc, char *argv[])
     glutInit(&argc, argv);
 
     w.show();
-    
+
     return a.exec();
 }
