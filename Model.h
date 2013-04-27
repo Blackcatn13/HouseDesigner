@@ -24,11 +24,14 @@ public:
     bool LoadModel(string modelName);
     CPoint3D getBBMin() {return BBMin;}
     CPoint3D getBBMax() {return BBMax;}
+    CPoint3D getSize();
 private:
     const struct aiScene* scene;
     void RecursiveRender(aiNode* node);
+    void CalculateBBAndSize(aiNode* node);
     CPoint3D BBMin;
     CPoint3D BBMax;
+    CPoint3D size;
 };
 
 #endif

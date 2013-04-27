@@ -110,9 +110,15 @@ void ThothWindow::on_pushButton_clicked()
 {
     //Select furnish model
     QModelIndex indx = ui->treeViewFurnish->currentIndex();
-    if(m_furnishModel->fileInfo(indx).isFile())
+    QFileInfo info = m_furnishModel->fileInfo(indx);
+    if(info.isFile())
     {
-        qDebug("Create model with path: %s", qPrintable(m_furnishModel->fileInfo(indx).absoluteFilePath()));
+        if(info.suffix() == QString("obj"))
+        {
+            qDebug("Create model with path: %s", qPrintable(info.absoluteFilePath()));
+                CScenary::getInstance()->setActiveModel(info.absoluteFilePath().toStdString());
+                CScenary::getInstance()->setActiveType(OBJECT);
+        }
     }
 }
 

@@ -22,6 +22,7 @@ public:
     bool Draw(string modelName);
     CPoint3D getModelBBMin(string modelName);
     CPoint3D getModelBBMax(string modelName);
+    CPoint3D getModelSize(string modelName);
     void CleanUp();
 private:
     static CModelManager*       m_ModelManager;

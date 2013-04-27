@@ -86,3 +86,17 @@ CPoint3D CModelManager::getModelBBMin(string modelName)
     }
     return CPoint3D();
 }
+
+CPoint3D CModelManager::getModelSize(string modelName)
+{
+    MapModel::iterator modelIterator;
+    modelIterator = m_Models.find(modelName);
+    if(modelIterator != m_Models.end())
+        return modelIterator->second->getSize();
+    else
+    {
+        if(LoadModel(modelName))
+            return getModelSize(modelName);
+    }
+    return CPoint3D();
+}

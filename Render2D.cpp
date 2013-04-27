@@ -2,12 +2,21 @@
 #include "Scenary.h"
 #include "CameraManager.h"
 #include "Camera.h"
+#include "ModelManager.h"
 
 
 Render2D::Render2D()
 {
     camera = CameraManager::GetInstance()->GetCamera(ORTHOGONAL);
     clicked = false;
+
+    ModelInfo ii;
+    ii.modelName = "Models/Furnish/Accesories/radio.obj";
+    ii.position = CPoint3D(3,0,3);
+    ii.scale = CPoint3D(1,1,1);
+    ii.rotation = CPoint3D(0,90,0);
+    CScenary *scene = CScenary::getInstance();
+    scene->addModel(ii);
 }
 
 Render2D::~Render2D()
@@ -37,6 +46,16 @@ void Render2D::Draw()
                     glVertex3f(secondTile.x, 0.05, secondTile.y);
                 glEnd();
                 glLineWidth(1);
+            }
+        case OBJECT:
+            {
+                glColor3f(1.0, 0.2, 1.0);
+                glBegin(GL_QUADS);
+                    glVertex3f(firstTile.x, 0.05, firstTile.y);
+                    glVertex3f(firstTile.x, 0.05, secondTile.y);
+                    glVertex3f(secondTile.x, 0.05, secondTile.y);
+                    glVertex3f(secondTile.x, 0.05, firstTile.y);
+                glEnd();
             }
         }
     }
@@ -88,7 +107,8 @@ void Render2D::AddCameraDistance(float d)
 
 void Render2D::mousePressEvent(QMouseEvent *event)
 {
-    Types t = CScenary::getInstance()->getActiveType();
+    CScenary *scenary = CScenary::getInstance();
+    Types t = scenary->getActiveType();
     int x = event->x();
     int y = event->y();
     float wx, wz;
@@ -112,6 +132,27 @@ void Render2D::mousePressEvent(QMouseEvent *event)
                     firstTile.y = rty;
                     secondTile.x = rtx;
                     secondTile.y = rty;
+                    clicked = true;
+                }
+            }
+        }
+    case OBJECT:
+        {
+            if (wx > 0.0 && wz > 0.0)
+            {
+                int rtx = (int)(wx*2)/2.0 + 0.5;
+                int rty = (int)(wz*2)/2.0 + 0.5;
+                qDebug() << "x pos: " << rtx << " z pos: " << rty;
+                if(!clicked)
+                {
+                    firstClick.x = wx;
+                    firstClick.y = wz;
+                    firstTile.x = rtx;
+                    firstTile.y = rty;
+                    CPoint3D max = CModelManager::GetInstance()->getModelSize(scenary->getActiveModel());
+                    qDebug() << "Size x: " << max.x << " y: " << max.y << " z: " << max.z;
+                    secondTile.x = rtx + max.x;
+                    secondTile.y = rty + max.z;
                     clicked = true;
                 }
             }
@@ -184,6 +225,7 @@ void Render2D::mouseReleaseEvent(QMouseEvent *event)
             }
         }
     }
+    clicked = false;
 }
     
 void Render2D::mouseMoveEvent(QMouseEvent *event)
