@@ -6,7 +6,8 @@ CScenary* CScenary::m_Scenary = 0;
 
 CScenary::CScenary(void)
 {
-    m_Models = vector<ModelInfo>();
+    m_Models = vector<vector<ModelInfo> >();
+    addNewFloor();
 }
 
 
@@ -21,19 +22,26 @@ CScenary* CScenary::getInstance()
     return m_Scenary;
 }
 
-bool CScenary::addModel(ModelInfo m_Info)
+void CScenary::addNewFloor()
 {
-    m_Models.push_back(m_Info);
+    m_Models.push_back( vector<ModelInfo>());
+}
+bool CScenary::addModel(ModelInfo m_Info, int floor)
+{
+    m_Models[floor].push_back(m_Info);
+    qDebug() << "Models in floor" << m_Models[floor].size();
     return true;
 }
 
-bool CScenary::Draw()
+bool CScenary::Draw(int floor)
 {
     CModelManager *modelManager = CModelManager::GetInstance();
+    if(floor > m_Models.size())
+        return false;
 
-    for(int i = 0; i < m_Models.size(); ++i)
+    for(int i = 0; i < m_Models[floor].size(); ++i)
     {
-        ModelInfo model = m_Models[i];
+        ModelInfo model = m_Models[floor][i];
         glPushMatrix();
             glTranslatef(model.position.x, model.position.y, model.position.z);
             glRotatef(model.rotation.x, 1, 0 ,0);
@@ -121,4 +129,17 @@ void CScenary::CleanUp()
 {
     CModelManager::GetInstance()->CleanUp();
     m_Models.clear();
+}
+
+bool CScenary::getWallCollision(ModelInfo mi, int floor)
+{
+    bool col = false;
+    for (int i = 0; i < m_Models[floor].size(); ++i)
+    {
+        if(m_Models[floor][i].type == WALL && !col)
+        {
+            col = (m_Models[floor][i] == mi);
+        }
+    }
+    return col;
 }

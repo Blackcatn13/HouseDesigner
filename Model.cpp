@@ -1,9 +1,12 @@
 #include "Model.h"
-
+#include <limits>
+#include "Point3D.h"
 
 CModel::CModel(void)
 {
     scene = NULL;
+    BBMin = CPoint3D(FLT_MAX, FLT_MAX, FLT_MAX);
+    BBMax = CPoint3D(FLT_MIN, FLT_MIN, FLT_MIN);
 }
 
 
@@ -74,7 +77,14 @@ void CModel::RecursiveRender(aiNode* node)
                     glColor4fv((GLfloat*)&mesh->mColors[0][index]);
                 if(mesh->mNormals != NULL)
                     glNormal3fv(&mesh->mNormals[index].x);
-                glVertex3fv(&mesh->mVertices[index].x);
+                aiVector3D tmp = mesh->mVertices[index];
+                glVertex3fv(&tmp.x);
+                BBMin.x = get_min(BBMin.x, tmp.x);
+                BBMin.y = get_min(BBMin.x, tmp.y);
+                BBMin.z = get_min(BBMin.x, tmp.z);
+                BBMax.x = get_max(BBMin.x, tmp.x);
+                BBMax.y = get_max(BBMin.x, tmp.y);
+                BBMax.z = get_max(BBMin.x, tmp.z);
             }
         glEnd();
         }

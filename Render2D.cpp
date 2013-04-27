@@ -8,18 +8,6 @@ Render2D::Render2D()
 {
     camera = CameraManager::GetInstance()->GetCamera(ORTHOGONAL);
     clicked = false;
-    ModelInfo ii;
-    ii.modelName = "Models/ModulParet.obj";
-    ii.position = CPoint3D(0,0,0);
-    ii.scale = CPoint3D(1,1,1);
-    ii.rotation = CPoint3D(0,90,0);
-    CScenary *scene = CScenary::getInstance();
-    scene->addModel(ii);
-    ii.modelName = "Models/radio.obj";
-    ii.position = CPoint3D(1,0,1);
-    ii.scale = CPoint3D(1,1,1);
-    ii.rotation = CPoint3D(0,0,0);
-    scene->addModel(ii);
 }
 
 Render2D::~Render2D()
@@ -34,7 +22,7 @@ void Render2D::Draw()
     CScenary * scene = CScenary::getInstance();
     scene->DrawAxis();
     scene->DrawGrid();
-    scene->Draw();
+    scene->Draw(0);
     if(clicked)
     {
         glLineWidth(5);
@@ -127,6 +115,7 @@ void Render2D::mouseReleaseEvent(QMouseEvent *event)
         ModelInfo ii;
         ii.modelName = "Models/ModulParet.obj";
         ii.scale = CPoint3D(1,1,1);
+        ii.type = WALL;
         qDebug() << "first click x" << firstTile.x;
         qDebug() << "first click y" << firstTile.y;
         qDebug() << "second click x" << secondTile.x;
@@ -152,7 +141,8 @@ void Render2D::mouseReleaseEvent(QMouseEvent *event)
             for(int i = start; i < end; i++)
             {
                 ii.position = CPoint3D(firstTile.x - 0.05 , 0, i);
-                scene->addModel(ii);
+                if(!scene->getWallCollision(ii, 0))
+                    scene->addModel(ii, 0);
             }
         }
         else
@@ -173,7 +163,8 @@ void Render2D::mouseReleaseEvent(QMouseEvent *event)
             for(int i = start; i < end; i++)
             {
                 ii.position = CPoint3D(i, 0, firstTile.y + 0.05);
-                scene->addModel(ii);
+                if(!scene->getWallCollision(ii, 0))
+                    scene->addModel(ii, 0);
             }
         }
     }
