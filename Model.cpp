@@ -130,9 +130,9 @@ CPoint3D CModel::getSize()
     if(size == CPoint3D())
     {
         CalculateBBAndSize(scene->mRootNode);
-        ceil(size.x);
-        ceil(size.y);
-        ceil(size.z);
+        size.x = ceil(size.x);
+        size.y = ceil(size.y);
+        size.z = ceil(size.z);
     }
     return size;
 }

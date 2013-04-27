@@ -9,14 +9,6 @@ Render2D::Render2D()
 {
     camera = CameraManager::GetInstance()->GetCamera(ORTHOGONAL);
     clicked = false;
-
-    ModelInfo ii;
-    ii.modelName = "Models/Furnish/Accesories/radio.obj";
-    ii.position = CPoint3D(3,0,3);
-    ii.scale = CPoint3D(1,1,1);
-    ii.rotation = CPoint3D(0,90,0);
-    CScenary *scene = CScenary::getInstance();
-    scene->addModel(ii);
 }
 
 Render2D::~Render2D()
@@ -51,10 +43,10 @@ void Render2D::Draw()
             {
                 glColor3f(1.0, 0.2, 1.0);
                 glBegin(GL_QUADS);
-                    glVertex3f(firstTile.x, 0.05, firstTile.y);
-                    glVertex3f(firstTile.x, 0.05, secondTile.y);
-                    glVertex3f(secondTile.x, 0.05, secondTile.y);
-                    glVertex3f(secondTile.x, 0.05, firstTile.y);
+                    glVertex3f(firstTile.x, -0.005, firstTile.y);
+                    glVertex3f(firstTile.x, -0.005, secondTile.y);
+                    glVertex3f(secondTile.x, -0.005, secondTile.y);
+                    glVertex3f(secondTile.x, -0.005, firstTile.y);
                 glEnd();
             }
         }
@@ -140,9 +132,8 @@ void Render2D::mousePressEvent(QMouseEvent *event)
         {
             if (wx > 0.0 && wz > 0.0)
             {
-                int rtx = (int)(wx*2)/2.0 + 0.5;
-                int rty = (int)(wz*2)/2.0 + 0.5;
-                qDebug() << "x pos: " << rtx << " z pos: " << rty;
+                int rtx = (int)wx;
+                int rty = (int)wz;
                 if(!clicked)
                 {
                     firstClick.x = wx;
@@ -150,7 +141,6 @@ void Render2D::mousePressEvent(QMouseEvent *event)
                     firstTile.x = rtx;
                     firstTile.y = rty;
                     CPoint3D max = CModelManager::GetInstance()->getModelSize(scenary->getActiveModel());
-                    qDebug() << "Size x: " << max.x << " y: " << max.y << " z: " << max.z;
                     secondTile.x = rtx + max.x;
                     secondTile.y = rty + max.z;
                     clicked = true;
@@ -165,17 +155,18 @@ void Render2D::mouseReleaseEvent(QMouseEvent *event)
 {
     if(clicked)
     {
-        Types t = CScenary::getInstance()->getActiveType();
+        CScenary *scenary = CScenary::getInstance();
+        Types t = scenary->getActiveType();
+        ModelInfo ii;
+        ii.modelName = scenary->getActiveModel();
+        ii.scale = CPoint3D(1,1,1);
+        ii.type = t;
+        clicked = false;
+
         switch(t)
         {
         case WALL:
-            {
-                CScenary *scene = CScenary::getInstance();
-                ModelInfo ii;
-                ii.modelName = scene->getActiveModel();
-                ii.scale = CPoint3D(1,1,1);
-                ii.type = t;
-                clicked = false;
+            { 
                 int angle;
                 int start, end;
                 if(firstTile.x == secondTile.x)
@@ -196,8 +187,8 @@ void Render2D::mouseReleaseEvent(QMouseEvent *event)
                     for(int i = start; i < end; i++)
                     {
                         ii.position = CPoint3D(firstTile.x - 0.05 , 0, i);
-                        if(!scene->getWallCollision(ii))
-                            scene->addModel(ii);
+                        if(!scenary->getWallCollision(ii))
+                            scenary->addModel(ii);
                     }
                 }
                 else
@@ -218,11 +209,15 @@ void Render2D::mouseReleaseEvent(QMouseEvent *event)
                     for(int i = start; i < end; i++)
                     {
                         ii.position = CPoint3D(i, 0, firstTile.y + 0.05);
-                        if(!scene->getWallCollision(ii))
-                            scene->addModel(ii);
+                        if(!scenary->getWallCollision(ii))
+                            scenary->addModel(ii);
                     }
                 }
             }
+        case OBJECT:
+            ii.rotation = CPoint3D();
+            ii.position = CPoint3D((firstTile.x + secondTile.x) / 2, 0, (firstTile.y + secondTile.y) / 2);
+            scenary->addModel(ii);
         }
     }
     clicked = false;
@@ -236,7 +231,8 @@ void Render2D::mouseMoveEvent(QMouseEvent *event)
     float wx, wz;
 
     getWorldMouseCoord(x, y, wx, wz);
-    Types t = CScenary::getInstance()->getActiveType();
+    CScenary *scenary = CScenary::getInstance();
+    Types t = scenary->getActiveType();
 
     if(wx > 0.0 && wz > 0.0)
     {
@@ -266,6 +262,16 @@ void Render2D::mouseMoveEvent(QMouseEvent *event)
                     }
                     secondTile.x = rtx;
                     secondTile.y = rty;
+                }
+            case OBJECT:
+                {
+                    int rtx = (int)wx;
+                    int rty = (int)wz;
+                    firstTile.x = rtx;
+                    firstTile.y = rty;
+                    CPoint3D max = CModelManager::GetInstance()->getModelSize(scenary->getActiveModel());
+                    secondTile.x = rtx + max.x;
+                    secondTile.y = rty + max.z;
                 }
             }
         }
