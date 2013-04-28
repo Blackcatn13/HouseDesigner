@@ -38,7 +38,7 @@ bool CProjectManager::SaveMap(string fileName)
         file << "## Floor " << currentFloor << endl;
         file << "### Walls" << endl;
         for(int index = 0; index < walls[currentFloor].size(); ++index)
-            file << getInfoFromObject(walls[currentFloor][index]) << endl;
+            file << getInfoFromObject(walls[currentFloor][index]);
         file << "### Objects" << endl;
         for(int index = 0; index < objects[currentFloor].size(); ++index)
             file << getInfoFromObject(objects[currentFloor][index]) << endl;
