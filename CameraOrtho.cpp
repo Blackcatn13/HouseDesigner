@@ -10,9 +10,10 @@ CameraOrtho::CameraOrtho()
     glLoadIdentity();
 
     // Set default values for camera and projection
-    orthoZoom = 2.5;
-    orthoAngleH = 0;
-    orthoAngleV = 0;
+    //FIXME: Set orthozoom to 2.5 again and orthoangles to 0.
+    orthoZoom = -20;
+    orthoAngleH = -2;
+    orthoAngleV = -2;
 }
 
 CameraOrtho::~CameraOrtho()

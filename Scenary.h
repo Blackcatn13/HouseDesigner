@@ -16,10 +16,17 @@ public:
     void DrawAxis();
     void DrawGrid();
     void CleanUp();
+    void setGridMaxX(int gridMaxX);
+    void setGridMaxZ(int gridMaxZ);
+    int getGridMaxX(){ return m_gridMaxX;}
+    int getGridMaxZ(){ return m_gridMaxZ;}
+
 private:
     CScenary(void);
-    vector<ModelInfo> m_Models;  
-    static CScenary* m_Scenary;
+    vector<ModelInfo>   m_Models;
+    static CScenary*    m_Scenary;
+    int                 m_gridMaxX;
+    int                 m_gridMaxZ;
 };
 
 #endif
