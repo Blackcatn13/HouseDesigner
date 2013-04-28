@@ -43,6 +43,7 @@ bool CProjectManager::SaveMap(string fileName)
         for(int index = 0; index < objects[currentFloor].size(); ++index)
             file << getInfoFromObject(objects[currentFloor][index]) << endl;
     }
+    file.close();
 
     return false;
 }
