@@ -7,9 +7,11 @@ public:
     CPoint3D(void);
     CPoint3D(float nx, float ny, float nz);
     ~CPoint3D(void);
+    void Normalize();
     CPoint3D operator+(const CPoint3D p);
     CPoint3D operator-(const CPoint3D p);
     CPoint3D operator*(const CPoint3D p);
+    CPoint3D operator*(const float val);
     CPoint3D &operator=(const CPoint3D p);
     CPoint3D &operator+=(const CPoint3D p);
     bool operator==(const CPoint3D &p) const;

@@ -1,5 +1,5 @@
 #include "Point3D.h"
-
+#include <cmath>
 
 CPoint3D::CPoint3D(void)
 {
@@ -59,4 +59,17 @@ bool CPoint3D::operator==(const CPoint3D &p) const
 bool CPoint3D::operator!=(const CPoint3D &p) const
 {
     return !(x==p.x && y == p.y && z == p.z);
+}
+
+void CPoint3D::Normalize()
+{
+    float mod = sqrt(x*x + y*y + z*z);
+    x /= mod;
+    y /= mod;
+    z /= mod;
+}
+
+CPoint3D CPoint3D::operator*(const float val)
+{
+    return CPoint3D(x*val, y*val, z*val);
 }

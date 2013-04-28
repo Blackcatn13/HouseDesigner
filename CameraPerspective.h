@@ -15,6 +15,7 @@ public:
     void move(float ah, float av);
     void AddDistance(float d);
     float getZoom() {return R;}
+    void AddYawAndPitch(float yaw, float pitch) {;}
 private:
     float R,angleh,anglev;
     float Cnear,Cfar;

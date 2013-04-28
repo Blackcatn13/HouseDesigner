@@ -123,7 +123,7 @@ void Render2D::mouseReleaseEvent(QMouseEvent *event)
     }    
 }
     
-void Render2D::mouseMoveEvent(QMouseEvent *event)
+void Render2D::mouseMoveEvent(QMouseEvent *event, int xG, int yG)
 {
 
     int x = event->x();

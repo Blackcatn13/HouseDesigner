@@ -15,6 +15,7 @@ public:
     void move(float ah, float av);
     void AddDistance(float d);
     float getZoom() {return orthoZoom;}
+    void AddYawAndPitch(float yaw, float pitch) {;}
 private:
     float orthoZoom, orthoAngleH, orthoAngleV;
 };

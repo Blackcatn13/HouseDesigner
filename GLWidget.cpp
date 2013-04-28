@@ -71,6 +71,8 @@ void GLWidget::initializeGL()
 void GLWidget::resizeGL(int w, int h)
 {
     // Resize all the render Modes cameras.
+    width = w;
+    heigth = h;
     RenderManager* RM = RenderManager::GetInstance();
     RM->SetProjection(w, h);
 }
@@ -118,7 +120,7 @@ void GLWidget::mouseReleaseEvent(QMouseEvent *event)
 void GLWidget::mouseMoveEvent(QMouseEvent *event)
 {
     RenderManager* RM = RenderManager::GetInstance();
-    RM->GetRenderMode(actualMode)->mouseMoveEvent(event);
+    RM->GetRenderMode(actualMode)->mouseMoveEvent(event, mapToGlobal(QPoint(width/2, heigth/2)).x(), mapToGlobal(QPoint(width/2, heigth/2)).y());
     updateGL();
 }
 
@@ -138,10 +140,20 @@ void GLWidget::wheelEvent(QWheelEvent *event)
  *****************************************************************************/
 void GLWidget::keyPressEvent(QKeyEvent* event)
 {
-
-    // Call the actual render mode key update to make its changes.
-    RenderManager* RM = RenderManager::GetInstance();
-    RM->GetRenderMode(actualMode)->KeyEvent(event->key());
+    if(event->key() == Qt::Key_L)
+    {
+        actualMode = EXPLORER;
+    }
+    else if(event->key() == Qt::Key_P)
+    {
+        actualMode = EDITOR_2D;
+    }
+    else
+    {
+        // Call the actual render mode key update to make its changes.
+        RenderManager* RM = RenderManager::GetInstance();
+        RM->GetRenderMode(actualMode)->KeyEvent(event->key());
+    }
 
     updateGL();
 }

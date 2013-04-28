@@ -25,6 +25,8 @@ protected:
 
 private:
     Modes actualMode;
+    float width;
+    float heigth;
 };
 
 #endif  /* _GLWIDGET_H */
