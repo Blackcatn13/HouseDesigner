@@ -6,6 +6,7 @@
 #include <QModelIndex>
 #include <QFileSystemModel>
 #include <QDir>
+#include "ProjectManager.h"
 
 ThothWindow::ThothWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -150,4 +151,9 @@ void ThothWindow::on_pushButton_7_clicked()
     {
         qDebug("Delete model with path: %s", qPrintable(m_decorateModel->fileInfo(indx).absoluteFilePath()));
     }
+}
+
+void ThothWindow::actionSave_project_triggered()
+{
+    CProjectManager::getInstance()->SaveMap("zProject.txt");
 }

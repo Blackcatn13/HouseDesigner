@@ -21,6 +21,8 @@ public:
     string getActiveModel() {return activeModel;}
     void setActiveModel(string model);
     void setActiveType(Types t);
+    vector< vector<ModelInfo> > getWalls() {return m_WallModels;}
+    vector< vector<ModelInfo> > getObjects() {return m_ObjectModels;}
 private:
     CScenary(void);
     vector< vector<ModelInfo> > m_WallModels;
