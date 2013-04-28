@@ -3,6 +3,7 @@
 
 #include "Util.h"
 #include "Camera.h"
+#include <QMouseEvent>
 
 class CameraPerspective : public Camera
 {

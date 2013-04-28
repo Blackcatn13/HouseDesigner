@@ -1,23 +1,23 @@
-#include "Render2D.h"
+#include "RenderIso.h"
 #include "Scenary.h"
 #include "CameraManager.h"
 #include "Camera.h"
 #include "ModelManager.h"
 
 
-Render2D::Render2D()
+RenderIso::RenderIso()
 {
     camera = CameraManager::GetInstance()->GetCamera(PERSPECTIVE);
     clicked = false;
 }
 
-Render2D::~Render2D()
+RenderIso::~RenderIso()
 {
     if(camera)
         delete camera;
 }
 
-void Render2D::Draw()
+void RenderIso::Draw()
 {
     camera->update();
     CScenary * scene = CScenary::getInstance();
@@ -39,12 +39,12 @@ void Render2D::Draw()
     }
 }
 
-void Render2D::Update()
+void RenderIso::Update()
 {
 
 }
 
-bool Render2D::KeyEvent(int key)
+bool RenderIso::KeyEvent(int key)
 {
     bool update = true;
 
@@ -72,38 +72,36 @@ bool Render2D::KeyEvent(int key)
     return update;
 }
 
-void Render2D::SetCameraProjection(int w, int h)
+void RenderIso::mousePressEvent(QMouseEvent *event)
+{
+ lastPos = event->pos();
+}
+
+void RenderIso::mouseMoveEvent(QMouseEvent *event)
+{
+    GLfloat dx = GLfloat(event->x() - lastPos.x()) / 120;
+    GLfloat dy = GLfloat(event->y() - lastPos.y()) / 120;
+    if (event->buttons() & Qt::LeftButton) {
+        xRot += 180 * dy;
+        yRot += 180 * dx;
+    } else if (event->buttons() & Qt::RightButton) {
+        xRot += 180 * dy;
+        yRot += 180 * dx;
+    }
+    lastPos = event->pos();
+}
+
+void RenderIso::SetCameraProjection(int w, int h)
 {
     camera->setProjection(w,h);
 }
 
-void Render2D::AddCameraDistance(float d)
+void RenderIso::AddCameraDistance(float d)
 {
     camera->AddDistance(d);
 }
 
-void Render2D::mousePressEvent(QMouseEvent *event)
-{
-    CScenary *scenary = CScenary::getInstance();
-    Types t = scenary->getActiveType();
-    int x = event->x();
-    int y = event->y();
-    float wx, wz;
-
-    getWorldMouseCoord(x, y, wx, wz);
-
-    switch(t)
-    {
-    case WALL:
-        FirstClickWall(wx, wz);
-        break;
-    case OBJECT:
-        FirstClickObject(wx, wz);
-        break;
-    }
-}
-
-void Render2D::mouseReleaseEvent(QMouseEvent *event)
+void RenderIso::mouseReleaseEvent(QMouseEvent *event)
 {
     if(clicked)
     {
@@ -123,35 +121,7 @@ void Render2D::mouseReleaseEvent(QMouseEvent *event)
     }    
 }
     
-void Render2D::mouseMoveEvent(QMouseEvent *event)
-{
-
-    int x = event->x();
-    int y = event->y();
-    float wx, wz;
-
-    getWorldMouseCoord(x, y, wx, wz);
-    CScenary *scenary = CScenary::getInstance();
-    Types t = scenary->getActiveType();
-
-    if(wx > 0.0 && wz > 0.0)
-    {
-        if(clicked)
-        {
-            switch(t)
-            {
-            case WALL:
-                MoveLine(wx, wz);
-                break;
-            case OBJECT:
-                MoveQuad(wx, wz);
-                break;
-            }
-        }
-    }
-}
-
-void Render2D::getWorldMouseCoord(int x, int y, float &wx, float &wz)
+void RenderIso::getWorldMouseCoord(int x, int y, float &wx, float &wz)
 {
     GLfloat MWX, MWY;
     GLdouble rx, ry, rz;
@@ -172,7 +142,7 @@ void Render2D::getWorldMouseCoord(int x, int y, float &wx, float &wz)
     wz = rz;
 }
 
-void Render2D::DrawLine()
+void RenderIso::DrawLine()
 {
     glLineWidth(5);
     glColor3f(1.0, 0.0, 1.0);
@@ -183,7 +153,7 @@ void Render2D::DrawLine()
     glLineWidth(1);
 }
 
-void Render2D::DrawQuad()
+void RenderIso::DrawQuad()
 {
     glColor3f(1.0, 0.2, 1.0);
     glBegin(GL_QUADS);
@@ -194,7 +164,7 @@ void Render2D::DrawQuad()
     glEnd();
 }
 
-void Render2D::MoveQuad(float wx, float wz)
+void RenderIso::MoveQuad(float wx, float wz)
 {
     CScenary *scenary = CScenary::getInstance();
     int rtx = (int)wx;
@@ -206,7 +176,7 @@ void Render2D::MoveQuad(float wx, float wz)
     secondTile.y = rty + max.z;
 }
 
-void Render2D::MoveLine(float wx, float wz)
+void RenderIso::MoveLine(float wx, float wz)
 {
     int rtx = (int)(wx*2)/2.0 + 0.5;
     int rty = (int)(wz*2)/2.0 + 0.5;
@@ -230,7 +200,7 @@ void Render2D::MoveLine(float wx, float wz)
     secondTile.y = rty;
 }
 
-void Render2D::AddObject()
+void RenderIso::AddObject()
 {
     CScenary *scenary = CScenary::getInstance();
     Types t = scenary->getActiveType();
@@ -243,7 +213,7 @@ void Render2D::AddObject()
     scenary->addModel(ii);
 }
 
-void Render2D::AddWall()
+void RenderIso::AddWall()
 {
     CScenary *scenary = CScenary::getInstance();
     Types t = scenary->getActiveType();
@@ -297,7 +267,7 @@ void Render2D::AddWall()
     }
 }
 
-void Render2D::FirstClickObject(float wx, float wz)
+void RenderIso::FirstClickObject(float wx, float wz)
 {
     CScenary *scenary = CScenary::getInstance();
     if (wx > 0.0 && wz > 0.0)
@@ -318,7 +288,7 @@ void Render2D::FirstClickObject(float wx, float wz)
     }
 }
 
-void Render2D::FirstClickWall(float wx, float wz)
+void RenderIso::FirstClickWall(float wx, float wz)
 {
     if (wx > 0.0 && wz > 0.0)
     {

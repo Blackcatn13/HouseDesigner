@@ -3,12 +3,13 @@
 #include <QApplication>
 #include "Scenary.h"
 #include "Render2D.h"
+#include "RenderIso.h"
 #include "RenderManager.h"
 
 GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent)
 {
     setMouseTracking(true);
-    actualMode = EDITOR_2D;
+    actualMode = EDITOR_3D;
 }
 
 GLWidget::~GLWidget()

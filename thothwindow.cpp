@@ -151,3 +151,4 @@ void ThothWindow::on_pushButton_7_clicked()
         qDebug("Delete model with path: %s", qPrintable(m_decorateModel->fileInfo(indx).absoluteFilePath()));
     }
 }
+

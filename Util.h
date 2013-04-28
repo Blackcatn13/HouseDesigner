@@ -36,7 +36,7 @@ using namespace std;
 #define INIT_HEIGHT 600
 
 enum Views {PERSPECTIVE, ORTHOGONAL};
-enum Modes {EDITOR_2D, EXPLORER, EXPLORER_ISO};
+enum Modes {EDITOR_2D, EDITOR_3D, EXPLORER, EXPLORER_ISO};
 enum Types {WALL, OBJECT, NOTHING};
 
 struct Point2D{

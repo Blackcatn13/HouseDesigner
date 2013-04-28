@@ -1,6 +1,7 @@
 #include "RenderManager.h"
 #include "Render.h"
 #include "Render2D.h"
+#include "RenderIso.h"
 
 
 RenderManager *RenderManager::m_RenderManager = 0;
@@ -9,6 +10,8 @@ RenderManager::RenderManager()
 {
     m_Renders = RenderMap();
     m_Renders.insert(std::pair<Modes, Render*>(EDITOR_2D, new Render2D()));
+    m_Renders.insert(std::pair<Modes, Render*>(EDITOR_3D, new RenderIso()));
+
     // TODO:
     // Afegir els inserts per els renders que falten un cop creats.
 
