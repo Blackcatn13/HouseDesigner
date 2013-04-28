@@ -30,25 +30,11 @@ void Render2D::Draw()
         switch(t)
         {
         case WALL:
-            {
-                glLineWidth(5);
-                glColor3f(1.0, 0.0, 1.0);
-                glBegin(GL_LINES);
-                    glVertex3f(firstTile.x, 0.05, firstTile.y);
-                    glVertex3f(secondTile.x, 0.05, secondTile.y);
-                glEnd();
-                glLineWidth(1);
-            }
+            DrawLine();
+            break;
         case OBJECT:
-            {
-                glColor3f(1.0, 0.2, 1.0);
-                glBegin(GL_QUADS);
-                    glVertex3f(firstTile.x, -0.005, firstTile.y);
-                    glVertex3f(firstTile.x, -0.005, secondTile.y);
-                    glVertex3f(secondTile.x, -0.005, secondTile.y);
-                    glVertex3f(secondTile.x, -0.005, firstTile.y);
-                glEnd();
-            }
+            DrawQuad();
+            break;
         }
     }
 }
@@ -83,7 +69,6 @@ bool Render2D::KeyEvent(int key)
     default:
         update = false;
     }
-
     return update;
 }
 
@@ -110,45 +95,12 @@ void Render2D::mousePressEvent(QMouseEvent *event)
     switch(t)
     {
     case WALL:
-        {
-            if (wx > 0.0 && wz > 0.0)
-            {
-                int rtx = (int)(wx*2)/2.0 + 0.5;
-                int rty = (int)(wz*2)/2.0 + 0.5;
-    
-                if(!clicked)
-                {
-                    firstClick.x = wx;
-                    firstClick.y = wz;
-                    firstTile.x = rtx;
-                    firstTile.y = rty;
-                    secondTile.x = rtx;
-                    secondTile.y = rty;
-                    clicked = true;
-                }
-            }
-        }
+        FirstClickWall(wx, wz);
+        break;
     case OBJECT:
-        {
-            if (wx > 0.0 && wz > 0.0)
-            {
-                int rtx = (int)wx;
-                int rty = (int)wz;
-                if(!clicked)
-                {
-                    firstClick.x = wx;
-                    firstClick.y = wz;
-                    firstTile.x = rtx;
-                    firstTile.y = rty;
-                    CPoint3D max = CModelManager::GetInstance()->getModelSize(scenary->getActiveModel());
-                    secondTile.x = rtx + max.x;
-                    secondTile.y = rty + max.z;
-                    clicked = true;
-                }
-            }
-        }
+        FirstClickObject(wx, wz);
+        break;
     }
-
 }
 
 void Render2D::mouseReleaseEvent(QMouseEvent *event)
@@ -157,70 +109,18 @@ void Render2D::mouseReleaseEvent(QMouseEvent *event)
     {
         CScenary *scenary = CScenary::getInstance();
         Types t = scenary->getActiveType();
-        ModelInfo ii;
-        ii.modelName = scenary->getActiveModel();
-        ii.scale = CPoint3D(1,1,1);
-        ii.type = t;
         clicked = false;
 
         switch(t)
         {
         case WALL:
-            { 
-                int angle;
-                int start, end;
-                if(firstTile.x == secondTile.x)
-                {
-                    if(firstTile.y < secondTile.y)
-                    {
-                        start = firstTile.y;
-                        end = secondTile.y;
-                        angle = 180;
-                    }
-                    else
-                    {
-                        start = secondTile.y;
-                        end = firstTile.y;
-                        angle = 180;
-                    }
-                    ii.rotation = CPoint3D(0, 180, 0);
-                    for(int i = start; i < end; i++)
-                    {
-                        ii.position = CPoint3D(firstTile.x - 0.05 , 0, i);
-                        if(!scenary->getWallCollision(ii))
-                            scenary->addModel(ii);
-                    }
-                }
-                else
-                {
-                    if(firstTile.x < secondTile.x)
-                    {
-                        start = firstTile.x;
-                        end = secondTile.x;
-                        angle = 90;
-                    }
-                    else
-                    {
-                        start = secondTile.x;
-                        end = firstTile.x;
-                        angle = -90;
-                    }
-                    ii.rotation = CPoint3D(0, -90, 0);
-                    for(int i = start; i < end; i++)
-                    {
-                        ii.position = CPoint3D(i, 0, firstTile.y + 0.05);
-                        if(!scenary->getWallCollision(ii))
-                            scenary->addModel(ii);
-                    }
-                }
-            }
+            AddWall();
+            break;
         case OBJECT:
-            ii.rotation = CPoint3D();
-            ii.position = CPoint3D((firstTile.x + secondTile.x) / 2, 0, (firstTile.y + secondTile.y) / 2);
-            scenary->addModel(ii);
+            AddObject();
+            break;
         }
-    }
-    clicked = false;
+    }    
 }
     
 void Render2D::mouseMoveEvent(QMouseEvent *event)
@@ -241,38 +141,11 @@ void Render2D::mouseMoveEvent(QMouseEvent *event)
             switch(t)
             {
             case WALL:
-                {
-                    int rtx = (int)(wx*2)/2.0 + 0.5;
-                    int rty = (int)(wz*2)/2.0 + 0.5;
-                    float nx, ny;
-                    nx = wx - firstClick.x;
-                    ny = wz - firstClick.y;
-                    float length = sqrt(nx*nx+ny*ny);
-                    //Abs function have problems. let's solve it momentarily.
-                    if (nx < 0)
-                        nx = nx * -1;
-                    float sin = nx/length;
-                    if(sin < SIN_45)
-                    {
-                        rtx = firstTile.x;
-                    }
-                    else
-                    {
-                        rty = firstTile.y;
-                    }
-                    secondTile.x = rtx;
-                    secondTile.y = rty;
-                }
+                MoveLine(wx, wz);
+                break;
             case OBJECT:
-                {
-                    int rtx = (int)wx;
-                    int rty = (int)wz;
-                    firstTile.x = rtx;
-                    firstTile.y = rty;
-                    CPoint3D max = CModelManager::GetInstance()->getModelSize(scenary->getActiveModel());
-                    secondTile.x = rtx + max.x;
-                    secondTile.y = rty + max.z;
-                }
+                MoveQuad(wx, wz);
+                break;
             }
         }
     }
@@ -297,4 +170,172 @@ void Render2D::getWorldMouseCoord(int x, int y, float &wx, float &wz)
     gluUnProject(MWX, MWY, 0, modelview, projection, viewport, &rx, &ry, &rz);
     wx = rx;
     wz = rz;
+}
+
+void Render2D::DrawLine()
+{
+    glLineWidth(5);
+    glColor3f(1.0, 0.0, 1.0);
+    glBegin(GL_LINES);
+        glVertex3f(firstTile.x, 0.05, firstTile.y);
+        glVertex3f(secondTile.x, 0.05, secondTile.y);
+    glEnd();
+    glLineWidth(1);
+}
+
+void Render2D::DrawQuad()
+{
+    glColor3f(1.0, 0.2, 1.0);
+    glBegin(GL_QUADS);
+        glVertex3f(firstTile.x, -0.005, firstTile.y);
+        glVertex3f(firstTile.x, -0.005, secondTile.y);
+        glVertex3f(secondTile.x, -0.005, secondTile.y);
+        glVertex3f(secondTile.x, -0.005, firstTile.y);
+    glEnd();
+}
+
+void Render2D::MoveQuad(float wx, float wz)
+{
+    CScenary *scenary = CScenary::getInstance();
+    int rtx = (int)wx;
+    int rty = (int)wz;
+    firstTile.x = rtx;
+    firstTile.y = rty;
+    CPoint3D max = CModelManager::GetInstance()->getModelSize(scenary->getActiveModel());
+    secondTile.x = rtx + max.x;
+    secondTile.y = rty + max.z;
+}
+
+void Render2D::MoveLine(float wx, float wz)
+{
+    int rtx = (int)(wx*2)/2.0 + 0.5;
+    int rty = (int)(wz*2)/2.0 + 0.5;
+    float nx, ny;
+    nx = wx - firstClick.x;
+    ny = wz - firstClick.y;
+    float length = sqrt(nx*nx+ny*ny);
+    //Abs function have problems. let's solve it momentarily.
+    if (nx < 0)
+        nx = nx * -1;
+    float sin = nx/length;
+    if(sin < SIN_45)
+    {
+        rtx = firstTile.x;
+    }
+    else
+    {
+        rty = firstTile.y;
+    }
+    secondTile.x = rtx;
+    secondTile.y = rty;
+}
+
+void Render2D::AddObject()
+{
+    CScenary *scenary = CScenary::getInstance();
+    Types t = scenary->getActiveType();
+    ModelInfo ii;
+    ii.modelName = scenary->getActiveModel();
+    ii.scale = CPoint3D(1,1,1);
+    ii.type = t;
+    ii.rotation = CPoint3D();
+    ii.position = CPoint3D((firstTile.x + secondTile.x) / 2, 0, (firstTile.y + secondTile.y) / 2);
+    scenary->addModel(ii);
+}
+
+void Render2D::AddWall()
+{
+    CScenary *scenary = CScenary::getInstance();
+    Types t = scenary->getActiveType();
+    ModelInfo ii;
+    ii.modelName = scenary->getActiveModel();
+    ii.scale = CPoint3D(1,1,1);
+    ii.type = t;
+    int angle;
+    int start, end;
+    if(firstTile.x == secondTile.x)
+    {
+        if(firstTile.y < secondTile.y)
+        {
+            start = firstTile.y;
+            end = secondTile.y;
+            angle = 180;
+        }
+        else
+        {
+            start = secondTile.y;
+            end = firstTile.y;
+            angle = 180;
+        }
+        ii.rotation = CPoint3D(0, 180, 0);
+        for(int i = start; i < end; i++)
+        {
+            ii.position = CPoint3D(firstTile.x - 0.05 , 0, i);
+            if(!scenary->getWallCollision(ii))
+                scenary->addModel(ii);
+        }
+    }
+    else
+    {
+        if(firstTile.x < secondTile.x)
+        {
+            start = firstTile.x;
+            end = secondTile.x;
+            angle = 90;
+        }
+        else
+        {
+            start = secondTile.x;
+            end = firstTile.x;
+            angle = -90;
+        }
+        ii.rotation = CPoint3D(0, -90, 0);
+        for(int i = start; i < end; i++)
+        {
+            ii.position = CPoint3D(i, 0, firstTile.y + 0.05);
+            if(!scenary->getWallCollision(ii))
+                scenary->addModel(ii);
+        }
+    }
+}
+
+void Render2D::FirstClickObject(float wx, float wz)
+{
+    CScenary *scenary = CScenary::getInstance();
+    if (wx > 0.0 && wz > 0.0)
+    {
+        int rtx = (int)wx;
+        int rty = (int)wz;
+        if(!clicked)
+        {
+            firstClick.x = wx;
+            firstClick.y = wz;
+            firstTile.x = rtx;
+            firstTile.y = rty;
+            CPoint3D max = CModelManager::GetInstance()->getModelSize(scenary->getActiveModel());
+            secondTile.x = rtx + max.x;
+            secondTile.y = rty + max.z;
+            clicked = true;
+        }
+    }
+}
+
+void Render2D::FirstClickWall(float wx, float wz)
+{
+    if (wx > 0.0 && wz > 0.0)
+    {
+        int rtx = (int)(wx*2)/2.0 + 0.5;
+        int rty = (int)(wz*2)/2.0 + 0.5;
+    
+        if(!clicked)
+        {
+            firstClick.x = wx;
+            firstClick.y = wz;
+            firstTile.x = rtx;
+            firstTile.y = rty;
+            secondTile.x = rtx;
+            secondTile.y = rty;
+            clicked = true;
+        }
+    }
 }
