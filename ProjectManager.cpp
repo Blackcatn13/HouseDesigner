@@ -30,7 +30,7 @@ bool CProjectManager::SaveMap(string fileName)
     vector< vector<ModelInfo> > walls = scenary->getWalls();
     vector< vector<ModelInfo> > objects = scenary->getObjects();
     ofstream file;
-    file.open(fileName);
+    file.open(fileName.c_str());
     int totalFloors = walls.size();
 
     for(int currentFloor = 0; currentFloor < totalFloors; ++currentFloor)
