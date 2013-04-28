@@ -183,13 +183,19 @@ bool CScenary::getWall2ObjectCollision(ModelInfo mi)
         if(mi.rotation == CPoint3D(0, 180, 0))
         {
             posaux.x += 0.05;
-            if(posaux.x > (maux.position.x - size.x/2) && posaux.x < (maux.position.x + size.x/2) && posaux.z >= (maux.position.z - size.z/2) && posaux.z < (maux.position.z + size.z/2))
+            if((posaux.x > (maux.position.x - size.x/2)) && 
+                (posaux.x < (maux.position.x + size.x/2)) &&
+                (posaux.z >= (maux.position.z - size.z/2)) && 
+                (posaux.z < (maux.position.z + size.z/2)))
                 return true;
         }
         if(mi.rotation == CPoint3D(0, -90, 0))
         {
             posaux.z -= 0.05;
-            if(posaux.x >= (maux.position.x - size.x/2) && posaux.x < (maux.position.x + size.x/2) && posaux.z > (maux.position.z - size.z/2) && posaux.z < (maux.position.z + size.z/2))
+            if((posaux.x >= (maux.position.x - size.x/2)) && 
+                (posaux.x < (maux.position.x + size.x/2)) &&
+                (posaux.z > (maux.position.z - size.z/2)) && 
+                (posaux.z < (maux.position.z + size.z/2)))
                 return true;
         }
     }
@@ -198,11 +204,56 @@ bool CScenary::getWall2ObjectCollision(ModelInfo mi)
 
 bool CScenary::getObject2ObjectCollision(ModelInfo mi)
 {
+    CModelManager *modelM = CModelManager::GetInstance();
+    CPoint3D size1;
+    CPoint3D size2;
+    ModelInfo maux;
+    for (int i = 0; i < m_ObjectModels[activeFloor].size(); ++i)
+    {
+        maux = m_ObjectModels[activeFloor][i];
+        if(maux == mi)
+            return true;
+        size1 = modelM->getModelSize(maux.modelName);
+        size2 = modelM->getModelSize(mi.modelName);
+        if(!((mi.position.x - size2.x/2 >= maux.position.x + size1.x/2) ||
+            (mi.position.x + size2.x/2 <= maux.position.x - size1.x/2) ||
+            (mi.position.z - size2.z/2 >= maux.position.z + size1.z/2) ||
+            (mi.position.z + size2.x/2 <= maux.position.z - size1.z/2)))
+            return true;
+    }
     return false;
 }
 
 bool CScenary::getObject2WallCollision(ModelInfo mi)
 {
+    CModelManager *modelM = CModelManager::GetInstance();
+    CPoint3D size;
+    ModelInfo maux;
+    CPoint3D posaux;
+    for (int i = 0; i < m_WallModels[activeFloor].size(); ++i)
+    {
+        maux = m_WallModels[activeFloor][i];
+        posaux = maux.position;
+        size = modelM->getModelSize(mi.modelName);
+        if(maux.rotation == CPoint3D(0, 180, 0))
+        {
+            posaux.x += 0.05;
+            if((posaux.x > (mi.position.x - size.x/2)) && 
+                (posaux.x < (mi.position.x + size.x/2)) &&
+                (posaux.z >= (mi.position.z - size.z/2)) && 
+                (posaux.z < (mi.position.z + size.z/2)))
+                return true;
+        }
+        if(maux.rotation == CPoint3D(0, -90, 0))
+        {
+            posaux.z -= 0.05;
+            if((posaux.x >= (mi.position.x - size.x/2)) && 
+                (posaux.x < (mi.position.x + size.x/2)) &&
+                (posaux.z > (mi.position.z - size.z/2)) && 
+                (posaux.z < (mi.position.z + size.z/2)))
+                return true;
+        }
+    }
     return false;
 }
 
