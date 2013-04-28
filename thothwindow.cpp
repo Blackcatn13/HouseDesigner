@@ -27,6 +27,7 @@ ThothWindow::ThothWindow(QWidget *parent) :
 ThothWindow::~ThothWindow()
 {
     delete ui;
+    //FIXME: Take care if the user closes the application and i'm not initializated.
     delete m_buildModel;
     delete m_decorateModel;
     delete m_furnishModel;
@@ -113,7 +114,17 @@ void ThothWindow::on_pushButton_7_clicked()
 
 void ThothWindow::on_lineEdit_2_editingFinished()
 {
-    //workspace size x has changed.
+    //New size of x grid.
+    QString txt = ui->lineEdit_2->text();
+    int maxX = txt.toInt();
+    if (maxX > 0 and maxX < 255)
+        CScenary::getInstance()->setGridMaxX(maxX);
+}
 
-    CScenary::getInstance()->setGridMaxX();
+void ThothWindow::on_lineEdit_editingFinished()
+{
+    //New size of x grid.
+    int maxZ = ui->lineEdit->text().toInt();
+    if (maxZ > 0 and maxZ < 255)
+        CScenary::getInstance()->setGridMaxZ(maxZ);
 }

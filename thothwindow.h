@@ -25,6 +25,10 @@ private slots:
     void on_pushButton_clicked();
 
     void on_pushButton_2_clicked();
+
+    void on_lineEdit_editingFinished();
+    void on_lineEdit_2_editingFinished();
+
 private:
     Ui::ThothWindow     *ui;
     QDirModel           *treeModel;

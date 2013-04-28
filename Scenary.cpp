@@ -141,9 +141,11 @@ void CScenary::CleanUp()
 void CScenary::setGridMaxX(int gridMaxX)
 {
     m_gridMaxX = gridMaxX;
+    this->DrawGrid();
 }
 
 void CScenary::setGridMaxZ(int gridMaxZ)
 {
     m_gridMaxZ = gridMaxZ;
+    this->DrawGrid();
 }
