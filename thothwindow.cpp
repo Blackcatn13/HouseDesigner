@@ -3,6 +3,7 @@
 #include <QTreeWidget>
 #include <QModelIndex>
 #include <QFileSystemModel>
+#include "Scenary.h"
 
 ThothWindow::ThothWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -108,4 +109,11 @@ void ThothWindow::on_pushButton_7_clicked()
             qDebug("Delete model with path: %s", qPrintable(m_decorateModel->fileInfo(indx).absoluteFilePath()));
         }
     }
+}
+
+void ThothWindow::on_lineEdit_2_editingFinished()
+{
+    //workspace size x has changed.
+
+    CScenary::getInstance()->setGridMaxX();
 }
