@@ -25,6 +25,7 @@ public:
     CPoint3D getBBMin() {return BBMin;}
     CPoint3D getBBMax() {return BBMax;}
     CPoint3D getSize();
+    std::map<std::string, GLuint> textureIdMap;
 private:
     const struct aiScene* scene;
     void RecursiveRender(aiNode* node);

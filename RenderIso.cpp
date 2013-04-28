@@ -17,6 +17,16 @@ RenderIso::~RenderIso()
         delete camera;
 }
 
+void RenderIso::wheelEvent(QWheelEvent *event)
+{
+    if(event->orientation() == Qt::Vertical)
+    {
+        scaleRatio += (double)(event->delta()) / 10000;
+        event->Quit;
+    }
+}
+
+
 void RenderIso::Draw()
 {
     camera->update();

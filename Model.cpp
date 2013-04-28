@@ -24,6 +24,7 @@ bool CModel::LoadModel(string modelName)
     return false;
 }
 
+
 bool CModel::Draw()
 {
     RecursiveRender(scene->mRootNode);
@@ -34,6 +35,8 @@ void CModel::CleanUp()
 {
     aiReleaseImport(scene);
 }
+
+
 
 void CModel::RecursiveRender(aiNode* node)
 {

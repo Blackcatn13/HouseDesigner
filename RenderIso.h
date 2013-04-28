@@ -3,7 +3,6 @@
 
 #include "Util.h"
 #include "Render.h"
-
 #define ASPECT_RATIO (4/3)
 #define SIN_45 0.707106781
 class Camera;
@@ -21,6 +20,7 @@ public:
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
+    void wheelEvent(QWheelEvent *event);
 private:
     Camera *camera;
     int gridX;
@@ -33,6 +33,7 @@ private:
     float xRot, yRot, zRot;
     QPoint lastPos;
     bool clicked;
+    float scaleRatio;
     void getWorldMouseCoord(int x, int y, float &wx, float &wz);
     void DrawLine();
     void DrawQuad();
