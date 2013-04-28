@@ -271,8 +271,7 @@ void Render2D::AddWall()
         for(int i = start; i < end; i++)
         {
             ii.position = CPoint3D(firstTile.x - 0.05 , 0, i);
-            if(!scenary->getWallCollision(ii))
-                scenary->addModel(ii);
+            scenary->addModel(ii);
         }
     }
     else
@@ -293,8 +292,7 @@ void Render2D::AddWall()
         for(int i = start; i < end; i++)
         {
             ii.position = CPoint3D(i, 0, firstTile.y + 0.05);
-            if(!scenary->getWallCollision(ii))
-                scenary->addModel(ii);
+            scenary->addModel(ii);
         }
     }
 }

@@ -6,7 +6,8 @@ CScenary* CScenary::m_Scenary = 0;
 
 CScenary::CScenary(void)
 {
-    m_Models = vector<vector<ModelInfo> >();
+    m_WallModels = vector<vector<ModelInfo> >();
+    m_ObjectModels = vector<vector<ModelInfo> >();
     addNewFloor();
     activeFloor = 0;
 }
@@ -25,24 +26,49 @@ CScenary* CScenary::getInstance()
 
 void CScenary::addNewFloor()
 {
-    m_Models.push_back( vector<ModelInfo>());
+    m_WallModels.push_back( vector<ModelInfo>());
+    m_ObjectModels.push_back( vector<ModelInfo>());
 }
 bool CScenary::addModel(ModelInfo m_Info)
 {
-    m_Models[activeFloor].push_back(m_Info);
-    qDebug() << "Models in floor" << m_Models[activeFloor].size();
+    switch(m_Info.type)
+    {
+    case WALL:
+        if(!getWall2WallCollision(m_Info) && !getWall2ObjectCollision(m_Info))
+            m_WallModels[activeFloor].push_back(m_Info);
+        break;
+    case OBJECT:
+        if(!getObject2WallCollision(m_Info) && !getObject2ObjectCollision(m_Info))
+            m_ObjectModels[activeFloor].push_back(m_Info);
+        break;
+    }
+    
+    qDebug() << "Models in floor" << m_WallModels[activeFloor].size() + m_ObjectModels[activeFloor].size();
     return true;
 }
 
 bool CScenary::Draw()
 {
     CModelManager *modelManager = CModelManager::GetInstance();
-    if(activeFloor > m_Models.size())
+    if(activeFloor > m_WallModels.size())
         return false;
 
-    for(int i = 0; i < m_Models[activeFloor].size(); ++i)
+    for(int i = 0; i < m_WallModels[activeFloor].size(); ++i)
     {
-        ModelInfo model = m_Models[activeFloor][i];
+        ModelInfo model = m_WallModels[activeFloor][i];
+        glPushMatrix();
+            glTranslatef(model.position.x, model.position.y, model.position.z);
+            glRotatef(model.rotation.x, 1, 0 ,0);
+            glRotatef(model.rotation.y, 0, 1 ,0);
+            glRotatef(model.rotation.z, 0, 0 ,1);
+            glScalef(model.scale.x, model.scale.y, model.scale.z);
+            modelManager->Draw(model.modelName);
+        glPopMatrix();
+    }
+
+    for(int i = 0; i < m_ObjectModels[activeFloor].size(); ++i)
+    {
+        ModelInfo model = m_ObjectModels[activeFloor][i];
         glPushMatrix();
             glTranslatef(model.position.x, model.position.y, model.position.z);
             glRotatef(model.rotation.x, 1, 0 ,0);
@@ -129,20 +155,55 @@ void CScenary::DrawGrid()
 void CScenary::CleanUp()
 {
     CModelManager::GetInstance()->CleanUp();
-    m_Models.clear();
+    m_WallModels.clear();
+    m_ObjectModels.clear();
 }
 
-bool CScenary::getWallCollision(ModelInfo mi)
+bool CScenary::getWall2WallCollision(ModelInfo mi)
 {
-    bool col = false;
-    for (int i = 0; i < m_Models[activeFloor].size(); ++i)
+    for (int i = 0; i < m_WallModels[activeFloor].size(); ++i)
     {
-        if(m_Models[activeFloor][i].type == WALL && !col)
+        if(m_WallModels[activeFloor][i] == mi)
+            return true;
+    }
+    return false;
+}
+
+bool CScenary::getWall2ObjectCollision(ModelInfo mi)
+{
+    CModelManager *modelM = CModelManager::GetInstance();
+    CPoint3D size;
+    CPoint3D posaux;
+    ModelInfo maux;
+    for (int i = 0; i < m_ObjectModels[activeFloor].size(); ++i)
+    {
+        maux = m_ObjectModels[activeFloor][i];
+        posaux = mi.position;
+        size = modelM->getModelSize(maux.modelName);
+        if(mi.rotation == CPoint3D(0, 180, 0))
         {
-            col = (m_Models[activeFloor][i] == mi);
+            posaux.x += 0.05;
+            if(posaux.x > (maux.position.x - size.x/2) && posaux.x < (maux.position.x + size.x/2) && posaux.z >= (maux.position.z - size.z/2) && posaux.z < (maux.position.z + size.z/2))
+                return true;
+        }
+        if(mi.rotation == CPoint3D(0, -90, 0))
+        {
+            posaux.z -= 0.05;
+            if(posaux.x >= (maux.position.x - size.x/2) && posaux.x < (maux.position.x + size.x/2) && posaux.z > (maux.position.z - size.z/2) && posaux.z < (maux.position.z + size.z/2))
+                return true;
         }
     }
-    return col;
+    return false;
+}
+
+bool CScenary::getObject2ObjectCollision(ModelInfo mi)
+{
+    return false;
+}
+
+bool CScenary::getObject2WallCollision(ModelInfo mi)
+{
+    return false;
 }
 
 void CScenary::setActiveModel(string model)
