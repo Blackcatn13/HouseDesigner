@@ -34,10 +34,14 @@ ThothWindow::~ThothWindow()
 void ThothWindow::on_pushButton_4_clicked()
 {
     //Select build model
+
     QModelIndex indx = ui->treeViewBuild->currentIndex();
-    if(m_buildModel->fileInfo(indx).isFile())
+    if(indx.isValid())
     {
-        qDebug("Create model with path: %s", qPrintable(m_buildModel->fileInfo(indx).absoluteFilePath()));
+        if(m_buildModel->fileInfo(indx).isFile())
+        {
+            qDebug("Create model with path: %s", qPrintable(m_buildModel->fileInfo(indx).absoluteFilePath()));
+        }
     }
 }
 
@@ -45,9 +49,12 @@ void ThothWindow::on_pushButton_5_clicked()
 {
     //Delete build model
     QModelIndex indx = ui->treeViewBuild->currentIndex();
-    if(m_buildModel->fileInfo(indx).isFile())
+    if(indx.isValid())
     {
-        qDebug("Delete model with path: %s", qPrintable(m_buildModel->fileInfo(indx).absoluteFilePath()));
+        if(m_buildModel->fileInfo(indx).isFile())
+        {
+            qDebug("Delete model with path: %s", qPrintable(m_buildModel->fileInfo(indx).absoluteFilePath()));
+        }
     }
 }
 
@@ -55,9 +62,12 @@ void ThothWindow::on_pushButton_clicked()
 {
     //Select furnish model
     QModelIndex indx = ui->treeViewFurnish->currentIndex();
-    if(m_furnishModel->fileInfo(indx).isFile())
+    if(indx.isValid())
     {
-        qDebug("Create model with path: %s", qPrintable(m_furnishModel->fileInfo(indx).absoluteFilePath()));
+        if(m_furnishModel->fileInfo(indx).isFile())
+        {
+            qDebug("Create model with path: %s", qPrintable(m_furnishModel->fileInfo(indx).absoluteFilePath()));
+        }
     }
 }
 
@@ -65,9 +75,12 @@ void ThothWindow::on_pushButton_2_clicked()
 {
     //Delete furnish model
     QModelIndex indx = ui->treeViewFurnish->currentIndex();
-    if(m_furnishModel->fileInfo(indx).isFile())
+    if(indx.isValid())
     {
-        qDebug("Delete model with path: %s", qPrintable(m_furnishModel->fileInfo(indx).absoluteFilePath()));
+        if(m_furnishModel->fileInfo(indx).isFile())
+        {
+            qDebug("Delete model with path: %s", qPrintable(m_furnishModel->fileInfo(indx).absoluteFilePath()));
+        }
     }
 }
 
@@ -75,9 +88,12 @@ void ThothWindow::on_pushButton_6_clicked()
 {
     //Select decorate model
     QModelIndex indx = ui->treeViewDecorate->currentIndex();
-    if(m_decorateModel->fileInfo(indx).isFile())
+    if(indx.isValid())
     {
-        qDebug("Create model with path: %s", qPrintable(m_decorateModel->fileInfo(indx).absoluteFilePath()));
+        if(m_decorateModel->fileInfo(indx).isFile())
+        {
+            qDebug("Create model with path: %s", qPrintable(m_decorateModel->fileInfo(indx).absoluteFilePath()));
+        }
     }
 }
 
@@ -85,8 +101,11 @@ void ThothWindow::on_pushButton_7_clicked()
 {
     //Delete decorate model
     QModelIndex indx = ui->treeViewDecorate->currentIndex();
-    if(m_decorateModel->fileInfo(indx).isFile())
+    if(indx.isValid())
     {
-        qDebug("Delete model with path: %s", qPrintable(m_decorateModel->fileInfo(indx).absoluteFilePath()));
+        if(m_decorateModel->fileInfo(indx).isFile())
+        {
+            qDebug("Delete model with path: %s", qPrintable(m_decorateModel->fileInfo(indx).absoluteFilePath()));
+        }
     }
 }
