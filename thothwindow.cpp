@@ -1,11 +1,8 @@
 #include "thothwindow.h"
 #include "ui_thothwindow.h"
 #include <QTreeWidget>
-
-//Important includes
 #include <QModelIndex>
 #include <QFileSystemModel>
-#include <QDir>
 
 ThothWindow::ThothWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -18,7 +15,7 @@ ThothWindow::ThothWindow(QWidget *parent) :
 
     //Tree file.
 
-    //treeview of build tab
+    //treeview of tabs
     new TreeFile(ui->treeViewBuild, "Build");
 
     new TreeFile(ui->treeViewDecorate, "Decorate");
@@ -29,6 +26,9 @@ ThothWindow::ThothWindow(QWidget *parent) :
 ThothWindow::~ThothWindow()
 {
     delete ui;
+    delete m_buildModel;
+    delete m_decorateModel;
+    delete m_furnishModel;
 }
 
 void ThothWindow::on_pushButton_4_clicked()
