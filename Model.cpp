@@ -1,5 +1,5 @@
 #include "Model.h"
-#include <limits>
+#include <cfloat>
 #include "Point3D.h"
 
 CModel::CModel(void)
