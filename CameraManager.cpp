@@ -1,6 +1,7 @@
 #include "CameraManager.h"
 #include "CameraPerspective.h"
 #include "CameraOrtho.h"
+#include "CameraFP.h"
 
 CameraManager *CameraManager::m_CameraManager = 0;
 
@@ -9,6 +10,7 @@ CameraManager::CameraManager()
     m_Cameras = CameraMap();
     m_Cameras.insert(std::pair<Views, Camera*>(PERSPECTIVE, new CameraPerspective()));
     m_Cameras.insert(std::pair<Views, Camera*>(ORTHOGONAL, new CameraOrtho()));
+    m_Cameras.insert(std::pair<Views, Camera*>(FP, new CameraFP()));
     // TODO:
     // Afegir els inserts per els renders que falten un cop creats.
 

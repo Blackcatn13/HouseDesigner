@@ -4,8 +4,8 @@
 #include <QMainWindow>
 #include <QtCore>
 #include <QtGui>
-
 #include "TreeFile.h"
+
 namespace Ui {
 class ThothWindow;
 }
@@ -27,12 +27,17 @@ private slots:
     void on_pushButton_2_clicked();
     void actionSave_project_triggered();
 
+    void on_lineEdit_editingFinished();
+    void on_lineEdit_2_editingFinished();
+
 private:
-    Ui::ThothWindow *ui;
-    QDirModel *treeModel;
-    QFileSystemModel *m_buildModel;
-    QFileSystemModel *m_furnishModel;
-    QFileSystemModel *m_decorateModel;
+    Ui::ThothWindow     *ui;
+    QDirModel           *treeModel;
+
+    QFileSystemModel    *m_buildModel;
+    QFileSystemModel    *m_furnishModel;
+    QFileSystemModel    *m_decorateModel;
+
 };
 
 #endif // THOTHWINDOW_H

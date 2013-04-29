@@ -24,9 +24,10 @@ SOURCES += Camera.cpp \
     CameraManager.cpp \
     CameraOrtho.cpp \
     CameraPerspective.cpp \
-    Directory.cpp \
-    TreeFile.cpp \
     ProjectManager.cpp
+    TreeFile.cpp \
+    RenderExplorer.cpp \
+    CameraFP.cpp
 HEADERS += Camera.h \
     GLWidget.h \
     Illumination.h \
@@ -43,9 +44,10 @@ HEADERS += Camera.h \
     CameraManager.h \
     CameraOrtho.h \
     CameraPerspective.h \
-    Directory.h \
-    TreeFile.h \
     ProjectManager.h
+    TreeFile.h \
+    RenderExplorer.h \
+    CameraFP.h
 FORMS += thothwindow.ui
 OTHER_FILES += simple.vert \
     simple.frag

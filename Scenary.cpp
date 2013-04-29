@@ -6,6 +6,9 @@ CScenary* CScenary::m_Scenary = 0;
 
 CScenary::CScenary(void)
 {
+    //Initialize grid maximum.
+    m_gridMaxX = 20;
+    m_gridMaxZ = 20;
     m_WallModels = vector<vector<ModelInfo> >();
     m_ObjectModels = vector<vector<ModelInfo> >();
     addNewFloor();
@@ -120,33 +123,45 @@ void CScenary::DrawAxis()
 
 void CScenary::DrawGrid()
 {
+
     glColor3f(0.0, 0.0, 0.0);
     glBegin(GL_POLYGON);
     glVertex3f(0, -0.01, 0);
-    glVertex3f(0, -0.01, 25);
-    glVertex3f(25, -0.01, 25);
-    glVertex3f(25, -0.01, 0);
+    glVertex3f(0, -0.01, m_gridMaxZ);
+    glVertex3f(m_gridMaxX, -0.01, m_gridMaxZ);
+    glVertex3f(m_gridMaxX, -0.01, 0);
     glEnd();
     glColor3f(1.0, 1.0, 1.0);
     glBegin(GL_LINES);
-    for(int i = 0; i < 26; i += 1)
+    //Vertical lines.
+    for(int i = 0; i < m_gridMaxX+1; ++i)
     {
-        glVertex3f(i, 0, 0);
-        glVertex3f(i, 0, 25);
-        glVertex3f(0, 0, i);
-        glVertex3f(25, 0, i);
+        glVertex3f((float)i, 0, 0);
+        glVertex3f((float)i, 0, m_gridMaxZ);
+    }
+    //Horizontal lines.
+    for (int i = 0; i < m_gridMaxZ+1; ++i)
+    {
+        glVertex3f(0, 0, (float)i);
+        glVertex3f(m_gridMaxX, 0, (float)i);
     }
     glEnd();
     glEnable (GL_LINE_STIPPLE);
     glColor3f(0.1, 0.8, 0.1);
     glLineStipple(1, 0x1111);
     glBegin(GL_LINES);
-    for(int i = 0; i < 25; i += 1)
+
+    //Vertical Dashed lines.
+    for(int i = 0; i < m_gridMaxX; ++i)
     {
         glVertex3f((float)i + 0.5, 0, 0);
-        glVertex3f((float)i + 0.5, 0, 25);
+        glVertex3f((float)i + 0.5, 0, m_gridMaxZ);
+    }
+    //Horizontal Dashed lines.
+    for (int i = 0; i < m_gridMaxZ; ++i)
+    {
         glVertex3f(0, 0, (float)i + 0.5);
-        glVertex3f(25, 0, (float)i + 0.5);
+        glVertex3f(m_gridMaxX, 0, (float)i + 0.5);
     }
     glEnd();
     glDisable(GL_LINE_STIPPLE);
@@ -222,6 +237,18 @@ bool CScenary::getObject2ObjectCollision(ModelInfo mi)
             return true;
     }
     return false;
+}
+
+void CScenary::setGridMaxX(int gridMaxX)
+{
+    m_gridMaxX = gridMaxX;
+    this->DrawGrid();
+}
+
+void CScenary::setGridMaxZ(int gridMaxZ)
+{
+    m_gridMaxZ = gridMaxZ;
+    this->DrawGrid();
 }
 
 bool CScenary::getObject2WallCollision(ModelInfo mi)

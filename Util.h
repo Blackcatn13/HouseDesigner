@@ -35,13 +35,25 @@ using namespace std;
 #define INIT_WIDTH 800
 #define INIT_HEIGHT 600
 
-enum Views {PERSPECTIVE, ORTHOGONAL};
+enum Views {PERSPECTIVE, ORTHOGONAL, FP};
 enum Modes {EDITOR_2D, EXPLORER, EXPLORER_ISO};
 enum Types {WALL, OBJECT, NOTHING};
 
 struct Point2D{
     GLfloat x;
     GLfloat y;
+    
+    Point2D()
+    {
+        x = 0.0;
+        y = 0.0;
+    }
+
+    Point2D(float nx, float ny)
+    {
+        x = nx;
+        y = ny;
+    }
 };
 
 struct ModelInfo{

@@ -16,6 +16,10 @@ public:
     void DrawAxis();
     void DrawGrid();
     void CleanUp();
+    void setGridMaxX(int gridMaxX);
+    void setGridMaxZ(int gridMaxZ);
+    int getGridMaxX(){ return m_gridMaxX;}
+    int getGridMaxZ(){ return m_gridMaxZ;}
     void addNewFloor();
     Types getActiveType() {return activeType;}
     string getActiveModel() {return activeModel;}
@@ -23,6 +27,7 @@ public:
     void setActiveType(Types t);
     vector< vector<ModelInfo> > getWalls() {return m_WallModels;}
     vector< vector<ModelInfo> > getObjects() {return m_ObjectModels;}
+
 private:
     CScenary(void);
     vector< vector<ModelInfo> > m_WallModels;
@@ -35,6 +40,8 @@ private:
     bool getWall2ObjectCollision(ModelInfo mi);
     bool getObject2WallCollision(ModelInfo mi);
     bool getObject2ObjectCollision(ModelInfo mi);
+    int m_gridMaxX;
+    int m_gridMaxZ;
 };
 
 #endif
