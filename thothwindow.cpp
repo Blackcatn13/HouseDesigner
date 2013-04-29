@@ -1,6 +1,8 @@
 #include "thothwindow.h"
 #include "ui_thothwindow.h"
 #include <QTreeWidget>
+#include "Scenary.h"
+//Important includes
 #include <QModelIndex>
 #include <QFileSystemModel>
 #include "Scenary.h"
@@ -38,11 +40,17 @@ void ThothWindow::on_pushButton_4_clicked()
     //Select build model
 
     QModelIndex indx = ui->treeViewBuild->currentIndex();
-    if(indx.isValid())
+    QFileInfo info = m_buildModel->fileInfo(indx);
+    if(info.isFile())
     {
-        if(m_buildModel->fileInfo(indx).isFile())
+        if(info.suffix() == QString("obj"))
         {
-            qDebug("Create model with path: %s", qPrintable(m_buildModel->fileInfo(indx).absoluteFilePath()));
+            qDebug("Create model with path: %s", qPrintable(info.absoluteFilePath()));
+            if(info.absoluteFilePath().contains(QString("wall"),Qt::CaseInsensitive))
+            {
+                CScenary::getInstance()->setActiveModel(info.absoluteFilePath().toStdString());
+                CScenary::getInstance()->setActiveType(WALL);
+            }
         }
     }
 }
@@ -64,11 +72,14 @@ void ThothWindow::on_pushButton_clicked()
 {
     //Select furnish model
     QModelIndex indx = ui->treeViewFurnish->currentIndex();
-    if(indx.isValid())
+    QFileInfo info = m_furnishModel->fileInfo(indx);
+    if(info.isFile())
     {
-        if(m_furnishModel->fileInfo(indx).isFile())
+        if(info.suffix() == QString("obj"))
         {
-            qDebug("Create model with path: %s", qPrintable(m_furnishModel->fileInfo(indx).absoluteFilePath()));
+            qDebug("Create model with path: %s", qPrintable(info.absoluteFilePath()));
+                CScenary::getInstance()->setActiveModel(info.absoluteFilePath().toStdString());
+                CScenary::getInstance()->setActiveType(OBJECT);
         }
     }
 }

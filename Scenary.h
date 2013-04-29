@@ -20,13 +20,26 @@ public:
     void setGridMaxZ(int gridMaxZ);
     int getGridMaxX(){ return m_gridMaxX;}
     int getGridMaxZ(){ return m_gridMaxZ;}
+    void addNewFloor();
+    Types getActiveType() {return activeType;}
+    string getActiveModel() {return activeModel;}
+    void setActiveModel(string model);
+    void setActiveType(Types t);
 
 private:
     CScenary(void);
-    vector<ModelInfo>   m_Models;
-    static CScenary*    m_Scenary;
-    int                 m_gridMaxX;
-    int                 m_gridMaxZ;
+    vector< vector<ModelInfo> > m_WallModels;
+    vector< vector<ModelInfo> > m_ObjectModels;
+    static CScenary* m_Scenary;
+    string activeModel;
+    int activeFloor;
+    Types activeType;
+    bool getWall2WallCollision(ModelInfo mi);
+    bool getWall2ObjectCollision(ModelInfo mi);
+    bool getObject2WallCollision(ModelInfo mi);
+    bool getObject2ObjectCollision(ModelInfo mi);
+    int m_gridMaxX;
+    int m_gridMaxZ;
 };
 
 #endif

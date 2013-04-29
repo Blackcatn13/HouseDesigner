@@ -6,10 +6,13 @@ CScenary* CScenary::m_Scenary = 0;
 
 CScenary::CScenary(void)
 {
-    m_Models = vector<ModelInfo>();
     //Initialize grid maximum.
     m_gridMaxX = 20;
     m_gridMaxZ = 20;
+    m_WallModels = vector<vector<ModelInfo> >();
+    m_ObjectModels = vector<vector<ModelInfo> >();
+    addNewFloor();
+    activeFloor = 0;
 }
 
 
@@ -24,19 +27,51 @@ CScenary* CScenary::getInstance()
     return m_Scenary;
 }
 
+void CScenary::addNewFloor()
+{
+    m_WallModels.push_back( vector<ModelInfo>());
+    m_ObjectModels.push_back( vector<ModelInfo>());
+}
 bool CScenary::addModel(ModelInfo m_Info)
 {
-    m_Models.push_back(m_Info);
+    switch(m_Info.type)
+    {
+    case WALL:
+        if(!getWall2WallCollision(m_Info) && !getWall2ObjectCollision(m_Info))
+            m_WallModels[activeFloor].push_back(m_Info);
+        break;
+    case OBJECT:
+        if(!getObject2WallCollision(m_Info) && !getObject2ObjectCollision(m_Info))
+            m_ObjectModels[activeFloor].push_back(m_Info);
+        break;
+    }
+    
+    qDebug() << "Models in floor" << m_WallModels[activeFloor].size() + m_ObjectModels[activeFloor].size();
     return true;
 }
 
 bool CScenary::Draw()
 {
     CModelManager *modelManager = CModelManager::GetInstance();
+    if(activeFloor > m_WallModels.size())
+        return false;
 
-    for(int i = 0; i < m_Models.size(); ++i)
+    for(int i = 0; i < m_WallModels[activeFloor].size(); ++i)
     {
-        ModelInfo model = m_Models[i];
+        ModelInfo model = m_WallModels[activeFloor][i];
+        glPushMatrix();
+            glTranslatef(model.position.x, model.position.y, model.position.z);
+            glRotatef(model.rotation.x, 1, 0 ,0);
+            glRotatef(model.rotation.y, 0, 1 ,0);
+            glRotatef(model.rotation.z, 0, 0 ,1);
+            glScalef(model.scale.x, model.scale.y, model.scale.z);
+            modelManager->Draw(model.modelName);
+        glPopMatrix();
+    }
+
+    for(int i = 0; i < m_ObjectModels[activeFloor].size(); ++i)
+    {
+        ModelInfo model = m_ObjectModels[activeFloor][i];
         glPushMatrix();
             glTranslatef(model.position.x, model.position.y, model.position.z);
             glRotatef(model.rotation.x, 1, 0 ,0);
@@ -135,7 +170,73 @@ void CScenary::DrawGrid()
 void CScenary::CleanUp()
 {
     CModelManager::GetInstance()->CleanUp();
-    m_Models.clear();
+    m_WallModels.clear();
+    m_ObjectModels.clear();
+}
+
+bool CScenary::getWall2WallCollision(ModelInfo mi)
+{
+    for (int i = 0; i < m_WallModels[activeFloor].size(); ++i)
+    {
+        if(m_WallModels[activeFloor][i] == mi)
+            return true;
+    }
+    return false;
+}
+
+bool CScenary::getWall2ObjectCollision(ModelInfo mi)
+{
+    CModelManager *modelM = CModelManager::GetInstance();
+    CPoint3D size;
+    CPoint3D posaux;
+    ModelInfo maux;
+    for (int i = 0; i < m_ObjectModels[activeFloor].size(); ++i)
+    {
+        maux = m_ObjectModels[activeFloor][i];
+        posaux = mi.position;
+        size = modelM->getModelSize(maux.modelName);
+        if(mi.rotation == CPoint3D(0, 180, 0))
+        {
+            posaux.x += 0.05;
+            if((posaux.x > (maux.position.x - size.x/2)) && 
+                (posaux.x < (maux.position.x + size.x/2)) &&
+                (posaux.z >= (maux.position.z - size.z/2)) && 
+                (posaux.z < (maux.position.z + size.z/2)))
+                return true;
+        }
+        if(mi.rotation == CPoint3D(0, -90, 0))
+        {
+            posaux.z -= 0.05;
+            if((posaux.x >= (maux.position.x - size.x/2)) && 
+                (posaux.x < (maux.position.x + size.x/2)) &&
+                (posaux.z > (maux.position.z - size.z/2)) && 
+                (posaux.z < (maux.position.z + size.z/2)))
+                return true;
+        }
+    }
+    return false;
+}
+
+bool CScenary::getObject2ObjectCollision(ModelInfo mi)
+{
+    CModelManager *modelM = CModelManager::GetInstance();
+    CPoint3D size1;
+    CPoint3D size2;
+    ModelInfo maux;
+    for (int i = 0; i < m_ObjectModels[activeFloor].size(); ++i)
+    {
+        maux = m_ObjectModels[activeFloor][i];
+        if(maux == mi)
+            return true;
+        size1 = modelM->getModelSize(maux.modelName);
+        size2 = modelM->getModelSize(mi.modelName);
+        if(!((mi.position.x - size2.x/2 >= maux.position.x + size1.x/2) ||
+            (mi.position.x + size2.x/2 <= maux.position.x - size1.x/2) ||
+            (mi.position.z - size2.z/2 >= maux.position.z + size1.z/2) ||
+            (mi.position.z + size2.x/2 <= maux.position.z - size1.z/2)))
+            return true;
+    }
+    return false;
 }
 
 void CScenary::setGridMaxX(int gridMaxX)
@@ -148,4 +249,47 @@ void CScenary::setGridMaxZ(int gridMaxZ)
 {
     m_gridMaxZ = gridMaxZ;
     this->DrawGrid();
+}
+
+bool CScenary::getObject2WallCollision(ModelInfo mi)
+{
+    CModelManager *modelM = CModelManager::GetInstance();
+    CPoint3D size;
+    ModelInfo maux;
+    CPoint3D posaux;
+    for (int i = 0; i < m_WallModels[activeFloor].size(); ++i)
+    {
+        maux = m_WallModels[activeFloor][i];
+        posaux = maux.position;
+        size = modelM->getModelSize(mi.modelName);
+        if(maux.rotation == CPoint3D(0, 180, 0))
+        {
+            posaux.x += 0.05;
+            if((posaux.x > (mi.position.x - size.x/2)) && 
+                (posaux.x < (mi.position.x + size.x/2)) &&
+                (posaux.z >= (mi.position.z - size.z/2)) && 
+                (posaux.z < (mi.position.z + size.z/2)))
+                return true;
+        }
+        if(maux.rotation == CPoint3D(0, -90, 0))
+        {
+            posaux.z -= 0.05;
+            if((posaux.x >= (mi.position.x - size.x/2)) && 
+                (posaux.x < (mi.position.x + size.x/2)) &&
+                (posaux.z > (mi.position.z - size.z/2)) && 
+                (posaux.z < (mi.position.z + size.z/2)))
+                return true;
+        }
+    }
+    return false;
+}
+
+void CScenary::setActiveModel(string model)
+{
+    activeModel = model;
+}
+
+void CScenary::setActiveType(Types t)
+{
+    activeType = t;
 }
