@@ -118,7 +118,7 @@ void CModel::CalculateBBAndSize(aiNode* node)
     {
         CalculateBBAndSize(node->mChildren[n]);
         size.x += BBMax.x - BBMin.x;
-        size.y += BBMax.y - BBMin.y;
+        size.y = get_max(BBMax.y, size.y);
         size.z += BBMax.z - BBMin.y;
         BBMin = CPoint3D(FLT_MAX, FLT_MAX, FLT_MAX);
         BBMax = CPoint3D(FLT_MIN, FLT_MIN, FLT_MIN);
