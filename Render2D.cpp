@@ -200,23 +200,27 @@ void Render2D::getWorldMouseCoord(int x, int y, float &wx, float &wz)
 
 void Render2D::DrawLine()
 {
+    CScenary *scenary = CScenary::getInstance();
+
     glLineWidth(5);
     glColor3f(1.0, 0.0, 1.0);
     glBegin(GL_LINES);
-        glVertex3f(firstTile.x, 0.05, firstTile.y);
-        glVertex3f(secondTile.x, 0.05, secondTile.y);
+    glVertex3f(firstTile.x, 0.05 + scenary->getHeightForModels(), firstTile.y);
+        glVertex3f(secondTile.x, 0.05 + scenary->getHeightForModels(), secondTile.y);
     glEnd();
     glLineWidth(1);
 }
 
 void Render2D::DrawQuad()
 {
+    CScenary *scenary = CScenary::getInstance();
+
     glColor3f(1.0, 0.2, 1.0);
     glBegin(GL_QUADS);
-        glVertex3f(firstTile.x, -0.005, firstTile.y);
-        glVertex3f(firstTile.x, -0.005, secondTile.y);
-        glVertex3f(secondTile.x, -0.005, secondTile.y);
-        glVertex3f(secondTile.x, -0.005, firstTile.y);
+        glVertex3f(firstTile.x, -0.005 + scenary->getHeightForModels(), firstTile.y);
+        glVertex3f(firstTile.x, -0.005 + scenary->getHeightForModels(), secondTile.y);
+        glVertex3f(secondTile.x, -0.005 + scenary->getHeightForModels(), secondTile.y);
+        glVertex3f(secondTile.x, -0.005 + scenary->getHeightForModels(), firstTile.y);
     glEnd();
 }
 
@@ -265,7 +269,7 @@ void Render2D::AddObject()
     ii.scale = CPoint3D(1,1,1);
     ii.type = t;
     ii.rotation = CPoint3D();
-    ii.position = CPoint3D((firstTile.x + secondTile.x) / 2, 0, (firstTile.y + secondTile.y) / 2);
+    ii.position = CPoint3D((firstTile.x + secondTile.x) / 2, scenary->getHeightForModels(), (firstTile.y + secondTile.y) / 2);
     scenary->addModel(ii);
 }
 
@@ -296,7 +300,7 @@ void Render2D::AddWall()
         ii.rotation = CPoint3D(0, 180, 0);
         for(int i = start; i < end; i++)
         {
-            ii.position = CPoint3D(firstTile.x - 0.05 , 0, i);
+            ii.position = CPoint3D(firstTile.x - 0.05 , scenary->getHeightForModels(), i);
             scenary->addModel(ii);
         }
     }
@@ -317,7 +321,7 @@ void Render2D::AddWall()
         ii.rotation = CPoint3D(0, -90, 0);
         for(int i = start; i < end; i++)
         {
-            ii.position = CPoint3D(i, 0, firstTile.y + 0.05);
+            ii.position = CPoint3D(i, scenary->getHeightForModels(), firstTile.y + 0.05);
             scenary->addModel(ii);
         }
     }
