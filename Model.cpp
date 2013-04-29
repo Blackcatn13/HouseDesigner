@@ -1,9 +1,13 @@
 #include "Model.h"
-
+#include <cfloat>
+#include "Point3D.h"
 
 CModel::CModel(void)
 {
     scene = NULL;
+    BBMin = CPoint3D(FLT_MAX, FLT_MAX, FLT_MAX);
+    BBMax = CPoint3D(FLT_MIN, FLT_MIN, FLT_MIN);
+    size = CPoint3D();
 }
 
 
@@ -86,4 +90,49 @@ void CModel::RecursiveRender(aiNode* node)
     }
 
     glPopMatrix();
+}
+
+void CModel::CalculateBBAndSize(aiNode* node)
+{
+    for(unsigned int n = 0; n < node->mNumMeshes; ++n)
+    {
+        const struct aiMesh* mesh = scene->mMeshes[node->mMeshes[n]];
+        for(unsigned int t = 0; t < mesh->mNumFaces; ++t)
+        {
+            const struct aiFace* face = &mesh->mFaces[t];
+            for(unsigned int i = 0; i < face->mNumIndices; ++i)
+            {
+                int index = face->mIndices[i];
+                aiVector3D tmp = mesh->mVertices[index];
+                BBMin.x = get_min(BBMin.x, tmp.x);
+                BBMin.y = get_min(BBMin.x, tmp.y);
+                BBMin.z = get_min(BBMin.x, tmp.z);
+                BBMax.x = get_max(BBMin.x, tmp.x);
+                BBMax.y = get_max(BBMin.x, tmp.y);
+                BBMax.z = get_max(BBMin.x, tmp.z);
+            }
+        }
+    }
+
+    for(unsigned n = 0; n < node->mNumChildren; ++n)
+    {
+        CalculateBBAndSize(node->mChildren[n]);
+        size.x += BBMax.x - BBMin.x;
+        size.y += BBMax.y - BBMin.y;
+        size.z += BBMax.z - BBMin.y;
+        BBMin = CPoint3D(FLT_MAX, FLT_MAX, FLT_MAX);
+        BBMax = CPoint3D(FLT_MIN, FLT_MIN, FLT_MIN);
+    }
+}
+
+CPoint3D CModel::getSize()
+{
+    if(size == CPoint3D())
+    {
+        CalculateBBAndSize(scene->mRootNode);
+        size.x = ceil(size.x);
+        size.y = ceil(size.y);
+        size.z = ceil(size.z);
+    }
+    return size;
 }

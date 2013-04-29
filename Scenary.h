@@ -16,10 +16,23 @@ public:
     void DrawAxis();
     void DrawGrid();
     void CleanUp();
+    void addNewFloor();
+    Types getActiveType() {return activeType;}
+    string getActiveModel() {return activeModel;}
+    void setActiveModel(string model);
+    void setActiveType(Types t);
 private:
     CScenary(void);
-    vector<ModelInfo> m_Models;  
+    vector< vector<ModelInfo> > m_WallModels;
+    vector< vector<ModelInfo> > m_ObjectModels;
     static CScenary* m_Scenary;
+    string activeModel;
+    int activeFloor;
+    Types activeType;
+    bool getWall2WallCollision(ModelInfo mi);
+    bool getWall2ObjectCollision(ModelInfo mi);
+    bool getObject2WallCollision(ModelInfo mi);
+    bool getObject2ObjectCollision(ModelInfo mi);
 };
 
 #endif

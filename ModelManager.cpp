@@ -58,3 +58,45 @@ void CModelManager::CleanUp()
         delete m_ModelManager;
     
 }
+
+CPoint3D CModelManager::getModelBBMax(string modelName)
+{
+    MapModel::iterator modelIterator;
+    modelIterator = m_Models.find(modelName);
+    if(modelIterator != m_Models.end())
+        return modelIterator->second->getBBMax();
+    else
+    {
+        if(LoadModel(modelName))
+            return getModelBBMax(modelName);
+    }
+    return CPoint3D();
+}
+
+CPoint3D CModelManager::getModelBBMin(string modelName)
+{
+    MapModel::iterator modelIterator;
+    modelIterator = m_Models.find(modelName);
+    if(modelIterator != m_Models.end())
+        return modelIterator->second->getBBMin();
+    else
+    {
+        if(LoadModel(modelName))
+            return getModelBBMin(modelName);
+    }
+    return CPoint3D();
+}
+
+CPoint3D CModelManager::getModelSize(string modelName)
+{
+    MapModel::iterator modelIterator;
+    modelIterator = m_Models.find(modelName);
+    if(modelIterator != m_Models.end())
+        return modelIterator->second->getSize();
+    else
+    {
+        if(LoadModel(modelName))
+            return getModelSize(modelName);
+    }
+    return CPoint3D();
+}
