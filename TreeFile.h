@@ -3,24 +3,20 @@
 
 #include "thothwindow.h"
 #include "ui_thothwindow.h"
-#include <QTreeWidget>
-#include "Directory.h"
+#include <QTreeView>
+#include <QFileSystemModel>
+#include <QString>
 
 class TreeFile;
 
 class TreeFile
 {
 public:
-    TreeFile(QTreeWidget* treeWidget, std::string tabName = "");
+    TreeFile(QTreeView* treeWiew, std::string tabName = "");
     ~TreeFile();
-    void SetHeaderName(std::string name);
-    void SetTree(std::string path, bool recursive = true, bool showRoot = true);
 private:
-    Directory*          m_dir;
-    QTreeWidget*        m_tree;
+    QFileSystemModel*   m_model;
     std::string         modelDir;
-    QTreeWidgetItem*     AddRoot(std::string name);
-    QTreeWidgetItem*     AddChild(QTreeWidgetItem *parent, std::string name);
 };
 
 #endif // TREEFILE_H
