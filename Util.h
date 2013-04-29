@@ -37,7 +37,8 @@ using namespace std;
 
 enum Views {PERSPECTIVE, ORTHOGONAL, FP};
 enum Modes {EDITOR_2D, EXPLORER, EXPLORER_ISO};
-enum Types {WALL, OBJECT, NOTHING};
+enum Types {WALL, OBJECT, NEITHER};
+enum EditModes {SELECTING, INSERTING, DELETING, NOTHING};
 
 struct Point2D{
     GLfloat x;
@@ -63,8 +64,6 @@ struct ModelInfo{
     string modelName;
     string textureName;
     Types type;
-    float height;
-    float width;
 
     ModelInfo()
     {
@@ -73,12 +72,10 @@ struct ModelInfo{
         scale = CPoint3D();
         modelName = "";
         textureName = "";
-        type = NOTHING;
-        height = 0;
-        width = 0;
+        type = NEITHER;
     }
 
-    ModelInfo(CPoint3D pos, CPoint3D rot, CPoint3D sc, string name, string texture, Types t, float h, float w)
+    ModelInfo(CPoint3D pos, CPoint3D rot, CPoint3D sc, string name, string texture, Types t)
     {
         position = pos;
         rotation = rot;
@@ -86,8 +83,6 @@ struct ModelInfo{
         modelName = name;
         textureName = texture;
         type = t;
-        height = h;
-        width = w;
     }
 
     bool operator==(const ModelInfo &mi) const

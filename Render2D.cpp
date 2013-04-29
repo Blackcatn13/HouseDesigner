@@ -9,6 +9,7 @@ Render2D::Render2D()
 {
     camera = CameraManager::GetInstance()->GetCamera(ORTHOGONAL);
     clicked = false;
+    actualEditMode = NOTHING;
 }
 
 Render2D::~Render2D()
@@ -91,14 +92,22 @@ void Render2D::mousePressEvent(QMouseEvent *event)
     float wx, wz;
 
     getWorldMouseCoord(x, y, wx, wz);
-
-    switch(t)
+    switch(actualEditMode)
     {
-    case WALL:
-        FirstClickWall(wx, wz);
+    case INSERTING:
+        switch(t)
+        {
+        case WALL:
+            FirstClickWall(wx, wz);
+            break;
+        case OBJECT:
+            FirstClickObject(wx, wz);
+            break;
+        }
         break;
-    case OBJECT:
-        FirstClickObject(wx, wz);
+    case SELECTING:
+        break;
+    case DELETING:
         break;
     }
 }
@@ -110,14 +119,22 @@ void Render2D::mouseReleaseEvent(QMouseEvent *event)
         CScenary *scenary = CScenary::getInstance();
         Types t = scenary->getActiveType();
         clicked = false;
-
-        switch(t)
+        switch(actualEditMode)
         {
-        case WALL:
-            AddWall();
+        case INSERTING:
+            switch(t)
+            {
+            case WALL:
+                AddWall();
+                break;
+            case OBJECT:
+                AddObject();
+                break;
+            }
             break;
-        case OBJECT:
-            AddObject();
+        case DELETING:
+            break;
+        case SELECTING:
             break;
         }
     }    
@@ -138,13 +155,22 @@ void Render2D::mouseMoveEvent(QMouseEvent *event, int xG, int yG)
     {
         if(clicked)
         {
-            switch(t)
+            switch(actualEditMode)
             {
-            case WALL:
-                MoveLine(wx, wz);
+            case INSERTING:
+                switch(t)
+                {
+                case WALL:
+                    MoveLine(wx, wz);
+                    break;
+                case OBJECT:
+                    MoveQuad(wx, wz);
+                    break;
+                }
                 break;
-            case OBJECT:
-                MoveQuad(wx, wz);
+            case DELETING:
+                break;
+            case SELECTING:
                 break;
             }
         }
@@ -336,4 +362,9 @@ void Render2D::FirstClickWall(float wx, float wz)
             clicked = true;
         }
     }
+}
+
+void Render2D::setEditMode(EditModes em)
+{
+    actualEditMode = em;
 }
