@@ -14,6 +14,7 @@ class TreeFile
 public:
     TreeFile(QTreeView* treeWiew, std::string tabName = "");
     ~TreeFile();
+    QFileSystemModel* getQFileSystemModel();
 private:
     QFileSystemModel*   m_model;
     std::string         modelDir;

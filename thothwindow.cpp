@@ -21,20 +21,22 @@ ThothWindow::ThothWindow(QWidget *parent) :
     //Tree file.
 
     //treeview of tabs
-    new TreeFile(ui->treeViewBuild, "Build");
-
-    new TreeFile(ui->treeViewDecorate, "Decorate");
-
-    new TreeFile(ui->treeViewFurnish, "Furnish");
+    TreeFile *m_build = new TreeFile(ui->treeViewBuild, "Build");
+    m_buildModel = m_build->getQFileSystemModel();
+    TreeFile *m_decorate = new TreeFile(ui->treeViewDecorate, "Decorate");
+    m_decorateModel = m_decorate->getQFileSystemModel();
+    TreeFile *m_furnish = new TreeFile(ui->treeViewFurnish, "Furnish");
+    m_furnishModel = m_furnish->getQFileSystemModel();
+    connect(ui->actionSave_project, SIGNAL(triggered()), this, SLOT(actionSave_project_triggered()));
 }
 
 ThothWindow::~ThothWindow()
 {
     delete ui;
     //FIXME: Take care if the user closes the application and i'm not initializated.
-    delete m_buildModel;
-    delete m_decorateModel;
-    delete m_furnishModel;
+    //delete m_buildModel;
+    //delete m_decorateModel;
+    //delete m_furnishModel;
 }
 
 void ThothWindow::on_pushButton_4_clicked()

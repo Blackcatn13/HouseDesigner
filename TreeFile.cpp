@@ -24,3 +24,8 @@ TreeFile::~TreeFile()
 {
     delete m_model;
 }
+
+QFileSystemModel* TreeFile::getQFileSystemModel()
+{
+    return m_model;
+}
