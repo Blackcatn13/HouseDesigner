@@ -24,7 +24,7 @@ SOURCES += Camera.cpp \
     CameraManager.cpp \
     CameraOrtho.cpp \
     CameraPerspective.cpp \
-    ProjectManager.cpp
+    ProjectManager.cpp \
     TreeFile.cpp \
     RenderExplorer.cpp \
     CameraFP.cpp
@@ -44,7 +44,7 @@ HEADERS += Camera.h \
     CameraManager.h \
     CameraOrtho.h \
     CameraPerspective.h \
-    ProjectManager.h
+    ProjectManager.h \
     TreeFile.h \
     RenderExplorer.h \
     CameraFP.h
