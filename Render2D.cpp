@@ -9,7 +9,7 @@ Render2D::Render2D()
 {
     camera = CameraManager::GetInstance()->GetCamera(ORTHOGONAL);
     clicked = false;
-    actualEditMode = NOTHING;
+    actualEditMode = INSERTING;
 }
 
 Render2D::~Render2D()

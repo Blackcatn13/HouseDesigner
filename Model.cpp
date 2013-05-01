@@ -105,11 +105,11 @@ void CModel::CalculateBBAndSize(aiNode* node)
                 int index = face->mIndices[i];
                 aiVector3D tmp = mesh->mVertices[index];
                 BBMin.x = get_min(BBMin.x, tmp.x);
-                BBMin.y = get_min(BBMin.x, tmp.y);
-                BBMin.z = get_min(BBMin.x, tmp.z);
-                BBMax.x = get_max(BBMin.x, tmp.x);
-                BBMax.y = get_max(BBMin.x, tmp.y);
-                BBMax.z = get_max(BBMin.x, tmp.z);
+                BBMin.y = get_min(BBMin.y, tmp.y);
+                BBMin.z = get_min(BBMin.z, tmp.z);
+                BBMax.x = get_max(BBMax.x, tmp.x);
+                BBMax.y = get_max(BBMax.y, tmp.y);
+                BBMax.z = get_max(BBMax.z, tmp.z);
             }
         }
     }
@@ -117,11 +117,8 @@ void CModel::CalculateBBAndSize(aiNode* node)
     for(unsigned n = 0; n < node->mNumChildren; ++n)
     {
         CalculateBBAndSize(node->mChildren[n]);
-        size.x += BBMax.x - BBMin.x;
-        size.y = get_max(BBMax.y, size.y);
-        size.z += BBMax.z - BBMin.y;
-        BBMin = CPoint3D(FLT_MAX, FLT_MAX, FLT_MAX);
-        BBMax = CPoint3D(FLT_MIN, FLT_MIN, FLT_MIN);
+        //BBMin = CPoint3D(FLT_MAX, FLT_MAX, FLT_MAX);
+        //BBMax = CPoint3D(FLT_MIN, FLT_MIN, FLT_MIN);
     }
 }
 
@@ -130,9 +127,9 @@ CPoint3D CModel::getSize()
     if(size == CPoint3D())
     {
         CalculateBBAndSize(scene->mRootNode);
-        size.x = ceil(size.x);
-        size.y = ceil(size.y);
-        size.z = ceil(size.z);
+        size.x = ceil(BBMax.x - BBMin.x);
+        size.y = ceil(BBMax.y - BBMin.y);
+        size.z = ceil(BBMax.z - BBMin.z);
     }
     return size;
 }
