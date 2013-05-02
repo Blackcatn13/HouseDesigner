@@ -2,6 +2,10 @@
 #include "Util.h"
 #include "ModelManager.h"
 
+#define MAXGRIDX 150
+#define MAXGRIDZ 150
+#define MAXFLOORS 10
+
 CScenary* CScenary::m_Scenary = 0;
 
 CScenary::CScenary(void)
@@ -9,6 +13,7 @@ CScenary::CScenary(void)
     //Initialize grid maximum.
     m_gridMaxX = 20;
     m_gridMaxZ = 20;
+    m_scenaryMat = vector< vector<int> >(MAXGRIDX, vector<int>(MAXGRIDZ));
     m_WallModels = vector<vector<ModelInfo> >();
     m_ObjectModels = vector<vector<ModelInfo> >();
     addNewFloor();
@@ -292,4 +297,9 @@ void CScenary::setActiveModel(string model)
 void CScenary::setActiveType(Types t)
 {
     activeType = t;
+}
+
+vector< vector<int> > CScenary::getScenaryMat()
+{
+    return m_scenaryMat;
 }
