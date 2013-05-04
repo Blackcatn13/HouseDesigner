@@ -36,13 +36,13 @@ bool RenderExplorer::KeyEvent(int key)
     switch(key)
     {
     case Qt::Key_A:
-        camera->move(0.0, -1);
+        camera->move(0.0, 1);
         break;
     case Qt::Key_S:
         camera->move(-1, 0.0);
         break;
     case Qt::Key_D:
-        camera->move(0.0, 1);
+        camera->move(0.0, -1);
         break;
     case Qt::Key_W:
         camera->move(1, 0.0);
@@ -58,6 +58,7 @@ void RenderExplorer::SetCameraProjection(int w, int h)
     camera->setProjection(w, h);
     width = w;
     heigth = h;
+    camera->update();
 }
 
 void RenderExplorer::AddCameraDistance(float d)
@@ -80,7 +81,7 @@ void RenderExplorer::mouseMoveEvent(QMouseEvent *event, int x, int y)
     Point2D mousePos(event->pos().x(), event->pos().y());
 
     Point2D mouseRelPos(mousePos.x - width/2, mousePos.y - heigth/2);
-    yaw = -mouseRelPos.x *0.1;
+    yaw = mouseRelPos.x *0.1;
     pitch = -mouseRelPos.y * 0.1;
     camera->AddYawAndPitch(yaw, pitch);
 

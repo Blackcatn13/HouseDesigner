@@ -23,6 +23,7 @@ public:
     int getGridMaxX(){ return m_gridMaxX;}
     int getGridMaxZ(){ return m_gridMaxZ;}
     void addNewFloor();
+    void fillFloor();
     Types getActiveType() {return activeType;}
     string getActiveModel() {return activeModel;}
     void setActiveModel(string model);
@@ -34,6 +35,7 @@ private:
     CScenary(void);
     vector< vector<ModelInfo> > m_WallModels;
     vector< vector<ModelInfo> > m_ObjectModels;
+    vector< vector<ModelInfo> > m_FloorModels;
     static CScenary* m_Scenary;
     string activeModel;
     int activeFloor;

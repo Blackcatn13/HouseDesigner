@@ -140,13 +140,16 @@ void GLWidget::wheelEvent(QWheelEvent *event)
  *****************************************************************************/
 void GLWidget::keyPressEvent(QKeyEvent* event)
 {
+    RenderManager* RM = RenderManager::GetInstance();
     if(event->key() == Qt::Key_L)
     {
         actualMode = EXPLORER;
+        RM->GetRenderMode(actualMode)->SetCameraProjection(width, heigth);
     }
     else if(event->key() == Qt::Key_P)
     {
         actualMode = EDITOR_2D;
+        RM->GetRenderMode(actualMode)->SetCameraProjection(width, heigth);
     }
     else
     {

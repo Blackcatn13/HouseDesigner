@@ -6,7 +6,8 @@
 
 using namespace std;
 
-#define PI 3.14159
+#define PI 3.14159265358979323846
+#define PI_2 1.57079632679489661923
 
 #ifdef __APPLE__
     #include <OpenGL/gl.h>
@@ -37,7 +38,7 @@ using namespace std;
 
 enum Views {PERSPECTIVE, ORTHOGONAL, FP};
 enum Modes {EDITOR_2D, EXPLORER, EXPLORER_ISO};
-enum Types {WALL, OBJECT, NEITHER};
+enum Types {WALL, OBJECT, FLOOR, LIGHT, NEITHER};
 enum EditModes {SELECTING, INSERTING, DELETING, NOTHING};
 
 struct Point2D{

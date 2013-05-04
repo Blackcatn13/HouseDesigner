@@ -101,8 +101,12 @@ void Render2D::mousePressEvent(QMouseEvent *event)
             FirstClickWall(wx, wz);
             break;
         case OBJECT:
-            FirstClickObject(wx, wz);
-            break;
+            {
+                CPoint3D max = CModelManager::GetInstance()->getModelSize(scenary->getActiveModel());
+                if(wx < scenary->getGridMaxX() - max.x +1 && wz < scenary->getGridMaxZ() - max.z +1)
+                    FirstClickObject(wx, wz);
+                break;
+            }
         }
         break;
     case SELECTING:
@@ -151,7 +155,7 @@ void Render2D::mouseMoveEvent(QMouseEvent *event, int xG, int yG)
     CScenary *scenary = CScenary::getInstance();
     Types t = scenary->getActiveType();
 
-    if(wx > 0.0 && wz > 0.0)
+    if(wx > 0.0 && wz > 0.0 && wx < scenary->getGridMaxX() && wz < scenary->getGridMaxZ())
     {
         if(clicked)
         {
@@ -164,8 +168,12 @@ void Render2D::mouseMoveEvent(QMouseEvent *event, int xG, int yG)
                     MoveLine(wx, wz);
                     break;
                 case OBJECT:
-                    MoveQuad(wx, wz);
-                    break;
+                    {
+                        CPoint3D max = CModelManager::GetInstance()->getModelSize(scenary->getActiveModel());
+                        if(wx < scenary->getGridMaxX() - max.x +1 && wz < scenary->getGridMaxZ() - max.z +1)
+                            MoveQuad(wx, wz);
+                        break;
+                    }
                 }
                 break;
             case DELETING:

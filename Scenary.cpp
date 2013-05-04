@@ -11,7 +11,9 @@ CScenary::CScenary(void)
     m_gridMaxZ = 20;
     m_WallModels = vector<vector<ModelInfo> >();
     m_ObjectModels = vector<vector<ModelInfo> >();
+    m_FloorModels = vector<vector<ModelInfo> >();
     addNewFloor();
+    fillFloor();
     activeFloor = 0;
 }
 
@@ -31,6 +33,9 @@ void CScenary::addNewFloor()
 {
     m_WallModels.push_back( vector<ModelInfo>());
     m_ObjectModels.push_back( vector<ModelInfo>());
+    if(activeFloor = 0)
+        m_FloorModels.push_back( vector<ModelInfo>());
+    m_FloorModels.push_back( vector<ModelInfo>());
 }
 bool CScenary::addModel(ModelInfo m_Info)
 {
@@ -46,7 +51,7 @@ bool CScenary::addModel(ModelInfo m_Info)
         break;
     }
     
-    qDebug() << "Models in floor" << m_WallModels[activeFloor].size() + m_ObjectModels[activeFloor].size();
+    qDebug() << "Models in floor" << m_WallModels[activeFloor].size() + m_ObjectModels[activeFloor].size() + m_FloorModels[activeFloor].size();
     return true;
 }
 
@@ -60,6 +65,7 @@ bool CScenary::Draw()
     {
         ModelInfo model = m_WallModels[activeFloor][i];
         glPushMatrix();
+            glColor3f(0,0,1);
             glTranslatef(model.position.x, model.position.y, model.position.z);
             glRotatef(model.rotation.x, 1, 0 ,0);
             glRotatef(model.rotation.y, 0, 1 ,0);
@@ -73,6 +79,7 @@ bool CScenary::Draw()
     {
         ModelInfo model = m_ObjectModels[activeFloor][i];
         glPushMatrix();
+            glColor3f(1,0,0);
             glTranslatef(model.position.x, model.position.y, model.position.z);
             glRotatef(model.rotation.x, 1, 0 ,0);
             glRotatef(model.rotation.y, 0, 1 ,0);
@@ -292,4 +299,27 @@ void CScenary::setActiveModel(string model)
 void CScenary::setActiveType(Types t)
 {
     activeType = t;
+}
+
+void CScenary::fillFloor()
+{
+    for (int i = 0; i < m_FloorModels.size(); ++i)
+    {
+        if(m_FloorModels[i].size() == 0)
+        {
+            for(int x = 0; x < m_gridMaxX; ++x)
+            {
+                for(int z = 0; z < m_gridMaxZ; ++z)
+                {
+                    ModelInfo mi;
+                    mi.rotation = CPoint3D();
+                    mi.scale = CPoint3D(1,1,1);
+                    mi.type = FLOOR;
+                    mi.modelName = "Models/Sin_t_tulo.obj";
+                    mi.position = CPoint3D(x, i , z);
+                    m_FloorModels[i].push_back(mi);
+                }
+            }
+        }
+    }
 }
