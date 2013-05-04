@@ -23,6 +23,10 @@ public:
     int getGridMaxX(){ return m_gridMaxX;}
     int getGridMaxZ(){ return m_gridMaxZ;}
     void addNewFloor();
+    void ChangeFloor(int newFloor);
+    int getCurrentFloor(){ return activeFloor; }
+    int getNFloors() {return m_nFloors;}
+
     Types getActiveType() {return activeType;}
     string getActiveModel() {return activeModel;}
     void setActiveModel(string model);
@@ -44,6 +48,7 @@ private:
     bool getObject2ObjectCollision(ModelInfo mi);
     int m_gridMaxX;
     int m_gridMaxZ;
+    int m_nFloors;
 };
 
 #endif

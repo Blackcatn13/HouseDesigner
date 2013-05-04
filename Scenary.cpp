@@ -13,8 +13,8 @@ CScenary::CScenary(void)
     m_ObjectModels = vector<vector<ModelInfo> >();
     addNewFloor();
     activeFloor = 0;
+    m_nFloors = 1;
 }
-
 
 CScenary::~CScenary(void)
 {
@@ -31,7 +31,14 @@ void CScenary::addNewFloor()
 {
     m_WallModels.push_back( vector<ModelInfo>());
     m_ObjectModels.push_back( vector<ModelInfo>());
+    m_nFloors += 1;
 }
+
+void CScenary::ChangeFloor(int newFloor)
+{
+    activeFloor = newFloor;
+}
+
 bool CScenary::addModel(ModelInfo m_Info)
 {
     switch(m_Info.type)
@@ -46,7 +53,7 @@ bool CScenary::addModel(ModelInfo m_Info)
         break;
     }
     
-    qDebug() << "Models in floor" << m_WallModels[activeFloor].size() + m_ObjectModels[activeFloor].size();
+    qDebug() << "Models:" << m_WallModels[activeFloor].size() + m_ObjectModels[activeFloor].size() << "in floor:" << activeFloor;
     return true;
 }
 
