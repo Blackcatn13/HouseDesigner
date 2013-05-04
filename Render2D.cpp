@@ -23,8 +23,9 @@ void Render2D::Draw()
     camera->update();
     CScenary * scene = CScenary::getInstance();
     scene->DrawAxis();
-    scene->DrawGrid();
     scene->Draw();
+    scene->DrawGrid();
+
     if(clicked)
     {
         Types t = scene->getActiveType();
@@ -225,10 +226,10 @@ void Render2D::DrawQuad()
 
     glColor3f(1.0, 0.2, 1.0);
     glBegin(GL_QUADS);
-        glVertex3f(firstTile.x, -0.005 + scenary->getHeightForModels(), firstTile.y);
-        glVertex3f(firstTile.x, -0.005 + scenary->getHeightForModels(), secondTile.y);
-        glVertex3f(secondTile.x, -0.005 + scenary->getHeightForModels(), secondTile.y);
-        glVertex3f(secondTile.x, -0.005 + scenary->getHeightForModels(), firstTile.y);
+        glVertex3f(firstTile.x, 0.005 + scenary->getHeightForModels(), firstTile.y);
+        glVertex3f(firstTile.x, 0.005 + scenary->getHeightForModels(), secondTile.y);
+        glVertex3f(secondTile.x, 0.005 + scenary->getHeightForModels(), secondTile.y);
+        glVertex3f(secondTile.x, 0.005 + scenary->getHeightForModels(), firstTile.y);
     glEnd();
 }
 

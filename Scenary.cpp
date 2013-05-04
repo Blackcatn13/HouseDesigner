@@ -12,9 +12,8 @@ CScenary::CScenary(void)
     m_WallModels = vector<vector<ModelInfo> >();
     m_ObjectModels = vector<vector<ModelInfo> >();
     m_FloorModels = vector<vector<ModelInfo> >();
-    addNewFloor();
-    fillFloor();
     activeFloor = 0;
+    addNewFloor();
 }
 
 
@@ -33,9 +32,10 @@ void CScenary::addNewFloor()
 {
     m_WallModels.push_back( vector<ModelInfo>());
     m_ObjectModels.push_back( vector<ModelInfo>());
-    if(activeFloor = 0)
+    if(activeFloor == 0)
         m_FloorModels.push_back( vector<ModelInfo>());
     m_FloorModels.push_back( vector<ModelInfo>());
+    fillFloor();  
 }
 bool CScenary::addModel(ModelInfo m_Info)
 {
@@ -80,6 +80,34 @@ bool CScenary::Draw()
         ModelInfo model = m_ObjectModels[activeFloor][i];
         glPushMatrix();
             glColor3f(1,0,0);
+            glTranslatef(model.position.x, model.position.y, model.position.z);
+            glRotatef(model.rotation.x, 1, 0 ,0);
+            glRotatef(model.rotation.y, 0, 1 ,0);
+            glRotatef(model.rotation.z, 0, 0 ,1);
+            glScalef(model.scale.x, model.scale.y, model.scale.z);
+            modelManager->Draw(model.modelName);
+        glPopMatrix();
+    }
+
+    for(int i = 0; i < m_FloorModels[activeFloor].size(); ++i)
+    {
+        ModelInfo model = m_FloorModels[activeFloor][i];
+        glPushMatrix();
+            glColor3f(1,1,0);
+            glTranslatef(model.position.x, model.position.y, model.position.z);
+            glRotatef(model.rotation.x, 1, 0 ,0);
+            glRotatef(model.rotation.y, 0, 1 ,0);
+            glRotatef(model.rotation.z, 0, 0 ,1);
+            glScalef(model.scale.x, model.scale.y, model.scale.z);
+            modelManager->Draw(model.modelName);
+        glPopMatrix();
+    }
+
+    for(int i = 0; i < m_FloorModels[activeFloor + 1].size(); ++i)
+    {
+        ModelInfo model = m_FloorModels[activeFloor + 1][i];
+        glPushMatrix();
+            glColor3f(1,0,1);
             glTranslatef(model.position.x, model.position.y, model.position.z);
             glRotatef(model.rotation.x, 1, 0 ,0);
             glRotatef(model.rotation.y, 0, 1 ,0);
@@ -143,14 +171,14 @@ void CScenary::DrawGrid()
     //Vertical lines.
     for(int i = 0; i < m_gridMaxX+1; ++i)
     {
-        glVertex3f((float)i, 0, 0);
-        glVertex3f((float)i, 0, m_gridMaxZ);
+        glVertex3f((float)i, 0.001, 0);
+        glVertex3f((float)i, 0.001, m_gridMaxZ);
     }
     //Horizontal lines.
     for (int i = 0; i < m_gridMaxZ+1; ++i)
     {
-        glVertex3f(0, 0, (float)i);
-        glVertex3f(m_gridMaxX, 0, (float)i);
+        glVertex3f(0, 0.001, (float)i);
+        glVertex3f(m_gridMaxX, 0.001, (float)i);
     }
     glEnd();
     glEnable (GL_LINE_STIPPLE);
@@ -161,14 +189,14 @@ void CScenary::DrawGrid()
     //Vertical Dashed lines.
     for(int i = 0; i < m_gridMaxX; ++i)
     {
-        glVertex3f((float)i + 0.5, 0, 0);
-        glVertex3f((float)i + 0.5, 0, m_gridMaxZ);
+        glVertex3f((float)i + 0.5, 0.001, 0);
+        glVertex3f((float)i + 0.5, 0.001, m_gridMaxZ);
     }
     //Horizontal Dashed lines.
     for (int i = 0; i < m_gridMaxZ; ++i)
     {
-        glVertex3f(0, 0, (float)i + 0.5);
-        glVertex3f(m_gridMaxX, 0, (float)i + 0.5);
+        glVertex3f(0, 0.001, (float)i + 0.5);
+        glVertex3f(m_gridMaxX, 0.001, (float)i + 0.5);
     }
     glEnd();
     glDisable(GL_LINE_STIPPLE);
@@ -309,14 +337,14 @@ void CScenary::fillFloor()
         {
             for(int x = 0; x < m_gridMaxX; ++x)
             {
-                for(int z = 0; z < m_gridMaxZ; ++z)
+                for(int z = 1; z <= m_gridMaxZ; ++z)
                 {
                     ModelInfo mi;
                     mi.rotation = CPoint3D();
                     mi.scale = CPoint3D(1,1,1);
                     mi.type = FLOOR;
                     mi.modelName = "Models/Sin_t_tulo.obj";
-                    mi.position = CPoint3D(x, i , z);
+                    mi.position = CPoint3D(x, i*HEIGTH, z);
                     m_FloorModels[i].push_back(mi);
                 }
             }

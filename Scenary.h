@@ -4,7 +4,7 @@
 #include "Util.h"
 #include <vector>
 
-#define HEIGTH 2
+#define HEIGTH 3
 
 class CScenary
 {
