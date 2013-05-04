@@ -152,11 +152,11 @@ void ThothWindow::on_lineEdit_editingFinished()
 void ThothWindow::on_floorBox_valueChanged(int setFloor)
 {
     CScenary *cs =CScenary::getInstance();
-    if (setFloor > cs->getNFloors())
+    setFloor = min(setFloor, 5);
+    setFloor = max(setFloor, 1);
+    while (cs->getNFloors() < setFloor)
+    {
         cs->addNewFloor();
-    if (setFloor > 5)
-        setFloor = 5;
-    else if (setFloor < 1)
-        setFloor = 1;
+    }
     cs->ChangeFloor(setFloor-1);
 }
