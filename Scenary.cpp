@@ -2,9 +2,10 @@
 #include "Util.h"
 #include "ModelManager.h"
 
-#define MAXGRIDX 150
-#define MAXGRIDZ 150
-#define MAXFLOORS 10
+//Maximum surface = 40*40*5 = 8000m²
+#define MAXGRIDX 40
+#define MAXGRIDZ 40
+#define MAXFLOORS 5
 
 CScenary* CScenary::m_Scenary = 0;
 
@@ -34,8 +35,11 @@ CScenary* CScenary::getInstance()
 
 void CScenary::addNewFloor()
 {
-    m_WallModels.push_back( vector<ModelInfo>());
-    m_ObjectModels.push_back( vector<ModelInfo>());
+    if (m_WallModels.size() < MAXFLOORS)
+    {
+        m_WallModels.push_back( vector<ModelInfo>());
+        m_ObjectModels.push_back( vector<ModelInfo>());
+    }
 }
 bool CScenary::addModel(ModelInfo m_Info)
 {
@@ -246,14 +250,22 @@ bool CScenary::getObject2ObjectCollision(ModelInfo mi)
 
 void CScenary::setGridMaxX(int gridMaxX)
 {
-    m_gridMaxX = gridMaxX;
-    this->DrawGrid();
+    if (gridMaxX < MAXGRIDX)
+    {
+        m_gridMaxX = gridMaxX;
+        this->DrawGrid();
+    }else
+        m_gridMaxX = MAXGRIDX;
 }
 
 void CScenary::setGridMaxZ(int gridMaxZ)
 {
-    m_gridMaxZ = gridMaxZ;
-    this->DrawGrid();
+    if (gridMaxZ < MAXGRIDZ)
+    {
+        m_gridMaxZ = gridMaxZ;
+        this->DrawGrid();
+    }else
+        m_gridMaxZ= MAXGRIDZ;
 }
 
 bool CScenary::getObject2WallCollision(ModelInfo mi)
