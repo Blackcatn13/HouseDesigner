@@ -102,35 +102,49 @@ bool CScenary::Draw()
             modelManager->Draw(model.modelName);
         glPopMatrix();
     }
-
-    for(int i = 0; i < m_FloorModels[activeFloor].size(); ++i)
-    {
-        ModelInfo model = m_FloorModels[activeFloor][i];
-        glPushMatrix();
-            glColor3f(1,1,0);
-            glTranslatef(model.position.x, model.position.y, model.position.z);
-            glRotatef(model.rotation.x, 1, 0 ,0);
-            glRotatef(model.rotation.y, 0, 1 ,0);
-            glRotatef(model.rotation.z, 0, 0 ,1);
-            glScalef(model.scale.x, model.scale.y, model.scale.z);
-            modelManager->Draw(model.modelName);
-        glPopMatrix();
-    }
-
-    for(int i = 0; i < m_FloorModels[activeFloor + 1].size(); ++i)
-    {
-        ModelInfo model = m_FloorModels[activeFloor + 1][i];
-        glPushMatrix();
-            glColor3f(1,0,1);
-            glTranslatef(model.position.x, model.position.y, model.position.z);
-            glRotatef(model.rotation.x, 1, 0 ,0);
-            glRotatef(model.rotation.y, 0, 1 ,0);
-            glRotatef(model.rotation.z, 0, 0 ,1);
-            glScalef(model.scale.x, model.scale.y, model.scale.z);
-            modelManager->Draw(model.modelName);
-        glPopMatrix();
-    }
     return true;
+}
+
+void CScenary::DrawFloor()
+{
+     CModelManager *modelManager = CModelManager::GetInstance();
+    if(activeFloor < m_FloorModels.size())
+    {
+        for(int i = 0; i < m_FloorModels[activeFloor].size(); ++i)
+        {
+            ModelInfo model = m_FloorModels[activeFloor][i];
+            glPushMatrix();
+                glColor3f(1,1,0);
+                glTranslatef(model.position.x, model.position.y, model.position.z);
+                glRotatef(model.rotation.x, 1, 0 ,0);
+                glRotatef(model.rotation.y, 0, 1 ,0);
+                glRotatef(model.rotation.z, 0, 0 ,1);
+                glScalef(model.scale.x, model.scale.y, model.scale.z);
+                modelManager->Draw(model.modelName);
+            glPopMatrix();
+        }
+    }
+}
+
+void CScenary::DrawCeil()
+{
+    CModelManager *modelManager = CModelManager::GetInstance();
+    if(activeFloor < m_FloorModels.size())
+    {
+        for(int i = 0; i < m_FloorModels[activeFloor + 1].size(); ++i)
+        {
+            ModelInfo model = m_FloorModels[activeFloor + 1][i];
+            glPushMatrix();
+                glColor3f(1,0,1);
+                glTranslatef(model.position.x, model.position.y, model.position.z);
+                glRotatef(model.rotation.x, 1, 0 ,0);
+                glRotatef(model.rotation.y, 0, 1 ,0);
+                glRotatef(model.rotation.z, 0, 0 ,1);
+                glScalef(model.scale.x, model.scale.y, model.scale.z);
+                modelManager->Draw(model.modelName);
+            glPopMatrix();
+        }
+    }
 }
 
 void CScenary::DrawAxis()
@@ -160,27 +174,29 @@ void CScenary::DrawAxis()
 
 void CScenary::DrawGrid()
 {
-
+    int heightPlane = HEIGTH * activeFloor - 1;
+    int heightGrid = HEIGTH * activeFloor + 0.001;
     glColor3f(0.0, 0.0, 0.0);
     glBegin(GL_POLYGON);
-    glVertex3f(0, -0.01, 0);
-    glVertex3f(0, -0.01, m_gridMaxZ);
-    glVertex3f(m_gridMaxX, -0.01, m_gridMaxZ);
-    glVertex3f(m_gridMaxX, -0.01, 0);
+    glVertex3f(0, heightPlane, 0);
+    glVertex3f(0, heightPlane, m_gridMaxZ);
+    glVertex3f(m_gridMaxX, heightPlane, m_gridMaxZ);
+    glVertex3f(m_gridMaxX, heightPlane, 0);
     glEnd();
     glColor3f(1.0, 1.0, 1.0);
     glBegin(GL_LINES);
+
     //Vertical lines.
     for(int i = 0; i < m_gridMaxX+1; ++i)
     {
-        glVertex3f((float)i, 0.001, 0);
-        glVertex3f((float)i, 0.001, m_gridMaxZ);
+        glVertex3f((float)i, heightGrid, 0);
+        glVertex3f((float)i, heightGrid, m_gridMaxZ);
     }
     //Horizontal lines.
     for (int i = 0; i < m_gridMaxZ+1; ++i)
     {
-        glVertex3f(0, 0.001, (float)i);
-        glVertex3f(m_gridMaxX, 0.001, (float)i);
+        glVertex3f(0, heightGrid, (float)i);
+        glVertex3f(m_gridMaxX, heightGrid, (float)i);
     }
     glEnd();
     glEnable (GL_LINE_STIPPLE);
@@ -191,14 +207,14 @@ void CScenary::DrawGrid()
     //Vertical Dashed lines.
     for(int i = 0; i < m_gridMaxX; ++i)
     {
-        glVertex3f((float)i + 0.5, 0.001, 0);
-        glVertex3f((float)i + 0.5, 0.001, m_gridMaxZ);
+        glVertex3f((float)i + 0.5, heightGrid, 0);
+        glVertex3f((float)i + 0.5, heightGrid, m_gridMaxZ);
     }
     //Horizontal Dashed lines.
     for (int i = 0; i < m_gridMaxZ; ++i)
     {
-        glVertex3f(0, 0.001, (float)i + 0.5);
-        glVertex3f(m_gridMaxX, 0.001, (float)i + 0.5);
+        glVertex3f(0, heightGrid, (float)i + 0.5);
+        glVertex3f(m_gridMaxX, heightGrid, (float)i + 0.5);
     }
     glEnd();
     glDisable(GL_LINE_STIPPLE);

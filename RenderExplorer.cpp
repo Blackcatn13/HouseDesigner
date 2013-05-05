@@ -24,6 +24,8 @@ void RenderExplorer::Draw()
     scene->DrawAxis();
     scene->DrawGrid();
     scene->Draw();
+    scene->DrawFloor();
+    scene->DrawCeil();
 }
 
 void RenderExplorer::Update()

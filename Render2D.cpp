@@ -24,8 +24,9 @@ void Render2D::Draw()
     camera->update();
     CScenary * scene = CScenary::getInstance();
     scene->DrawAxis();
-    scene->DrawGrid();
     scene->Draw();
+    scene->DrawFloor();
+    scene->DrawGrid();
 
     if(clicked)
     {
@@ -218,7 +219,6 @@ void Render2D::getWorldMouseCoord(int x, int y, float &wx, float &wz)
 void Render2D::DrawLine()
 {
     CScenary *scenary = CScenary::getInstance();
-
     glLineWidth(5);
     glColor3f(1.0, 0.0, 1.0);
     glBegin(GL_LINES);

@@ -21,6 +21,8 @@ public:
 
     void DrawAxis();
     void DrawGrid();
+    void DrawFloor();
+    void DrawCeil();
     void CleanUp();
     void setGridMaxX(int gridMaxX);
     void setGridMaxZ(int gridMaxZ);
