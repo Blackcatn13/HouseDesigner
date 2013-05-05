@@ -34,26 +34,19 @@ bool CProjectManager::SaveMap(string fileName)
     file.open(fileName.c_str());
     int totalFloors = walls.size();
 
-    file << "# HouseDesigner project" << endl;
-    file << "## Basic Info" << endl;
-    file << "### Total floors" << endl;
     file << totalFloors << endl;
-    file << "### Workspace dimension (X Z)" << endl;
     file << scenary->getGridMaxX() << " " << scenary->getGridMaxZ()<< endl;
 
     for(int currentFloor = 0; currentFloor < totalFloors; ++currentFloor)
     {
-        file << "## Floor " << currentFloor << endl;
-        file << "### Walls" << endl;
         for(int index = 0; index < walls[currentFloor].size(); ++index)
             file << getInfoFromObject(currentFloor, walls[currentFloor][index]) << endl;
-        file << "### Objects" << endl;
         for(int index = 0; index < objects[currentFloor].size(); ++index)
             file << getInfoFromObject(currentFloor, objects[currentFloor][index]) << endl;
     }
     file.close();
 
-    return false;
+    return true;
 }
 
 bool CProjectManager::LoadMap(string fileName)
