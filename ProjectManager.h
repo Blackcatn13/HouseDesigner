@@ -16,6 +16,7 @@ private:
     static CProjectManager* m_ProjectManager;
     int activeFloor;
     std::string getInfoFromObject(int, ModelInfo);
+    ModelInfo getObjectFromInfo(std::string line, int &currentFloor);
 };
 
 #endif

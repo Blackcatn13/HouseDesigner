@@ -51,7 +51,20 @@ bool CProjectManager::SaveMap(string fileName)
 
 bool CProjectManager::LoadMap(string fileName)
 {
-    // Implementation of the read file function, need to read all the ModelInfo to the m_Info
+    ifstream file;
+    std::string line;
+    int totalFloors, maxX, maxZ, currentFloor;
+    ModelInfo info;
+
+    file.open(fileName);
+    if(file.is_open())
+    {
+        file >> totalFloors;
+        file >> maxX >> maxZ;
+        while(getline(file, line))
+            // parse line (string) 
+            info = getObjectFromInfo(line, currentFloor);
+    }
     return false;
 }
 
@@ -82,4 +95,14 @@ std::string CProjectManager::getInfoFromObject(int currentFloor, ModelInfo objec
     info << object.type;
 
     return info.str();
+}
+
+ModelInfo CProjectManager::getObjectFromInfo(std::string line, int &currentFloor)
+{
+    istringstream iss(line);
+    ModelInfo info;
+
+    iss >> currentFloor;
+
+    return info;
 }
