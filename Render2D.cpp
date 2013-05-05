@@ -261,7 +261,7 @@ void Render2D::MoveLine(float wx, float wz)
     nx = wx - firstClick.x;
     ny = wz - firstClick.y;
     float length = sqrt(nx*nx+ny*ny);
-    //Abs function have problems. let's solve it momentarily.
+    //FIXME: Abs function have problems. let's solve it momentarily.
     if (nx < 0)
         nx = nx * -1;
     float sin = nx/length;

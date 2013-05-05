@@ -41,6 +41,7 @@
     <property name="styleSheet">
      <string notr="true">background-color:black;</string>
     </property>
+    <zorder>lcdNumber</zorder>
    </widget>
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">

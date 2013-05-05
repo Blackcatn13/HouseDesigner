@@ -8,6 +8,7 @@ public:
     CPoint3D(float nx, float ny, float nz);
     ~CPoint3D(void);
     void Normalize();
+    void Round();
     CPoint3D operator+(const CPoint3D p);
     CPoint3D operator-(const CPoint3D p);
     CPoint3D operator*(const CPoint3D p);

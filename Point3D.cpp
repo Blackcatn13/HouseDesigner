@@ -69,6 +69,13 @@ void CPoint3D::Normalize()
     z /= mod;
 }
 
+void CPoint3D::Round()
+{
+    x = round(x);
+    y = round(y);
+    z = round(z);
+}
+
 CPoint3D CPoint3D::operator*(const float val)
 {
     return CPoint3D(x*val, y*val, z*val);

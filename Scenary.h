@@ -5,7 +5,7 @@
 #include <vector>
 
 #define HEIGTH 3
-//Maximum surface = 40*40*5 = 8000m²
+//Maximum surface = 40*40*5 = 8000m2
 #define MAXGRIDX 40
 #define MAXGRIDZ 40
 #define MAXFLOORS 5
@@ -58,6 +58,7 @@ private:
     int m_gridMaxZ;
     int m_nFloors;
     vector< vector<int> > m_scenaryMat;
+    void setModelScenaryMat(ModelInfo m_Info, int activeFloor, int modelIndex);
 
 };
 
