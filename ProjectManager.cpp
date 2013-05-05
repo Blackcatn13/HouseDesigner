@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <QDir>
 
 CProjectManager* CProjectManager::m_ProjectManager = 0;
 
@@ -76,9 +77,13 @@ std::string CProjectManager::getInfoFromObject(ModelInfo object)
     info << object.scale.y << " ";
     info << object.scale.z << " ";
 
-    info << object.modelName << " ";
+    int currentPathLength = QDir::currentPath().size();
+    info << object.modelName.substr(currentPathLength) << " ";
 
-    //info << object.textureName << " ";
+    std::string texture = object.textureName.base;
+    if(!texture.empty())
+        texture = texture.substr(currentPathLength);
+    info << texture << " ";
 
     info << object.type;
 
