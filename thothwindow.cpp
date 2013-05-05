@@ -153,3 +153,15 @@ void ThothWindow::on_lineEdit_editingFinished()
     if (maxZ > 0 && maxZ < 255)
         CScenary::getInstance()->setGridMaxZ(maxZ);
 }
+
+void ThothWindow::on_floorBox_valueChanged(int setFloor)
+{
+    CScenary *cs =CScenary::getInstance();
+    setFloor = min(setFloor, 5);
+    setFloor = max(setFloor, 1);
+    while (cs->getNFloors() < setFloor)
+    {
+        cs->addNewFloor();
+    }
+    cs->ChangeFloor(setFloor-1);
+}

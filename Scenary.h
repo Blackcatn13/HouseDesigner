@@ -22,12 +22,17 @@ public:
     int getGridMaxZ(){ return m_gridMaxZ;}
     void addNewFloor();
     void fillFloor();
+    void ChangeFloor(int newFloor);
+    int getCurrentFloor(){ return activeFloor; }
+    int getNFloors() {return m_nFloors;}
+
     Types getActiveType() {return activeType;}
     string getActiveModel() {return activeModel;}
     void setActiveModel(string model);
     void setActiveType(Types t);
     vector< vector<ModelInfo> > getWalls() {return m_WallModels;}
     vector< vector<ModelInfo> > getObjects() {return m_ObjectModels;}
+    vector< vector<int> > getScenaryMat();
     float getHeightForModels() {return (HEIGTH * activeFloor);}
 private:
     CScenary(void);
@@ -44,6 +49,9 @@ private:
     bool getObject2ObjectCollision(ModelInfo mi);
     int m_gridMaxX;
     int m_gridMaxZ;
+    int m_nFloors;
+    vector< vector<int> > m_scenaryMat;
+
 };
 
 #endif
