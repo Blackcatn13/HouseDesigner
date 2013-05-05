@@ -41,8 +41,6 @@
     <property name="styleSheet">
      <string notr="true">background-color:black;</string>
     </property>
-    <zorder>spinBox</zorder>
-    <zorder>spinBox</zorder>
    </widget>
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
@@ -63,7 +61,7 @@
      <enum>QTabWidget::Triangular</enum>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>0</number>
     </property>
     <property name="tabsClosable">
      <bool>false</bool>
