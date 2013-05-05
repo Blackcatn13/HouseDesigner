@@ -20,11 +20,12 @@ Render2D::~Render2D()
 
 void Render2D::Draw()
 {
+    
     camera->update();
     CScenary * scene = CScenary::getInstance();
     scene->DrawAxis();
-    scene->Draw();
     scene->DrawGrid();
+    scene->Draw();
 
     if(clicked)
     {
@@ -221,7 +222,7 @@ void Render2D::DrawLine()
     glLineWidth(5);
     glColor3f(1.0, 0.0, 1.0);
     glBegin(GL_LINES);
-    glVertex3f(firstTile.x, 0.05 + scenary->getHeightForModels(), firstTile.y);
+        glVertex3f(firstTile.x, 0.05 + scenary->getHeightForModels(), firstTile.y);
         glVertex3f(secondTile.x, 0.05 + scenary->getHeightForModels(), secondTile.y);
     glEnd();
     glLineWidth(1);

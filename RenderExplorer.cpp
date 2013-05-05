@@ -51,6 +51,20 @@ bool RenderExplorer::KeyEvent(int key)
     case Qt::Key_Space:
         fly = !fly;
         break;
+    case Qt::Key_PageDown:
+        {
+            int floor = CScenary::getInstance()->getCurrentFloor();
+            if(floor > 0)
+                CScenary::getInstance()->ChangeFloor(floor - 1);
+            break;
+        }
+    case Qt::Key_PageUp:
+        {
+            int floor = CScenary::getInstance()->getCurrentFloor();
+            if(floor < CScenary::getMaxFloors() - 1)
+                CScenary::getInstance()->ChangeFloor(floor + 1);
+            break;
+        }
     default:
         update = false;
     }

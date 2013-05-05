@@ -5,6 +5,10 @@
 #include <vector>
 
 #define HEIGTH 3
+//Maximum surface = 40*40*5 = 8000m²
+#define MAXGRIDX 40
+#define MAXGRIDZ 40
+#define MAXFLOORS 5
 
 class CScenary
 {
@@ -13,6 +17,8 @@ public:
     bool Draw();
     bool addModel(ModelInfo m_Info);
     static CScenary* getInstance();
+    static int getMaxFloors() {return MAXFLOORS;}
+
     void DrawAxis();
     void DrawGrid();
     void CleanUp();
@@ -25,7 +31,6 @@ public:
     void ChangeFloor(int newFloor);
     int getCurrentFloor(){ return activeFloor; }
     int getNFloors() {return m_nFloors;}
-
     Types getActiveType() {return activeType;}
     string getActiveModel() {return activeModel;}
     void setActiveModel(string model);

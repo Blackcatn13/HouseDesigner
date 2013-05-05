@@ -25,8 +25,6 @@ void CameraOrtho::setProjection(int, int)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(-0.1, 10 - orthoZoom, -0.1, 10 - orthoZoom, 0.1, 100);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
 }
 
 void CameraOrtho::update()

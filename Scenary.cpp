@@ -2,11 +2,6 @@
 #include "Util.h"
 #include "ModelManager.h"
 
-//Maximum surface = 40*40*5 = 8000m²
-#define MAXGRIDX 40
-#define MAXGRIDZ 40
-#define MAXFLOORS 5
-
 CScenary* CScenary::m_Scenary = 0;
 
 CScenary::CScenary(void)
@@ -19,9 +14,8 @@ CScenary::CScenary(void)
     m_ObjectModels = vector<vector<ModelInfo> >();
     m_FloorModels = vector<vector<ModelInfo> >();
     activeFloor = 0;
+    m_nFloors = 0;
     addNewFloor();
-    m_nFloors = 1;
-
 }
 
 CScenary::~CScenary(void)
@@ -41,7 +35,7 @@ void CScenary::addNewFloor()
     {
         m_WallModels.push_back( vector<ModelInfo>());
         m_ObjectModels.push_back( vector<ModelInfo>());
-        if(activeFloor == 0)
+        if(m_nFloors == 0)
             m_FloorModels.push_back( vector<ModelInfo>());
         m_FloorModels.push_back( vector<ModelInfo>());
         fillFloor(); 
@@ -85,7 +79,7 @@ bool CScenary::Draw()
     {
         ModelInfo model = m_WallModels[activeFloor][i];
         glPushMatrix();
-            glColor3f(0,0,1);
+            glColor3f(0,1,0);
             glTranslatef(model.position.x, model.position.y, model.position.z);
             glRotatef(model.rotation.x, 1, 0 ,0);
             glRotatef(model.rotation.y, 0, 1 ,0);
@@ -215,6 +209,7 @@ void CScenary::CleanUp()
     CModelManager::GetInstance()->CleanUp();
     m_WallModels.clear();
     m_ObjectModels.clear();
+    m_FloorModels.clear();
 }
 
 bool CScenary::getWall2WallCollision(ModelInfo mi)
