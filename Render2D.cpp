@@ -273,7 +273,7 @@ void Render2D::MoveQuadStair(float wx, float wz)
     firstTile.x = rtx;
     firstTile.y = rty;
     secondTile.x = rtx + 5;
-    secondTile.y = rty + 2;
+    secondTile.y = rty + 1;
 }
 
 void Render2D::MoveLine(float wx, float wz)
@@ -425,7 +425,7 @@ void Render2D::FirstClickStair(float wx, float wz)
             firstTile.x = rtx;
             firstTile.y = rty;
             secondTile.x = rtx + 5;
-            secondTile.y = rty + 2;
+            secondTile.y = rty + 1;
             clicked = true;
         }
     }
@@ -441,10 +441,11 @@ void Render2D::AddStair()
 
     for(int i = 0; i < 4; ++i)
     {
-        m.position = CPoint3D(firstTile.x + i, 0.75 * i, firstTile.y + 1.5);
+        m.position = CPoint3D(firstTile.x + i, 0.75 * i, firstTile.y + 0.5);
         scenary->addModel(m);
     }
 
-    scenary->deleteFloor(firstTile.x + 2, firstTile.y + 2, scenary->getCurrentFloor() + 1);
-    scenary->deleteFloor(firstTile.x + 3, firstTile.y + 2, scenary->getCurrentFloor() + 1);
+    scenary->deleteFloor(firstTile.x + 1, firstTile.y + 1, scenary->getCurrentFloor() + 1);
+    scenary->deleteFloor(firstTile.x + 2, firstTile.y + 1, scenary->getCurrentFloor() + 1);
+    scenary->deleteFloor(firstTile.x + 3, firstTile.y + 1, scenary->getCurrentFloor() + 1);
 }

@@ -23,10 +23,11 @@ void RenderExplorer::Draw()
     CScenary * scene = CScenary::getInstance();
     scene->DrawAxis();
     scene->DrawGrid();
+    scene->DrawStairs();
     scene->Draw();
     scene->DrawFloor();
     scene->DrawCeil();
-    scene->DrawStairs();
+    
 }
 
 void RenderExplorer::Update()
@@ -40,16 +41,16 @@ bool RenderExplorer::KeyEvent(int key)
     switch(key)
     {
     case Qt::Key_A:
-        move.y += 1;
+        move.y += 0.25;
         break;
     case Qt::Key_S:
-        move.x -= 1;
+        move.x -= 0.25;
         break;
     case Qt::Key_D:
-        move.y -= 1;
+        move.y -= 0.25;
         break;
     case Qt::Key_W:
-        move.x += 1;
+        move.x += 0.25;
         break;
     case Qt::Key_Space:
         fly = !fly;
