@@ -91,7 +91,17 @@ void GLWidget::paintGL()
 
     // Call the draw function of the actual render Mode.
     RenderManager* RM = RenderManager::GetInstance();
+    switch (actualMode)
+    {
+    case EXPLORER:
+    case EXPLORER_ISO:
+        setCursor(Qt::BlankCursor);
+        break;
+    case EDITOR_2D:
+        setCursor(Qt::ArrowCursor);
+    }
     RM->GetRenderMode(actualMode)->Draw();
+
 }
 
 /*****************************************************************************
