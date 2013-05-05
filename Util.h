@@ -38,7 +38,7 @@ using namespace std;
 
 enum Views {PERSPECTIVE, ORTHOGONAL, FP};
 enum Modes {EDITOR_2D, EXPLORER, EXPLORER_ISO};
-enum Types {WALL, OBJECT, FLOOR, LIGHT, NEITHER};
+enum Types {WALL, OBJECT, FLOOR, LIGHT, STAIR, NEITHER};
 enum EditModes {SELECTING, INSERTING, DELETING, NOTHING};
 
 struct Point2D{

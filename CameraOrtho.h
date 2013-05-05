@@ -12,7 +12,7 @@ public:
 
     void setProjection(int w,int h);
     void update();
-    void move(float ah, float av);
+    void move(float ah, float av, bool fly);
     void AddDistance(float d);
     float getZoom() {return orthoZoom;}
     void AddYawAndPitch(float yaw, float pitch) {;}

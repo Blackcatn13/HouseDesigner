@@ -74,7 +74,7 @@ void GLWidget::resizeGL(int w, int h)
     width = w;
     heigth = h;
     RenderManager* RM = RenderManager::GetInstance();
-    RM->SetProjection(w, h);
+    RM->SetProjection(w, h, actualMode);
 }
 
 /*****************************************************************************

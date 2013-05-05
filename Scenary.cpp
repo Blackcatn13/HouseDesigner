@@ -49,6 +49,9 @@ bool CScenary::addModel(ModelInfo m_Info)
         if(!getObject2WallCollision(m_Info) && !getObject2ObjectCollision(m_Info))
             m_ObjectModels[activeFloor].push_back(m_Info);
         break;
+    case STAIR:
+        m_ObjectModels[activeFloor].push_back(m_Info);
+        break;
     }
     
     qDebug() << "Models in floor" << m_WallModels[activeFloor].size() + m_ObjectModels[activeFloor].size() + m_FloorModels[activeFloor].size();
@@ -117,18 +120,6 @@ bool CScenary::Draw()
         glPopMatrix();
     }
     return true;
-}
-
-bool CScenary::SaveMap(string fileName)
-{
-    // Implementation of the save funtion, need to write all the ModelInfo in the m_Info
-    return false;
-}
-
-bool CScenary::LoadMap(string fileName)
-{
-    // Implementation of the read file function, need to read all the ModelInfo to the m_Info
-    return false;
 }
 
 void CScenary::DrawAxis()

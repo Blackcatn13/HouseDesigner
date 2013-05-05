@@ -63,7 +63,7 @@ void CameraPerspective::update()
 				up[0],up[1],up[2]);
 }
 
-void CameraPerspective::move(float ah, float av)
+void CameraPerspective::move(float ah, float av, bool)
 {
     angleh += ah/2;
     anglev -= av/2;

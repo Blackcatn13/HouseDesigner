@@ -49,28 +49,29 @@ void Render2D::Update()
 bool Render2D::KeyEvent(int key)
 {
     bool update = true;
-
+    Point2D move;
     switch(key)
     {
     case Qt::Key_A:
-        camera->move(0.0,-0.6);
+        move.y -= .6;
         gridX -= 0.6;
         break;
     case Qt::Key_S:
-        camera->move(-0.6,0.0);
+        move.x -= .6;
         gridY += 0.6;
         break;
     case Qt::Key_D:
-        camera->move(0.0,0.6);
+        move.y += .6;
         gridX += 0.6;
         break;
     case Qt::Key_W:
-        camera->move(0.6,0.0);
+        move.x += .6;
         gridY -= 0.6;
         break;
     default:
         update = false;
     }
+    camera->move(move.x, move.y, false);
     return update;
 }
 
@@ -106,6 +107,12 @@ void Render2D::mousePressEvent(QMouseEvent *event)
                 CPoint3D max = CModelManager::GetInstance()->getModelSize(scenary->getActiveModel());
                 if(wx < scenary->getGridMaxX() - max.x +1 && wz < scenary->getGridMaxZ() - max.z +1)
                     FirstClickObject(wx, wz);
+                break;
+            }
+        case STAIR:
+            {
+                if(wx < scenary->getGridMaxX() - 4 && wz < scenary->getGridMaxZ() - 4)
+                    FirstClickStair(wx, wz);
                 break;
             }
         }
@@ -380,4 +387,9 @@ void Render2D::FirstClickWall(float wx, float wz)
 void Render2D::setEditMode(EditModes em)
 {
     actualEditMode = em;
+}
+
+void Render2D::FirstClickStair(float wx, float wz)
+{
+
 }

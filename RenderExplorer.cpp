@@ -8,6 +8,7 @@
 RenderExplorer::RenderExplorer()
 {
     camera = CameraManager::GetInstance()->GetCamera(FP);
+    fly = false;
 }
 
 RenderExplorer::~RenderExplorer()
@@ -32,24 +33,28 @@ void RenderExplorer::Update()
 bool RenderExplorer::KeyEvent(int key)
 {
     bool update = true;
-
+    Point2D move;
     switch(key)
     {
     case Qt::Key_A:
-        camera->move(0.0, 1);
+        move.y += 1;
         break;
     case Qt::Key_S:
-        camera->move(-1, 0.0);
+        move.x -= 1;
         break;
     case Qt::Key_D:
-        camera->move(0.0, -1);
+        move.y -= 1;
         break;
     case Qt::Key_W:
-        camera->move(1, 0.0);
+        move.x += 1;
+        break;
+    case Qt::Key_Space:
+        fly = !fly;
         break;
     default:
         update = false;
     }
+    camera->move(move.x, move.y, fly);
     return update;
 }
 

@@ -43,7 +43,7 @@ void CameraOrtho::update()
                 1.0, 0.0, 0.0);
 }
 
-void CameraOrtho::move(float ah, float av)
+void CameraOrtho::move(float ah, float av, bool)
 {
     orthoAngleH += ah;
     orthoAngleV += av;

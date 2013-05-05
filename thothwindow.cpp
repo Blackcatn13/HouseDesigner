@@ -55,6 +55,11 @@ void ThothWindow::on_pushButton_4_clicked()
                 CScenary::getInstance()->setActiveModel(info.absoluteFilePath().toStdString());
                 CScenary::getInstance()->setActiveType(WALL);
             }
+            if(info.absoluteFilePath().contains(QString("stair"), Qt::CaseInsensitive))
+            {
+                CScenary::getInstance()->setActiveModel(info.absoluteFilePath().toStdString());
+                CScenary::getInstance()->setActiveType(STAIR);
+            }
         }
     }
 }

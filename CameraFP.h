@@ -14,7 +14,7 @@ public:
 
     void setProjection(int w,int h);
     void update();
-    void move(float f, float s);
+    void move(float f, float s, bool fly);
     void AddDistance(float) {;}
     float getZoom() {return 1;}
     void AddYawAndPitch(float yaw, float pitch);

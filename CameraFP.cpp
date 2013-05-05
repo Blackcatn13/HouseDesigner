@@ -12,7 +12,7 @@ CameraFP::CameraFP()
     m_yaw = 0;
     m_pitch = 0;
     speedy = speedp = speedf = 1.0;
-    position = CPoint3D(-5, .2, 0);
+    position = CPoint3D(-5, 1.5, 0);
     dir = CPoint3D(0, 0, 0);
 }
 
@@ -44,14 +44,15 @@ void CameraFP::update()
         up.x, up.y, up.z);
 }
 
-void CameraFP::move(float f, float s)
+void CameraFP::move(float f, float s, bool fly)
 {
     CPoint3D addPos = CPoint3D();
     float yaw = toRad(m_yaw);
     float p = toRad(m_pitch);
     addPos.x = f * cos(yaw) * cos(p) + s * cos(yaw - PI_2);
-    addPos.y = sin(p);
     addPos.z = f * sin(yaw) * cos(p) + s * sin(yaw - PI_2);
+    if (fly)
+        addPos.y = sin(p);
     
     position += addPos;
     qDebug() << "Position to add: " << addPos.x << " , " << addPos.y << " , " << addPos.z;

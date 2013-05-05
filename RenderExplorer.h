@@ -24,6 +24,7 @@ private:
     Camera *camera;
     int gridX;
     int gridY;
+    bool fly;
     float width, heigth;
     Point2D mousePosition;
     bool clicked;

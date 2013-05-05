@@ -42,6 +42,7 @@ private:
     void AddWall();
     void FirstClickWall(float wx, float wz);
     void FirstClickObject(float wx, float wz);
+    void FirstClickStair(float wx, float wz);
     EditModes actualEditMode;
 };
 
