@@ -33,6 +33,7 @@ public:
     void setActiveType(Types t);
     vector< vector<ModelInfo> > getWalls() {return m_WallModels;}
     vector< vector<ModelInfo> > getObjects() {return m_ObjectModels;}
+    vector< vector<int> > getScenaryMat();
     float getHeightForModels() {return (HEIGTH * activeFloor);}
 private:
     CScenary(void);
@@ -49,6 +50,8 @@ private:
     int m_gridMaxX;
     int m_gridMaxZ;
     int m_nFloors;
+    vector< vector<int> > m_scenaryMat;
+
 };
 
 #endif
