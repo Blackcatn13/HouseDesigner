@@ -13,6 +13,7 @@ CScenary::CScenary(void)
     m_WallModels = vector<vector<ModelInfo> >();
     m_ObjectModels = vector<vector<ModelInfo> >();
     m_FloorModels = vector<vector<ModelInfo> >();
+    m_StairModels = vector<vector<ModelInfo> >();
     activeFloor = 0;
     m_nFloors = 0;
     addNewFloor();
@@ -38,6 +39,7 @@ void CScenary::addNewFloor()
         if(m_nFloors == 0)
             m_FloorModels.push_back( vector<ModelInfo>());
         m_FloorModels.push_back( vector<ModelInfo>());
+        m_StairModels.push_back( vector<ModelInfo>());
         fillFloor(); 
         m_nFloors += 1;
     }
@@ -61,7 +63,7 @@ bool CScenary::addModel(ModelInfo m_Info)
             m_ObjectModels[activeFloor].push_back(m_Info);
         break;
     case STAIR:
-        m_ObjectModels[activeFloor].push_back(m_Info);
+        m_StairModels[activeFloor].push_back(m_Info);
         break;
     }
     
@@ -136,6 +138,27 @@ void CScenary::DrawCeil()
             ModelInfo model = m_FloorModels[activeFloor + 1][i];
             glPushMatrix();
                 glColor3f(1,0,1);
+                glTranslatef(model.position.x, model.position.y, model.position.z);
+                glRotatef(model.rotation.x, 1, 0 ,0);
+                glRotatef(model.rotation.y, 0, 1 ,0);
+                glRotatef(model.rotation.z, 0, 0 ,1);
+                glScalef(model.scale.x, model.scale.y, model.scale.z);
+                modelManager->Draw(model.modelName);
+            glPopMatrix();
+        }
+    }
+}
+
+void CScenary::DrawStairs()
+{
+    CModelManager *modelManager = CModelManager::GetInstance();
+    if(activeFloor < m_StairModels.size())
+    {
+        for(int i = 0; i < m_StairModels[activeFloor].size(); ++i)
+        {
+            ModelInfo model = m_StairModels[activeFloor][i];
+            glPushMatrix();
+                glColor3f(0, 0, 1);
                 glTranslatef(model.position.x, model.position.y, model.position.z);
                 glRotatef(model.rotation.x, 1, 0 ,0);
                 glRotatef(model.rotation.y, 0, 1 ,0);
@@ -382,4 +405,20 @@ void CScenary::fillFloor()
 vector< vector<int> > CScenary::getScenaryMat()
 {
     return m_scenaryMat;
+}
+
+void CScenary::deleteFloor(int x, int z, int floor)
+{
+    if(floor < m_FloorModels.size())
+    {
+        vector<ModelInfo>::iterator it;
+        for (it = m_FloorModels[floor].begin(); it != m_FloorModels[floor].end(); ++it)
+        {
+            if(it->position == CPoint3D(x, floor * HEIGTH, z))
+            {
+                m_FloorModels[floor].erase(it);
+                break;
+            }
+        }
+    }
 }

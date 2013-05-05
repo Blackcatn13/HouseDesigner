@@ -23,6 +23,7 @@ public:
     void DrawGrid();
     void DrawFloor();
     void DrawCeil();
+    void DrawStairs();
     void CleanUp();
     void setGridMaxX(int gridMaxX);
     void setGridMaxZ(int gridMaxZ);
@@ -41,11 +42,13 @@ public:
     vector< vector<ModelInfo> > getObjects() {return m_ObjectModels;}
     vector< vector<int> > getScenaryMat();
     float getHeightForModels() {return (HEIGTH * activeFloor);}
+    void deleteFloor(int x, int z, int floor);
 private:
     CScenary(void);
     vector< vector<ModelInfo> > m_WallModels;
     vector< vector<ModelInfo> > m_ObjectModels;
     vector< vector<ModelInfo> > m_FloorModels;
+    vector< vector<ModelInfo> > m_StairModels;
     static CScenary* m_Scenary;
     string activeModel;
     int activeFloor;

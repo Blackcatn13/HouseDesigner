@@ -27,6 +27,7 @@ void Render2D::Draw()
     scene->Draw();
     scene->DrawFloor();
     scene->DrawGrid();
+    scene->DrawStairs();
 
     if(clicked)
     {
@@ -37,6 +38,9 @@ void Render2D::Draw()
             DrawLine();
             break;
         case OBJECT:
+            DrawQuad();
+            break;
+        case STAIR:
             DrawQuad();
             break;
         }
@@ -113,7 +117,7 @@ void Render2D::mousePressEvent(QMouseEvent *event)
             }
         case STAIR:
             {
-                if(wx < scenary->getGridMaxX() - 4 && wz < scenary->getGridMaxZ() - 4)
+                if(wx < scenary->getGridMaxX() - 4 && wz < scenary->getGridMaxZ() - 1)
                     FirstClickStair(wx, wz);
                 break;
             }
@@ -143,6 +147,9 @@ void Render2D::mouseReleaseEvent(QMouseEvent *event)
                 break;
             case OBJECT:
                 AddObject();
+                break;
+            case STAIR:
+                AddStair();
                 break;
             }
             break;
@@ -182,6 +189,12 @@ void Render2D::mouseMoveEvent(QMouseEvent *event, int xG, int yG)
                         CPoint3D max = CModelManager::GetInstance()->getModelSize(scenary->getActiveModel());
                         if(wx < scenary->getGridMaxX() - max.x +1 && wz < scenary->getGridMaxZ() - max.z +1)
                             MoveQuad(wx, wz);
+                        break;
+                    }
+                case STAIR:
+                    {
+                        if(wx < scenary->getGridMaxX() - 4 && wz < scenary->getGridMaxZ() - 1)
+                            MoveQuadStair(wx, wz);
                         break;
                     }
                 }
@@ -253,6 +266,16 @@ void Render2D::MoveQuad(float wx, float wz)
     secondTile.y = rty + max.z;
 }
 
+void Render2D::MoveQuadStair(float wx, float wz)
+{
+    int rtx = (int)wx;
+    int rty = (int)wz;
+    firstTile.x = rtx;
+    firstTile.y = rty;
+    secondTile.x = rtx + 5;
+    secondTile.y = rty + 2;
+}
+
 void Render2D::MoveLine(float wx, float wz)
 {
     int rtx = (int)(wx*2)/2.0 + 0.5;
@@ -283,7 +306,6 @@ void Render2D::AddObject()
     Types t = scenary->getActiveType();
     ModelInfo ii;
     ii.modelName = scenary->getActiveModel();
-    ii.scale = CPoint3D(1,1,1);
     ii.type = t;
     ii.rotation = CPoint3D();
     ii.position = CPoint3D((firstTile.x + secondTile.x) / 2, scenary->getHeightForModels(), (firstTile.y + secondTile.y) / 2);
@@ -296,7 +318,6 @@ void Render2D::AddWall()
     Types t = scenary->getActiveType();
     ModelInfo ii;
     ii.modelName = scenary->getActiveModel();
-    ii.scale = CPoint3D(1,1,1);
     ii.type = t;
     int angle;
     int start, end;
@@ -392,5 +413,38 @@ void Render2D::setEditMode(EditModes em)
 
 void Render2D::FirstClickStair(float wx, float wz)
 {
+    CScenary *scenary = CScenary::getInstance();
+    if (wx > 0.0 && wz > 0.0)
+    {
+        int rtx = (int)wx;
+        int rty = (int)wz;
+        if(!clicked)
+        {
+            firstClick.x = wx;
+            firstClick.y = wz;
+            firstTile.x = rtx;
+            firstTile.y = rty;
+            secondTile.x = rtx + 5;
+            secondTile.y = rty + 2;
+            clicked = true;
+        }
+    }
+}
 
+void Render2D::AddStair()
+{
+    CScenary *scenary = CScenary::getInstance();
+    Types t = scenary->getActiveType();
+    ModelInfo m = ModelInfo();
+    m.type = t;
+    m.modelName = scenary->getActiveModel();
+
+    for(int i = 0; i < 4; ++i)
+    {
+        m.position = CPoint3D(firstTile.x + i, 0.75 * i, firstTile.y + 1.5);
+        scenary->addModel(m);
+    }
+
+    scenary->deleteFloor(firstTile.x + 2, firstTile.y + 2, scenary->getCurrentFloor() + 1);
+    scenary->deleteFloor(firstTile.x + 3, firstTile.y + 2, scenary->getCurrentFloor() + 1);
 }

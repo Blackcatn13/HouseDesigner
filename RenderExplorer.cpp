@@ -26,6 +26,7 @@ void RenderExplorer::Draw()
     scene->Draw();
     scene->DrawFloor();
     scene->DrawCeil();
+    scene->DrawStairs();
 }
 
 void RenderExplorer::Update()

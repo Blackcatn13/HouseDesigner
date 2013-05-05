@@ -70,7 +70,7 @@ struct ModelInfo{
     {
         position = CPoint3D();
         rotation = CPoint3D();
-        scale = CPoint3D();
+        scale = CPoint3D(1, 1, 1);
         modelName = "";
         textureName = "";
         type = NEITHER;

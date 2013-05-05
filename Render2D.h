@@ -37,9 +37,11 @@ private:
     void DrawLine();
     void DrawQuad();
     void MoveQuad(float wx, float wz);
+    void MoveQuadStair(float wx, float wz);
     void MoveLine(float wx, float wz);
     void AddObject();
     void AddWall();
+    void AddStair();
     void FirstClickWall(float wx, float wz);
     void FirstClickObject(float wx, float wz);
     void FirstClickStair(float wx, float wz);
