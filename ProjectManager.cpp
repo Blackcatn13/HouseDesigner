@@ -46,10 +46,10 @@ bool CProjectManager::SaveMap(string fileName)
         file << "## Floor " << currentFloor << endl;
         file << "### Walls" << endl;
         for(int index = 0; index < walls[currentFloor].size(); ++index)
-            file << getInfoFromObject(walls[currentFloor][index]) << endl;
+            file << getInfoFromObject(currentFloor, walls[currentFloor][index]) << endl;
         file << "### Objects" << endl;
         for(int index = 0; index < objects[currentFloor].size(); ++index)
-            file << getInfoFromObject(objects[currentFloor][index]) << endl;
+            file << getInfoFromObject(currentFloor, objects[currentFloor][index]) << endl;
     }
     file.close();
 
@@ -62,9 +62,10 @@ bool CProjectManager::LoadMap(string fileName)
     return false;
 }
 
-std::string CProjectManager::getInfoFromObject(ModelInfo object)
+std::string CProjectManager::getInfoFromObject(int currentFloor, ModelInfo object)
 {
     stringstream info;
+    info << currentFloor << " ";
     info << object.position.x << " ";
     info << object.position.y << " ";
     info << object.position.z << " ";
