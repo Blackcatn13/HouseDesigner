@@ -272,6 +272,11 @@ bool CScenary::getWall2ObjectCollision(ModelInfo mi)
         maux = m_ObjectModels[activeFloor][i];
         posaux = mi.position;
         size = modelM->getModelSize(maux.modelName);
+        if(mi.rotation == CPoint3D(0, 90, 0) || mi.rotation == CPoint3D(0, 270, 0))
+        {
+            CPoint3D aux = size;
+            size = CPoint3D(aux.z, aux.y, aux.x); 
+        }
         if(mi.rotation == CPoint3D(0, 180, 0))
         {
             posaux.x += 0.05f;
@@ -299,6 +304,7 @@ bool CScenary::getObject2ObjectCollision(ModelInfo mi)
     CModelManager *modelM = CModelManager::GetInstance();
     CPoint3D size1;
     CPoint3D size2;
+    CPoint3D aux;
     ModelInfo maux;
     for (size_t i = 0; i < m_ObjectModels[activeFloor].size(); ++i)
     {
@@ -306,7 +312,17 @@ bool CScenary::getObject2ObjectCollision(ModelInfo mi)
         if(maux == mi)
             return true;
         size1 = modelM->getModelSize(maux.modelName);
+        if(maux.rotation == CPoint3D(0, 90, 0) || maux.rotation == CPoint3D(0, 270, 0))
+        {
+            aux = size1;
+            size1 = CPoint3D(aux.z, aux.y, aux.x); 
+        }
         size2 = modelM->getModelSize(mi.modelName);
+        if(mi.rotation == CPoint3D(0, 90, 0) || mi.rotation == CPoint3D(0, 270, 0))
+        {
+            aux = size2;
+            size2 = CPoint3D(aux.z, aux.y, aux.x); 
+        }
         if(!((mi.position.x - size2.x/2 >= maux.position.x + size1.x/2) ||
             (mi.position.x + size2.x/2 <= maux.position.x - size1.x/2) ||
             (mi.position.z - size2.z/2 >= maux.position.z + size1.z/2) ||
@@ -347,6 +363,11 @@ bool CScenary::getObject2WallCollision(ModelInfo mi)
         maux = m_WallModels[activeFloor][i];
         posaux = maux.position;
         size = modelM->getModelSize(mi.modelName);
+        if(mi.rotation == CPoint3D(0, 90, 0) || mi.rotation == CPoint3D(0, 270, 0))
+        {
+            CPoint3D aux = size;
+            size = CPoint3D(aux.z, aux.y, aux.x); 
+        }
         if(maux.rotation == CPoint3D(0, 180, 0))
         {
             posaux.x += 0.05f;
