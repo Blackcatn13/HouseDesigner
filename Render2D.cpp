@@ -10,6 +10,7 @@ Render2D::Render2D()
     camera = CameraManager::GetInstance()->GetCamera(ORTHOGONAL);
     clicked = false;
     actualEditMode = INSERTING;
+    rotation = 0;
 }
 
 Render2D::~Render2D()
@@ -73,6 +74,19 @@ bool Render2D::KeyEvent(int key)
     case Qt::Key_W:
         move.x += .6f;
         gridY -= 0.6;
+        break;
+    case Qt::Key_Q:
+        rotation++;
+        rotation = rotation % 4;
+        RefreshQuad();
+        break;
+    case Qt::Key_E:
+        if(rotation > 0)
+            rotation--;
+        else
+            rotation = 3;
+        rotation = rotation % 4;
+        RefreshQuad();
         break;
     default:
         update = false;
@@ -262,8 +276,16 @@ void Render2D::MoveQuad(float wx, float wz)
     firstTile.x = rtx;
     firstTile.y = rty;
     CPoint3D max = CModelManager::GetInstance()->getModelSize(scenary->getActiveModel());
-    secondTile.x = rtx + max.x;
-    secondTile.y = rty + max.z;
+    if(rotation == 0 || rotation == 2)
+    {
+        secondTile.x = rtx + max.x;
+        secondTile.y = rty + max.z;
+    }
+    else
+    {
+        secondTile.x = rtx + max.z;
+        secondTile.y = rty + max.x;
+    }
 }
 
 void Render2D::MoveQuadStair(float wx, float wz)
@@ -307,7 +329,7 @@ void Render2D::AddObject()
     ModelInfo ii;
     ii.modelName = scenary->getActiveModel();
     ii.type = t;
-    ii.rotation = CPoint3D();
+    ii.rotation = CPoint3D(0, rotation * 90, 0);
     ii.position = CPoint3D((firstTile.x + secondTile.x) / 2, scenary->getHeightForModels(), (firstTile.y + secondTile.y) / 2);
     scenary->addModel(ii);
 }
@@ -379,8 +401,16 @@ void Render2D::FirstClickObject(float wx, float wz)
             firstTile.x = rtx;
             firstTile.y = rty;
             CPoint3D max = CModelManager::GetInstance()->getModelSize(scenary->getActiveModel());
-            secondTile.x = rtx + max.x;
-            secondTile.y = rty + max.z;
+            if(rotation == 0 || rotation == 2)
+            {
+                secondTile.x = rtx + max.x;
+                secondTile.y = rty + max.z;
+            }
+            else
+            {
+                secondTile.x = rtx + max.z;
+                secondTile.y = rty + max.x;
+            }
             clicked = true;
         }
     }
@@ -447,4 +477,20 @@ void Render2D::AddStair()
     scenary->deleteFloor(firstTile.x + 1, firstTile.y + 1, scenary->getCurrentFloor() + 1);
     scenary->deleteFloor(firstTile.x + 2, firstTile.y + 1, scenary->getCurrentFloor() + 1);
     scenary->deleteFloor(firstTile.x + 3, firstTile.y + 1, scenary->getCurrentFloor() + 1);
+}
+
+void Render2D::RefreshQuad()
+{
+    CScenary *scenary = CScenary::getInstance();
+    CPoint3D max = CModelManager::GetInstance()->getModelSize(scenary->getActiveModel());
+    if(rotation == 0 || rotation == 2)
+    {
+        secondTile.x = firstTile.x + max.x;
+        secondTile.y = firstTile.y + max.z;
+    }
+    else
+    {
+        secondTile.x = firstTile.x + max.z;
+        secondTile.y = firstTile.y + max.x;
+    }
 }

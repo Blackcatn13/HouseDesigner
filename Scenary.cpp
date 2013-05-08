@@ -55,11 +55,11 @@ bool CScenary::addModel(ModelInfo m_Info)
     switch(m_Info.type)
     {
     case WALL:
-        if(!getWall2WallCollision(m_Info) && !getWall2ObjectCollision(m_Info))
+        if(!getWall2WallCollision(m_Info) && !getWall2ObjectCollision(m_Info) && !getWall2StairCollision(m_Info))
             m_WallModels[activeFloor].push_back(m_Info);
         break;
     case OBJECT:
-        if(!getObject2WallCollision(m_Info) && !getObject2ObjectCollision(m_Info))
+        if(!getObject2WallCollision(m_Info) && !getObject2ObjectCollision(m_Info) && !getObject2StairCollision(m_Info))
             m_ObjectModels[activeFloor].push_back(m_Info);
         break;
     case STAIR:
@@ -443,3 +443,36 @@ void CScenary::deleteFloor(int x, int z, int floor)
         }
     }
 }
+
+bool CScenary::getStairCollition(CPoint3D s)
+{
+    return false;//(getStair2WallCollision(mi) && getStair2ObjectCollision(mi) && getStair2StairCollision(mi));
+}
+
+bool CScenary::getStair2WallCollision(ModelInfo mi)
+{
+
+    return false;
+}
+
+bool CScenary::getStair2StairCollision(ModelInfo mi)
+{
+    return false;
+}
+
+bool CScenary::getStair2ObjectCollision(ModelInfo mi)
+{ 
+    return false;
+}
+
+bool CScenary::getObject2StairCollision(ModelInfo mi)
+{
+    return false;
+}
+
+bool CScenary::getWall2StairCollision(ModelInfo mi)
+{
+    return false;
+}
+
+

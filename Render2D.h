@@ -32,11 +32,13 @@ private:
     Point2D secondTile;
     Point2D vecDir;
     Point2D actPos;
+    int rotation;
     bool clicked;
     void getWorldMouseCoord(int x, int y, float &wx, float &wz);
     void DrawLine();
     void DrawQuad();
     void MoveQuad(float wx, float wz);
+    void RefreshQuad();
     void MoveQuadStair(float wx, float wz);
     void MoveLine(float wx, float wz);
     void AddObject();

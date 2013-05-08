@@ -154,6 +154,9 @@ public:
         Function to delete one Tile of the floor
     */
     void deleteFloor(int x, int z, int floor);
+
+    bool getStairCollition(CPoint3D s);
+
 private:
 
     CScenary(void);
