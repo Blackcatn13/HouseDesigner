@@ -37,8 +37,10 @@ private:
     void getWorldMouseCoord(int x, int y, float &wx, float &wz);
     void DrawLine();
     void DrawQuad();
+    void DrawInverseQuad();
     void MoveQuad(float wx, float wz);
     void RefreshQuad();
+    void RefreshQuadStair();
     void MoveQuadStair(float wx, float wz);
     void MoveLine(float wx, float wz);
     void AddObject();

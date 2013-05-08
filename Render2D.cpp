@@ -42,7 +42,10 @@ void Render2D::Draw()
             DrawQuad();
             break;
         case STAIR:
-            DrawQuad();
+            if(rotation == 0 || rotation == 3)
+                DrawQuad();
+            else
+                DrawInverseQuad();
             break;
         }
     }
@@ -55,6 +58,8 @@ void Render2D::Update()
 
 bool Render2D::KeyEvent(int key)
 {
+    CScenary *scenary = CScenary::getInstance();
+    Types t = scenary->getActiveType();
     bool update = true;
     Point2D move;
     switch(key)
@@ -78,7 +83,10 @@ bool Render2D::KeyEvent(int key)
     case Qt::Key_Q:
         rotation++;
         rotation = rotation % 4;
-        RefreshQuad();
+        if (t == OBJECT)
+            RefreshQuad();
+        else if (t == STAIR)
+            RefreshQuadStair();
         break;
     case Qt::Key_E:
         if(rotation > 0)
@@ -86,7 +94,10 @@ bool Render2D::KeyEvent(int key)
         else
             rotation = 3;
         rotation = rotation % 4;
-        RefreshQuad();
+        if (t == OBJECT)
+            RefreshQuad();
+        else if (t == STAIR)
+            RefreshQuadStair();
         break;
     default:
         update = false;
@@ -268,6 +279,19 @@ void Render2D::DrawQuad()
     glEnd();
 }
 
+void Render2D::DrawInverseQuad()
+{
+    CScenary *scenary = CScenary::getInstance();
+
+    glColor3f(1.0f, 0.2f, 1.0f);
+    glBegin(GL_QUADS);
+        glVertex3f(firstTile.x, 0.005 + scenary->getHeightForModels(), firstTile.y);
+        glVertex3f(secondTile.x, 0.005 + scenary->getHeightForModels(), firstTile.y);
+        glVertex3f(secondTile.x, 0.005 + scenary->getHeightForModels(), secondTile.y);
+        glVertex3f(firstTile.x, 0.005 + scenary->getHeightForModels(), secondTile.y);
+    glEnd();
+}
+
 void Render2D::MoveQuad(float wx, float wz)
 {
     CScenary *scenary = CScenary::getInstance();
@@ -275,17 +299,7 @@ void Render2D::MoveQuad(float wx, float wz)
     int rty = (int)wz;
     firstTile.x = rtx;
     firstTile.y = rty;
-    CPoint3D max = CModelManager::GetInstance()->getModelSize(scenary->getActiveModel());
-    if(rotation == 0 || rotation == 2)
-    {
-        secondTile.x = rtx + max.x;
-        secondTile.y = rty + max.z;
-    }
-    else
-    {
-        secondTile.x = rtx + max.z;
-        secondTile.y = rty + max.x;
-    }
+    RefreshQuad();
 }
 
 void Render2D::MoveQuadStair(float wx, float wz)
@@ -294,8 +308,7 @@ void Render2D::MoveQuadStair(float wx, float wz)
     int rty = (int)wz;
     firstTile.x = rtx;
     firstTile.y = rty;
-    secondTile.x = rtx + 5;
-    secondTile.y = rty + 1;
+    RefreshQuadStair();
 }
 
 void Render2D::MoveLine(float wx, float wz)
@@ -465,18 +478,36 @@ void Render2D::AddStair()
     CScenary *scenary = CScenary::getInstance();
     Types t = scenary->getActiveType();
     ModelInfo m = ModelInfo();
+    m.rotation = CPoint3D(0, rotation * 90, 0);
     m.type = t;
     m.modelName = scenary->getActiveModel();
-
-    for(int i = 0; i < 4; ++i)
+    if (!scenary->getStairCollition(CPoint3D(firstTile.x, 0, firstTile.y), rotation))
     {
-        m.position = CPoint3D(firstTile.x + i, 0.75 * i, firstTile.y + 0.5);
-        scenary->addModel(m);
-    }
+        for(int i = 0; i < 4; ++i)
+        {
+            if(rotation == 0)
+                m.position = CPoint3D(firstTile.x + i, 0.75 * i, firstTile.y + 0.51);
+            else if (rotation == 1)
+                m.position = CPoint3D(firstTile.x + 0.51, 0.75 * i, firstTile.y - i);
+            else if (rotation == 2)
+                m.position = CPoint3D(firstTile.x - i, 0.75 * i, firstTile.y + 0.51);
+            else
+                m.position = CPoint3D(firstTile.x + 0.51, 0.75 * i, firstTile.y + i);
+            scenary->addModel(m);
+        }
 
-    scenary->deleteFloor(firstTile.x + 1, firstTile.y + 1, scenary->getCurrentFloor() + 1);
-    scenary->deleteFloor(firstTile.x + 2, firstTile.y + 1, scenary->getCurrentFloor() + 1);
-    scenary->deleteFloor(firstTile.x + 3, firstTile.y + 1, scenary->getCurrentFloor() + 1);
+        for(int i = 1; i < 4; ++i)
+        {
+            if(rotation == 0)
+                scenary->deleteFloor(firstTile.x + i, firstTile.y + 1, scenary->getCurrentFloor() + 1);
+            else if (rotation == 1)
+                scenary->deleteFloor(firstTile.x, firstTile.y - i, scenary->getCurrentFloor() + 1);
+            else if (rotation == 2)
+                scenary->deleteFloor(firstTile.x - 1 - i, firstTile.y + 1, scenary->getCurrentFloor() + 1);
+            else
+                scenary->deleteFloor(firstTile.x, firstTile.y + 1 + i, scenary->getCurrentFloor() + 1);
+        }
+    }
 }
 
 void Render2D::RefreshQuad()
@@ -492,5 +523,29 @@ void Render2D::RefreshQuad()
     {
         secondTile.x = firstTile.x + max.z;
         secondTile.y = firstTile.y + max.x;
+    }
+}
+
+void Render2D::RefreshQuadStair()
+{
+    if (rotation == 0)
+    {
+        secondTile.x = firstTile.x + 5;
+        secondTile.y = firstTile.y + 1;
+    }
+    else if(rotation == 1)
+    {
+        secondTile.x = firstTile.x + 1;
+        secondTile.y = firstTile.y - 5;
+    }
+    else if(rotation == 2)
+    {
+        secondTile.x = firstTile.x - 5;
+        secondTile.y = firstTile.y + 1;
+    }
+    else
+    {
+        secondTile.x = firstTile.x + 1;
+        secondTile.y = firstTile.y + 5;
     }
 }

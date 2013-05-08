@@ -155,7 +155,7 @@ public:
     */
     void deleteFloor(int x, int z, int floor);
 
-    bool getStairCollition(CPoint3D s);
+    bool getStairCollition(CPoint3D s, int rotation);
 
 private:
 
@@ -213,15 +213,17 @@ private:
     */
     bool getObject2ObjectCollision(ModelInfo mi);
 
-    bool getStair2WallCollision(ModelInfo mi);
+    bool getStair2WallCollision(CPoint3D s, int rotation);
 
-    bool getStair2StairCollision(ModelInfo mi);
+    bool getStair2StairCollision(CPoint3D s, int rotation);
+
+    bool getStair2ObjectCollision(CPoint3D s, int rotation);
 
     bool getObject2StairCollision(ModelInfo mi);
 
     bool getWall2StairCollision(ModelInfo mi);
 
-    bool getStair2ObjectCollision(ModelInfo mi);
+    
     /*
         Actual max X grid value
     */

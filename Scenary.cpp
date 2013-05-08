@@ -444,23 +444,62 @@ void CScenary::deleteFloor(int x, int z, int floor)
     }
 }
 
-bool CScenary::getStairCollition(CPoint3D s)
+bool CScenary::getStairCollition(CPoint3D s, int rotation)
 {
-    return false;//(getStair2WallCollision(mi) && getStair2ObjectCollision(mi) && getStair2StairCollision(mi));
+    return (getStair2WallCollision(s, rotation) || getStair2ObjectCollision(s, rotation) || getStair2StairCollision(s, rotation));
 }
 
-bool CScenary::getStair2WallCollision(ModelInfo mi)
+bool CScenary::getStair2WallCollision(CPoint3D s, int rotation)
 {
-
+    CPoint3D size;
+    ModelInfo maux;
+    CPoint3D posaux;
+    for (size_t i = 0; i < m_WallModels[activeFloor].size(); ++i)
+    {
+        maux = m_WallModels[activeFloor][i];
+        posaux = maux.position;
+        switch (rotation)
+        {
+        case 0:
+            size = CPoint3D(STAIR_HEIGHT, 0, STAIR_WIDTH);
+            break;
+        case 1:
+            size = CPoint3D(STAIR_WIDTH, 0, -STAIR_HEIGHT);
+            break;
+        case 2:
+            size = CPoint3D(-STAIR_HEIGHT, 0, STAIR_WIDTH);
+            break;
+        case 3:
+            size = CPoint3D(STAIR_WIDTH, 0, STAIR_HEIGHT);
+        }
+        if(maux.rotation == CPoint3D(0, 180, 0))
+        {
+            posaux.x += 0.05f;
+            if((posaux.x > (s.x - size.x/2)) && 
+                (posaux.x < (s.x + size.x/2)) &&
+                (posaux.z >= (s.z - size.z/2)) && 
+                (posaux.z < (s.z + size.z/2)))
+                return true;
+        }
+        if(maux.rotation == CPoint3D(0, 270, 0))
+        {
+            posaux.z -= 0.05f;
+            if((posaux.x >= (s.x - size.x/2)) && 
+                (posaux.x < (s.x + size.x/2)) &&
+                (posaux.z > (s.z - size.z/2)) && 
+                (posaux.z < (s.z + size.z/2)))
+                return true;
+        }
+    }
     return false;
 }
 
-bool CScenary::getStair2StairCollision(ModelInfo mi)
+bool CScenary::getStair2StairCollision(CPoint3D s, int rotation)
 {
     return false;
 }
 
-bool CScenary::getStair2ObjectCollision(ModelInfo mi)
+bool CScenary::getStair2ObjectCollision(CPoint3D s, int rotation)
 { 
     return false;
 }
