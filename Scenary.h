@@ -184,7 +184,7 @@ private:
     /*
         Current floor
     */
-    int activeFloor;
+    unsigned int activeFloor;
     /*
         Type of the selected model
     */

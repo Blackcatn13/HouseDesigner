@@ -7,7 +7,7 @@ CameraFP::CameraFP()
     glLoadIdentity();
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    Cnear = .1;
+    Cnear = .1f;
     Cfar = 1000;
     m_yaw = 0;
     m_pitch = 0;

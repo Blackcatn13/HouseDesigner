@@ -84,16 +84,16 @@ void RenderExplorer::SetCameraProjection(int w, int h)
     camera->update();
 }
 
-void RenderExplorer::AddCameraDistance(float d)
+void RenderExplorer::AddCameraDistance(float)
 {
 }
 
-void RenderExplorer::mousePressEvent(QMouseEvent *event)
+void RenderExplorer::mousePressEvent(QMouseEvent*)
 {
 
 }
 
-void RenderExplorer::mouseReleaseEvent(QMouseEvent *event)
+void RenderExplorer::mouseReleaseEvent(QMouseEvent*)
 {
 
 }

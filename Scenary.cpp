@@ -77,7 +77,7 @@ bool CScenary::Draw()
     if(activeFloor > m_WallModels.size())
         return false;
 
-    for(int i = 0; i < m_WallModels[activeFloor].size(); ++i)
+    for(size_t i = 0; i < m_WallModels[activeFloor].size(); ++i)
     {
         ModelInfo model = m_WallModels[activeFloor][i];
         glPushMatrix();
@@ -91,7 +91,7 @@ bool CScenary::Draw()
         glPopMatrix();
     }
 
-    for(int i = 0; i < m_ObjectModels[activeFloor].size(); ++i)
+    for(size_t i = 0; i < m_ObjectModels[activeFloor].size(); ++i)
     {
         ModelInfo model = m_ObjectModels[activeFloor][i];
         glPushMatrix();
@@ -112,7 +112,7 @@ void CScenary::DrawFloor()
      CModelManager *modelManager = CModelManager::GetInstance();
     if(activeFloor < m_FloorModels.size())
     {
-        for(int i = 0; i < m_FloorModels[activeFloor].size(); ++i)
+        for(size_t i = 0; i < m_FloorModels[activeFloor].size(); ++i)
         {
             ModelInfo model = m_FloorModels[activeFloor][i];
             glPushMatrix();
@@ -133,7 +133,7 @@ void CScenary::DrawCeil()
     CModelManager *modelManager = CModelManager::GetInstance();
     if(activeFloor < m_FloorModels.size())
     {
-        for(int i = 0; i < m_FloorModels[activeFloor + 1].size(); ++i)
+        for(size_t i = 0; i < m_FloorModels[activeFloor + 1].size(); ++i)
         {
             ModelInfo model = m_FloorModels[activeFloor + 1][i];
             glPushMatrix();
@@ -154,7 +154,7 @@ void CScenary::DrawStairs()
     CModelManager *modelManager = CModelManager::GetInstance();
     if(activeFloor < m_StairModels.size())
     {
-        for(int i = 0; i < m_StairModels[activeFloor].size(); ++i)
+        for(size_t i = 0; i < m_StairModels[activeFloor].size(); ++i)
         {
             ModelInfo model = m_StairModels[activeFloor][i];
             glPushMatrix();
@@ -223,7 +223,7 @@ void CScenary::DrawGrid()
     }
     glEnd();
     glEnable (GL_LINE_STIPPLE);
-    glColor3f(0.1, 0.8, 0.1);
+    glColor3f(0.1f, 0.8f, 0.1f);
     glLineStipple(1, 0x1111);
     glBegin(GL_LINES);
 
@@ -253,7 +253,7 @@ void CScenary::CleanUp()
 
 bool CScenary::getWall2WallCollision(ModelInfo mi)
 {
-    for (int i = 0; i < m_WallModels[activeFloor].size(); ++i)
+    for (size_t i = 0; i < m_WallModels[activeFloor].size(); ++i)
     {
         if(m_WallModels[activeFloor][i] == mi)
             return true;
@@ -267,23 +267,23 @@ bool CScenary::getWall2ObjectCollision(ModelInfo mi)
     CPoint3D size;
     CPoint3D posaux;
     ModelInfo maux;
-    for (int i = 0; i < m_ObjectModels[activeFloor].size(); ++i)
+    for (size_t i = 0; i < m_ObjectModels[activeFloor].size(); ++i)
     {
         maux = m_ObjectModels[activeFloor][i];
         posaux = mi.position;
         size = modelM->getModelSize(maux.modelName);
         if(mi.rotation == CPoint3D(0, 180, 0))
         {
-            posaux.x += 0.05;
+            posaux.x += 0.05f;
             if((posaux.x > (maux.position.x - size.x/2)) && 
                 (posaux.x < (maux.position.x + size.x/2)) &&
                 (posaux.z >= (maux.position.z - size.z/2)) && 
                 (posaux.z < (maux.position.z + size.z/2)))
                 return true;
         }
-        if(mi.rotation == CPoint3D(0, -90, 0))
+        if(mi.rotation == CPoint3D(0, 270, 0))
         {
-            posaux.z -= 0.05;
+            posaux.z -= 0.05f;
             if((posaux.x >= (maux.position.x - size.x/2)) && 
                 (posaux.x < (maux.position.x + size.x/2)) &&
                 (posaux.z > (maux.position.z - size.z/2)) && 
@@ -300,7 +300,7 @@ bool CScenary::getObject2ObjectCollision(ModelInfo mi)
     CPoint3D size1;
     CPoint3D size2;
     ModelInfo maux;
-    for (int i = 0; i < m_ObjectModels[activeFloor].size(); ++i)
+    for (size_t i = 0; i < m_ObjectModels[activeFloor].size(); ++i)
     {
         maux = m_ObjectModels[activeFloor][i];
         if(maux == mi)
@@ -342,23 +342,23 @@ bool CScenary::getObject2WallCollision(ModelInfo mi)
     CPoint3D size;
     ModelInfo maux;
     CPoint3D posaux;
-    for (int i = 0; i < m_WallModels[activeFloor].size(); ++i)
+    for (size_t i = 0; i < m_WallModels[activeFloor].size(); ++i)
     {
         maux = m_WallModels[activeFloor][i];
         posaux = maux.position;
         size = modelM->getModelSize(mi.modelName);
         if(maux.rotation == CPoint3D(0, 180, 0))
         {
-            posaux.x += 0.05;
+            posaux.x += 0.05f;
             if((posaux.x > (mi.position.x - size.x/2)) && 
                 (posaux.x < (mi.position.x + size.x/2)) &&
                 (posaux.z >= (mi.position.z - size.z/2)) && 
                 (posaux.z < (mi.position.z + size.z/2)))
                 return true;
         }
-        if(maux.rotation == CPoint3D(0, -90, 0))
+        if(maux.rotation == CPoint3D(0, 270, 0))
         {
-            posaux.z -= 0.05;
+            posaux.z -= 0.05f;
             if((posaux.x >= (mi.position.x - size.x/2)) && 
                 (posaux.x < (mi.position.x + size.x/2)) &&
                 (posaux.z > (mi.position.z - size.z/2)) && 
@@ -381,7 +381,7 @@ void CScenary::setActiveType(Types t)
 
 void CScenary::fillFloor()
 {
-    for (int i = 0; i < m_FloorModels.size(); ++i)
+    for (size_t i = 0; i < m_FloorModels.size(); ++i)
     {
         if(m_FloorModels[i].size() == 0)
         {
@@ -409,7 +409,7 @@ vector< vector<int> > CScenary::getScenaryMat()
 
 void CScenary::deleteFloor(int x, int z, int floor)
 {
-    if(floor < m_FloorModels.size())
+    if(unsigned int(floor) < m_FloorModels.size())
     {
         vector<ModelInfo>::iterator it;
         for (it = m_FloorModels[floor].begin(); it != m_FloorModels[floor].end(); ++it)

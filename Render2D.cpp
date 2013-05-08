@@ -59,19 +59,19 @@ bool Render2D::KeyEvent(int key)
     switch(key)
     {
     case Qt::Key_A:
-        move.y -= .6;
+        move.y -= .6f;
         gridX -= 0.6;
         break;
     case Qt::Key_S:
-        move.x -= .6;
+        move.x -= .6f;
         gridY += 0.6;
         break;
     case Qt::Key_D:
-        move.y += .6;
+        move.y += .6f;
         gridX += 0.6;
         break;
     case Qt::Key_W:
-        move.x += .6;
+        move.x += .6f;
         gridY -= 0.6;
         break;
     default:
@@ -130,7 +130,7 @@ void Render2D::mousePressEvent(QMouseEvent *event)
     }
 }
 
-void Render2D::mouseReleaseEvent(QMouseEvent *event)
+void Render2D::mouseReleaseEvent(QMouseEvent*)
 {
     if(clicked)
     {
@@ -161,7 +161,7 @@ void Render2D::mouseReleaseEvent(QMouseEvent *event)
     }    
 }
     
-void Render2D::mouseMoveEvent(QMouseEvent *event, int xG, int yG)
+void Render2D::mouseMoveEvent(QMouseEvent *event, int, int)
 {
 
     int x = event->x();
@@ -245,7 +245,7 @@ void Render2D::DrawQuad()
 {
     CScenary *scenary = CScenary::getInstance();
 
-    glColor3f(1.0, 0.2, 1.0);
+    glColor3f(1.0f, 0.2f, 1.0f);
     glBegin(GL_QUADS);
         glVertex3f(firstTile.x, 0.005 + scenary->getHeightForModels(), firstTile.y);
         glVertex3f(firstTile.x, 0.005 + scenary->getHeightForModels(), secondTile.y);
@@ -413,7 +413,6 @@ void Render2D::setEditMode(EditModes em)
 
 void Render2D::FirstClickStair(float wx, float wz)
 {
-    CScenary *scenary = CScenary::getInstance();
     if (wx > 0.0 && wz > 0.0)
     {
         int rtx = (int)wx;
