@@ -209,6 +209,16 @@ private:
         Function to calculate if exist a collision between objects
     */
     bool getObject2ObjectCollision(ModelInfo mi);
+
+    bool getStair2WallCollision(ModelInfo mi);
+
+    bool getStair2StairCollision(ModelInfo mi);
+
+    bool getObject2StairCollision(ModelInfo mi);
+
+    bool getWall2StairCollision(ModelInfo mi);
+
+    bool getStair2ObjectCollision(ModelInfo mi);
     /*
         Actual max X grid value
     */

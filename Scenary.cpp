@@ -310,7 +310,7 @@ bool CScenary::getObject2ObjectCollision(ModelInfo mi)
         if(!((mi.position.x - size2.x/2 >= maux.position.x + size1.x/2) ||
             (mi.position.x + size2.x/2 <= maux.position.x - size1.x/2) ||
             (mi.position.z - size2.z/2 >= maux.position.z + size1.z/2) ||
-            (mi.position.z + size2.x/2 <= maux.position.z - size1.z/2)))
+            (mi.position.z + size2.z/2 <= maux.position.z - size1.z/2)))
             return true;
     }
     return false;
