@@ -29,7 +29,8 @@ SOURCES += Camera.cpp \
     RenderExplorer.cpp \
     CameraFP.cpp \
     TextureManager.cpp \
-    Texture.cpp
+    Texture.cpp \
+    Shadermanager.cpp
 HEADERS += Camera.h \
     GLWidget.h \
     Illumination.h \
@@ -51,7 +52,8 @@ HEADERS += Camera.h \
     RenderExplorer.h \
     CameraFP.h \
     TextureManager.h \
-    Texture.h
+    Texture.h \
+    Shadermanager.h
 FORMS += thothwindow.ui
 OTHER_FILES += simple.vert \
     simple.frag
