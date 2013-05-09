@@ -7,8 +7,11 @@
 
 using namespace std;
 
+// Used Classes
+class CTexture;
+
 // New type definitions
-typedef map< string, CTexture* > MapTextures;
+typedef map< string, CTexture* > MapTexture;
 typedef pair< string, CTexture* > Texture_Pair;
 
 class CTextureManager
@@ -20,7 +23,7 @@ public:
     void CleanUp();
 private:
     static CTextureManager*     m_TextureManager;
-    MapTextures                 m_Textures;
+    MapTexture                 m_Textures;
 
     CTextureManager(void);
     bool LoadTexture(string textureName);
