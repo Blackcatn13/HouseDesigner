@@ -4,9 +4,13 @@ CShaderManager *CShaderManager::m_ShaderManager = 0;
 
 CShaderManager::CShaderManager(void)
 {
-    string arr[] = { "Shader1", "Shader2", "Shader3" };
-    m_Shaders = vector<string>(arr, arr + sizeof(arr)/sizeof(arr[0]));
-    m_SelShader = "";
+    m_Shaders = MapShader();
+    m_Shaders["Shader1"] = LIGHT;
+    m_Shaders["Shader2"] = TEXTURE;
+    m_Shaders["Shader3"] = NEITHER;
+    //selShader init.
+    m_SelShader.first = "";
+    m_SelShader.second = NEITHER;
 }
 
 CShaderManager::~CShaderManager(void)
@@ -27,11 +31,15 @@ void CShaderManager::CleanUp()
         delete m_ShaderManager;
 }
 
-bool CShaderManager::setShader(string shaderName)
+bool CShaderManager::setShader(string shaderName, sType type)
 {
-    //FIXME: Need check if shaderName exists.
-    bool test = true;
-    if (test)
-        m_SelShader = shaderName;
-    return test;
+    MapShader::iterator ShaderIter;
+    ShaderIter = m_Shaders.find(shaderName);
+    if (ShaderIter->first == shaderName && ShaderIter->second == type)
+    {
+        m_SelShader.first = shaderName;
+        m_SelShader.second = type;
+        return true;
+    }
+    return false;
 }
