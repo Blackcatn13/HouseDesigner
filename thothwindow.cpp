@@ -174,12 +174,17 @@ void ThothWindow::on_pushButton_7_clicked()
 void ThothWindow::actionSave_project_triggered()
 {
     //Save project
-    CProjectManager::getInstance()->SaveMap("zProject.txt");
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), "",
+                                                        tr("Files (*.txt)"));
+    CProjectManager::getInstance()->SaveMap(fileName.toStdString());
 }
 void ThothWindow::actionOpen_project_triggered()
 {
     //Load project
-    CProjectManager::getInstance()->LoadMap("zProject.txt");
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
+                                                         "",
+                                                         tr("Files (*.txt)"));
+    CProjectManager::getInstance()->LoadMap(fileName.toStdString());
 }
 
 void ThothWindow::on_lineEdit_2_editingFinished()
