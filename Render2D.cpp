@@ -81,23 +81,35 @@ bool Render2D::KeyEvent(int key)
         gridY -= 0.6;
         break;
     case Qt::Key_Q:
-        rotation++;
-        rotation = rotation % 4;
-        if (t == OBJECT)
-            RefreshQuad();
-        else if (t == STAIR)
-            RefreshQuadStair();
+        if(clicked)
+        {
+            rotation++;
+            rotation = rotation % 4;
+            if (t == OBJECT)
+                RefreshQuad();
+            else if (t == STAIR)
+                RefreshQuadStair();
+        }
         break;
     case Qt::Key_E:
-        if(rotation > 0)
-            rotation--;
-        else
-            rotation = 3;
-        rotation = rotation % 4;
-        if (t == OBJECT)
-            RefreshQuad();
-        else if (t == STAIR)
-            RefreshQuadStair();
+        if(clicked)
+        {
+            if(rotation > 0)
+                rotation--;
+            else
+                rotation = 3;
+            rotation = rotation % 4;
+            if (t == OBJECT)
+                RefreshQuad();
+            else if (t == STAIR)
+                RefreshQuadStair();
+        }
+        break;
+    case Qt::Key_Escape:
+        if(clicked)
+        {
+            clicked = false;
+        }
         break;
     default:
         update = false;
@@ -362,13 +374,11 @@ void Render2D::AddWall()
         {
             start = firstTile.y;
             end = secondTile.y;
-            angle = 180;
         }
         else
         {
             start = secondTile.y;
             end = firstTile.y;
-            angle = 180;
         }
         ii.rotation = CPoint3D(0, 180, 0);
         for(int i = start; i < end; i++)
@@ -383,15 +393,13 @@ void Render2D::AddWall()
         {
             start = firstTile.x;
             end = secondTile.x;
-            angle = 90;
         }
         else
         {
             start = secondTile.x;
             end = firstTile.x;
-            angle = -90;
         }
-        ii.rotation = CPoint3D(0, -90, 0);
+        ii.rotation = CPoint3D(0, 270, 0);
         for(int i = start; i < end; i++)
         {
             ii.position = CPoint3D(i, scenary->getHeightForModels(), firstTile.y + 0.05);

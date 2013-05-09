@@ -272,7 +272,7 @@ bool CScenary::getWall2ObjectCollision(ModelInfo mi)
         maux = m_ObjectModels[activeFloor][i];
         posaux = mi.position;
         size = modelM->getModelSize(maux.modelName);
-        if(mi.rotation == CPoint3D(0, 90, 0) || mi.rotation == CPoint3D(0, 270, 0))
+        if(maux.rotation == CPoint3D(0, 90, 0) || maux.rotation == CPoint3D(0, 270, 0))
         {
             CPoint3D aux = size;
             size = CPoint3D(aux.z, aux.y, aux.x); 
