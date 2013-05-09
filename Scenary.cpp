@@ -522,6 +522,48 @@ bool CScenary::getStair2WallCollision(CPoint3D s, int rotation)
 
 bool CScenary::getStair2StairCollision(CPoint3D s, int rotation)
 {
+    CPoint3D size;
+    ModelInfo maux;
+    CPoint3D posaux;
+    for (size_t i = 0; i < m_StairModels[activeFloor].size(); ++i)
+    {
+        maux = m_StairModels[activeFloor][i];
+        posaux = maux.position;
+        switch (rotation)
+        {
+        case 0:
+            size = CPoint3D(STAIR_DEEP, 0, STAIR_WIDTH);
+            if(!((posaux.x >= s.x + size.x) ||
+                (posaux.x + STAIR_WIDTH <= s.x) ||
+                (posaux.z > s.z + size.z) ||
+                (posaux.z + STAIR_WIDTH < s.z)))
+                return true;  
+            break;
+        case 1:
+            size = CPoint3D(STAIR_WIDTH, 0, STAIR_DEEP);
+            if(!((posaux.x > s.x + size.x) ||
+                (posaux.x + STAIR_WIDTH < s.x) ||
+                (posaux.z > s.z) ||
+                (posaux.z + STAIR_WIDTH < s.z - size.z)))
+                return true;
+            break;
+        case 2:
+            size = CPoint3D(STAIR_DEEP, 0, STAIR_WIDTH);
+            if(!((posaux.x > s.x) ||
+                (posaux.x + STAIR_WIDTH < s.x - size.x) ||
+                (posaux.z > s.z + size.z) ||
+                (posaux.z + STAIR_WIDTH < s.z)))
+                return true;
+            break;
+        case 3:
+            size = CPoint3D(STAIR_WIDTH, 0, STAIR_DEEP);
+            if(!((posaux.x > s.x + size.x) ||
+                (posaux.x + STAIR_WIDTH < s.x) ||
+                (posaux.z > s.z + size.z) ||
+                (posaux.z + STAIR_WIDTH < s.z)))
+                return true;
+        }
+    }
     return false;
 }
 
