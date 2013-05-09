@@ -206,7 +206,7 @@ void CScenary::DrawGrid()
     glVertex3f(m_gridMaxX, heightPlane, m_gridMaxZ);
     glVertex3f(m_gridMaxX, heightPlane, 0);
     glEnd();
-    glColor3f(1.0, 1.0, 1.0);
+    glColor3f(0.8f, 0.8f, 0.8f);
     glBegin(GL_LINES);
 
     //Vertical lines.
@@ -223,7 +223,7 @@ void CScenary::DrawGrid()
     }
     glEnd();
     glEnable (GL_LINE_STIPPLE);
-    glColor3f(0.1f, 0.8f, 0.1f);
+    glColor3f(0.1f, 0.9f, 0.1f);
     glLineStipple(1, 0x1111);
     glBegin(GL_LINES);
 
@@ -465,34 +465,56 @@ bool CScenary::getStair2WallCollision(CPoint3D s, int rotation)
         switch (rotation)
         {
         case 0:
-            size = CPoint3D(STAIR_HEIGHT, 0, STAIR_WIDTH);
+            size = CPoint3D(STAIR_DEEP, 0, STAIR_WIDTH);
+            if(maux.rotation == CPoint3D(0, 180, 0))
+            {
+                posaux.x += 0.05f;
+                posaux.x = ceil(posaux.x);
+                if(!((posaux.x >= s.x + size.x) ||
+                    (posaux.x <= s.x) ||
+                    (posaux.z > s.z + size.z) ||
+                    (posaux.z < s.z)))
+                    return true;
+            }   
             break;
         case 1:
-            size = CPoint3D(STAIR_WIDTH, 0, -STAIR_HEIGHT);
+            size = CPoint3D(STAIR_WIDTH, 0, STAIR_DEEP);
+            if(maux.rotation == CPoint3D(0, 270, 0))
+            {
+                posaux.z -= 0.05f;
+                posaux.z = ceil(posaux.z);
+                if(!((posaux.x > s.x + size.x) ||
+                    (posaux.x < s.x) ||
+                    (posaux.z > s.z) ||
+                    (posaux.z < s.z - size.z)))
+                    return true;
+            }
             break;
         case 2:
-            size = CPoint3D(-STAIR_HEIGHT, 0, STAIR_WIDTH);
+            size = CPoint3D(STAIR_DEEP, 0, STAIR_WIDTH);
+            if(maux.rotation == CPoint3D(0, 180, 0))
+            {
+                posaux.x += 0.05f;
+                posaux.x = ceil(posaux.x);
+                if(!((posaux.x > s.x) ||
+                    (posaux.x < s.x - size.x) ||
+                    (posaux.z > s.z + size.z) ||
+                    (posaux.z < s.z)))
+                    return true;
+            }
             break;
         case 3:
-            size = CPoint3D(STAIR_WIDTH, 0, STAIR_HEIGHT);
-        }
-        if(maux.rotation == CPoint3D(0, 180, 0))
-        {
-            posaux.x += 0.05f;
-            if((posaux.x > (s.x - size.x/2)) && 
-                (posaux.x < (s.x + size.x/2)) &&
-                (posaux.z >= (s.z - size.z/2)) && 
-                (posaux.z < (s.z + size.z/2)))
-                return true;
-        }
-        if(maux.rotation == CPoint3D(0, 270, 0))
-        {
-            posaux.z -= 0.05f;
-            if((posaux.x >= (s.x - size.x/2)) && 
-                (posaux.x < (s.x + size.x/2)) &&
-                (posaux.z > (s.z - size.z/2)) && 
-                (posaux.z < (s.z + size.z/2)))
-                return true;
+            size = CPoint3D(STAIR_WIDTH, 0, STAIR_DEEP);
+            if(maux.rotation == CPoint3D(0, 270, 0))
+            {
+                posaux.z -= 0.05f;
+                posaux.z = ceil(posaux.z);
+                if(!((posaux.x > s.x + size.x) ||
+                    (posaux.x < s.x) ||
+                    (posaux.z > s.z + size.z) ||
+                    (posaux.z < s.z)))
+                    return true;
+            }
         }
     }
     return false;

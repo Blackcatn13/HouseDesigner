@@ -38,6 +38,7 @@ private:
     void DrawLine();
     void DrawQuad();
     void DrawInverseQuad();
+    void DrawInverseQuad1();
     void MoveQuad(float wx, float wz);
     void RefreshQuad();
     void RefreshQuadStair();

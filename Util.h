@@ -37,6 +37,7 @@ using namespace std;
 #define INIT_HEIGHT 600
 #define STAIR_HEIGHT 0.75f
 #define STAIR_WIDTH 1
+#define STAIR_DEEP 4
 
 enum Views {PERSPECTIVE, ORTHOGONAL, FP};
 enum Modes {EDITOR_2D, EXPLORER, EXPLORER_ISO};
