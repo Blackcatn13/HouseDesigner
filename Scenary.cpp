@@ -632,7 +632,7 @@ bool CScenary::getObject2StairCollision(ModelInfo mi)
     for (size_t i = 0; i < m_StairModels[activeFloor].size(); ++i)
     {
         maux = m_StairModels[activeFloor][i];
-        size1 = CPoint3D(STAIR_DEEP, 0, STAIR_DEEP);
+        size1 = CPoint3D(STAIR_WIDTH, 0, STAIR_WIDTH);
         size2 = modelM->getModelSize(mi.modelName);
         if(mi.rotation == CPoint3D(0, 90, 0) || mi.rotation == CPoint3D(0, 270, 0))
         {
@@ -650,6 +650,36 @@ bool CScenary::getObject2StairCollision(ModelInfo mi)
 
 bool CScenary::getWall2StairCollision(ModelInfo mi)
 {
+    CModelManager *modelM = CModelManager::GetInstance();
+    CPoint3D size;
+    CPoint3D posaux;
+    ModelInfo maux;
+    for (size_t i = 0; i < m_StairModels[activeFloor].size(); ++i)
+    {
+        maux = m_StairModels[activeFloor][i];
+        posaux = mi.position;
+        size = CPoint3D(STAIR_WIDTH, 0, STAIR_WIDTH);
+        if(mi.rotation == CPoint3D(0, 180, 0))
+        {
+            posaux.x += 0.05f;
+            posaux.x = ceil(posaux.x);
+            if(!((posaux.x >= maux.position.x + size.x) ||
+                (posaux.x <= maux.position.x) ||
+                (posaux.z >= maux.position.z + size.z) ||
+                (posaux.z < maux.position.z)))
+                return true;
+        }
+        if(mi.rotation == CPoint3D(0, 270, 0))
+        {
+            posaux.z -= 0.05f;
+            posaux.z = ceil(posaux.x);
+            if(!((posaux.x >= maux.position.x + size.x) ||
+                (posaux.x < maux.position.x) ||
+                (posaux.z >= maux.position.z + size.z) ||
+                (posaux.z <= maux.position.z)))
+                return true;
+        }
+    }
     return false;
 }
 
