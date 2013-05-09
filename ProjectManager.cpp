@@ -56,16 +56,35 @@ bool CProjectManager::LoadMap(string fileName)
     int totalFloors, maxX, maxZ, currentFloor;
     ModelInfo info;
 
+    vector< vector<ModelInfo> > walls, objects;
+
     file.open(fileName.c_str());
     if(file.is_open())
     {
         file >> totalFloors;
         file >> maxX >> maxZ;
+
+        for(int i=0;i<totalFloors;++i)
+        {
+            walls.push_back( vector<ModelInfo>());
+            objects.push_back( vector<ModelInfo>());
+        }
+
         while(getline(file, line))
+        {
             // parse line (string) 
             info = getObjectFromInfo(line, currentFloor);
+            if(info.type == WALL)
+                walls[currentFloor].push_back(info);
+            else if(info.type == OBJECT)
+                objects[currentFloor].push_back(info);
+        }
     }
-    return false;
+    file.close();
+
+    CScenary::getInstance()->setWalls(walls);
+    CScenary::getInstance()->setObjects(objects);
+    return true;
 }
 
 std::string CProjectManager::getInfoFromObject(int currentFloor, ModelInfo object)
@@ -103,6 +122,27 @@ ModelInfo CProjectManager::getObjectFromInfo(std::string line, int &currentFloor
     ModelInfo info;
 
     iss >> currentFloor;
+    iss >> info.position.x;
+    iss >> info.position.y;
+    iss >> info.position.z;
+
+    iss >> info.rotation.x;
+    iss >> info.rotation.y;
+    iss >> info.rotation.z;
+
+    iss >> info.scale.x;
+    iss >> info.scale.y;
+    iss >> info.scale.z;
+
+    std::string model, texture;
+    iss >> model;
+    info.modelName = QDir::currentPath().toUtf8().constData() + model;
+    iss >> texture;
+    info.textureName = QDir::currentPath().toUtf8().constData() + texture;
+
+    int type;
+    iss >> type;
+    info.type = static_cast<Types>(type);
 
     return info;
 }

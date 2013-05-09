@@ -154,6 +154,7 @@ public:
         Function to get at what height the models need to be put
     */
     float getHeightForModels() {return (HEIGTH * activeFloor);}
+
     void ClearFloor();
     /*
         void deleteFloor(int, int, int)
@@ -162,8 +163,14 @@ public:
     void deleteFloor(int x, int z, int floor);
 
     bool getStairCollition(CPoint3D s, int rotation);
+
     ModelInfo getPickedObject(float x, float y, float z, size_t &index);
+
     void ChangeModelInfo(ModelInfo mi, size_t pos);
+
+    void setWalls(vector< vector<ModelInfo> > walls) {m_WallModels = walls;}
+    void setObjects(vector< vector<ModelInfo> > objects) {m_ObjectModels = objects;}
+
 private:
     CScenary(QObject *parent = 0);
     /*

@@ -179,6 +179,7 @@ void ThothWindow::actionSave_project_triggered()
 void ThothWindow::actionOpen_project_triggered()
 {
     //Load project
+    CProjectManager::getInstance()->LoadMap("zProject.txt");
 }
 
 void ThothWindow::on_lineEdit_2_editingFinished()
