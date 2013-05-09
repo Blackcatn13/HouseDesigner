@@ -52,7 +52,7 @@ ThothWindow::ThothWindow(QWidget *parent) :
     connect(this, SIGNAL(changeCursor(Qt::CursorShape)), ui->contextGL, SLOT(changeCursor(Qt::CursorShape)));
     connect(ui->ColorButton, SIGNAL(clicked(bool)), SLOT(on_colorButton_clicked()));
     connect(this, SIGNAL(newModel(ModelInfo, int)), RenderManager::GetInstance()->GetRenderMode(EXPLORER), SLOT(changeModelTexture(ModelInfo, int)));
-
+    connect(ui->actionOpen_project, SIGNAL(triggered()), this, SLOT(actionOpen_project_triggered()));
 }
 
 ThothWindow::~ThothWindow()
@@ -173,7 +173,12 @@ void ThothWindow::on_pushButton_7_clicked()
 
 void ThothWindow::actionSave_project_triggered()
 {
+    //Save project
     CProjectManager::getInstance()->SaveMap("zProject.txt");
+}
+void ThothWindow::actionOpen_project_triggered()
+{
+    //Load project
 }
 
 void ThothWindow::on_lineEdit_2_editingFinished()

@@ -56,7 +56,7 @@ bool CProjectManager::LoadMap(string fileName)
     int totalFloors, maxX, maxZ, currentFloor;
     ModelInfo info;
 
-    file.open(fileName);
+    file.open(fileName.c_str());
     if(file.is_open())
     {
         file >> totalFloors;
