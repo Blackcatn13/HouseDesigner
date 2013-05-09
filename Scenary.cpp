@@ -280,6 +280,7 @@ bool CScenary::getWall2ObjectCollision(ModelInfo mi)
         if(mi.rotation == CPoint3D(0, 180, 0))
         {
             posaux.x += 0.05f;
+            posaux.x = ceil(posaux.x);
             if(!((posaux.x >= maux.position.x + size.x/2) ||
                 (posaux.x <= maux.position.x - size.x/2) ||
                 (posaux.z >= maux.position.z + size.z/2) ||
@@ -289,6 +290,7 @@ bool CScenary::getWall2ObjectCollision(ModelInfo mi)
         if(mi.rotation == CPoint3D(0, 270, 0))
         {
             posaux.z -= 0.05f;
+            posaux.z = ceil(posaux.x);
             if(!((posaux.x >= maux.position.x + size.x/2) ||
                 (posaux.x < maux.position.x - size.x/2) ||
                 (posaux.z >= maux.position.z + size.z/2) ||
@@ -371,6 +373,7 @@ bool CScenary::getObject2WallCollision(ModelInfo mi)
         if(maux.rotation == CPoint3D(0, 180, 0))
         {
             posaux.x += 0.05f;
+            posaux.x = ceil(posaux.x);
             if(!((posaux.x >= mi.position.x + size.x/2) ||
                 (posaux.x <= mi.position.x - size.x/2) ||
                 (posaux.z >= mi.position.z + size.z/2) ||
@@ -380,6 +383,7 @@ bool CScenary::getObject2WallCollision(ModelInfo mi)
         if(maux.rotation == CPoint3D(0, 270, 0))
         {
             posaux.z -= 0.05f;
+            posaux.z = ceil(posaux.z);
             if(!((posaux.x >= mi.position.x + size.x/2) ||
                 (posaux.x < mi.position.x - size.x/2) ||
                 (posaux.z >= mi.position.z + size.z/2) ||
