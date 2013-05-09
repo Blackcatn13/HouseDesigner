@@ -148,8 +148,16 @@ void Render2D::mousePressEvent(QMouseEvent *event)
         case OBJECT:
             {
                 CPoint3D max = CModelManager::GetInstance()->getModelSize(scenary->getActiveModel());
-                if(wx < scenary->getGridMaxX() - max.x +1 && wz < scenary->getGridMaxZ() - max.z +1)
-                    FirstClickObject(wx, wz);
+                if(rotation == 0 || rotation == 2)
+                {
+                    if(wx < scenary->getGridMaxX() - max.x +1 && wz < scenary->getGridMaxZ() - max.z +1)
+                        FirstClickObject(wx, wz);
+                }
+                else
+                {
+                    if(wx < scenary->getGridMaxX() - max.z +1 && wz < scenary->getGridMaxZ() - max.x +1)
+                        FirstClickObject(wx, wz);
+                }
                 break;
             }
         case STAIR:
@@ -224,8 +232,16 @@ void Render2D::mouseMoveEvent(QMouseEvent *event, int, int)
                 case OBJECT:
                     {
                         CPoint3D max = CModelManager::GetInstance()->getModelSize(scenary->getActiveModel());
-                        if(wx < scenary->getGridMaxX() - max.x +1 && wz < scenary->getGridMaxZ() - max.z +1)
-                            MoveQuad(wx, wz);
+                        if(rotation == 0 || rotation == 2)
+                        {
+                            if(wx < scenary->getGridMaxX() - max.x +1 && wz < scenary->getGridMaxZ() - max.z +1)
+                                MoveQuad(wx, wz);
+                        }
+                        else
+                        {
+                            if(wx < scenary->getGridMaxX() - max.z +1 && wz < scenary->getGridMaxZ() - max.x +1)
+                                MoveQuad(wx, wz);
+                        }
                         break;
                     }
                 case STAIR:
