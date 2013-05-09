@@ -411,7 +411,7 @@ void Render2D::AddWall()
 void Render2D::FirstClickObject(float wx, float wz)
 {
     CScenary *scenary = CScenary::getInstance();
-    if (wx > 0.0 && wz > 0.0)
+    if (wx > 0.0 && wz > 0.0 && wx < scenary->getGridMaxX() && wz < scenary->getGridMaxZ())
     {
         int rtx = (int)wx;
         int rty = (int)wz;
@@ -439,7 +439,8 @@ void Render2D::FirstClickObject(float wx, float wz)
 
 void Render2D::FirstClickWall(float wx, float wz)
 {
-    if (wx > 0.0 && wz > 0.0)
+    CScenary *scenary = CScenary::getInstance();
+    if (wx > 0.0 && wz > 0.0 && wx < scenary->getGridMaxX() && wz < scenary->getGridMaxZ())
     {
         int rtx = (int)(wx*2)/2.0 + 0.5;
         int rty = (int)(wz*2)/2.0 + 0.5;
@@ -464,7 +465,8 @@ void Render2D::setEditMode(EditModes em)
 
 void Render2D::FirstClickStair(float wx, float wz)
 {
-    if (wx > 0.0 && wz > 0.0)
+    CScenary *scenary = CScenary::getInstance();
+    if (wx > 0.0 && wz > 0.0 && wx < scenary->getGridMaxX() && wz < scenary->getGridMaxZ())
     {
         int rtx = (int)wx;
         int rty = (int)wz;
