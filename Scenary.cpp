@@ -624,6 +624,27 @@ bool CScenary::getStair2ObjectCollision(CPoint3D s, int rotation)
 
 bool CScenary::getObject2StairCollision(ModelInfo mi)
 {
+    CModelManager *modelM = CModelManager::GetInstance();
+    CPoint3D size1;
+    CPoint3D size2;
+    CPoint3D aux;
+    ModelInfo maux;
+    for (size_t i = 0; i < m_StairModels[activeFloor].size(); ++i)
+    {
+        maux = m_StairModels[activeFloor][i];
+        size1 = CPoint3D(STAIR_DEEP, 0, STAIR_DEEP);
+        size2 = modelM->getModelSize(mi.modelName);
+        if(mi.rotation == CPoint3D(0, 90, 0) || mi.rotation == CPoint3D(0, 270, 0))
+        {
+            aux = size2;
+            size2 = CPoint3D(aux.z, aux.y, aux.x); 
+        }
+        if(!((mi.position.x - size2.x/2 >= maux.position.x + size1.x) ||
+            (mi.position.x + size2.x/2 <= maux.position.x) ||
+            (mi.position.z - size2.z/2 >= maux.position.z + size1.z) ||
+            (mi.position.z + size2.z/2 <= maux.position.z)))
+            return true;
+    }
     return false;
 }
 
