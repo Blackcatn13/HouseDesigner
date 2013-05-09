@@ -61,8 +61,14 @@ bool CProjectManager::LoadMap(string fileName)
     file.open(fileName.c_str());
     if(file.is_open())
     {
-        file >> totalFloors;
-        file >> maxX >> maxZ;
+        getline(file, line);
+        istringstream iss(line);
+        iss >> totalFloors;
+        getline(file, line);
+        istringstream iss2(line);
+        iss2 >> maxX;
+        iss2 >> maxZ;
+        
 
         for(int i=0;i<totalFloors;++i)
         {
