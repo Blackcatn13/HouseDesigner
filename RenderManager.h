@@ -14,7 +14,7 @@ public:
     ~RenderManager();
     static RenderManager* GetInstance();
     Render* GetRenderMode(Modes m);
-    void SetProjection(int w, int h);
+    void SetProjection(int w, int h, Modes mode);
     void CleanUp();
 private:
     RenderManager();

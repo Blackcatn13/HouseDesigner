@@ -21,6 +21,8 @@ public:
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event, int x, int y);
+    void setEditMode(EditModes em);
+    EditModes getActualEditMode() {return actualEditMode;}
 private:
     Camera *camera;
     int gridX;
@@ -40,6 +42,8 @@ private:
     void AddWall();
     void FirstClickWall(float wx, float wz);
     void FirstClickObject(float wx, float wz);
+    void FirstClickStair(float wx, float wz);
+    EditModes actualEditMode;
 };
 
 #endif

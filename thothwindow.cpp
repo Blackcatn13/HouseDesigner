@@ -55,6 +55,11 @@ void ThothWindow::on_pushButton_4_clicked()
                 CScenary::getInstance()->setActiveModel(info.absoluteFilePath().toStdString());
                 CScenary::getInstance()->setActiveType(WALL);
             }
+            if(info.absoluteFilePath().contains(QString("stair"), Qt::CaseInsensitive))
+            {
+                CScenary::getInstance()->setActiveModel(info.absoluteFilePath().toStdString());
+                CScenary::getInstance()->setActiveType(STAIR);
+            }
         }
     }
 }
@@ -147,4 +152,17 @@ void ThothWindow::on_lineEdit_editingFinished()
     int maxZ = ui->lineEdit->text().toInt();
     if (maxZ > 0 && maxZ < 255)
         CScenary::getInstance()->setGridMaxZ(maxZ);
+}
+
+void ThothWindow::on_floorBox_valueChanged(int setFloor)
+{
+    CScenary *cs =CScenary::getInstance();
+    setFloor = min(setFloor, 5);
+    setFloor = max(setFloor, 1);
+    while (cs->getNFloors() < setFloor)
+    {
+        cs->addNewFloor();
+    }
+    //cs->ChangeFloor(setFloor-1);
+
 }

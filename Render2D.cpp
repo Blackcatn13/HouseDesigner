@@ -9,6 +9,7 @@ Render2D::Render2D()
 {
     camera = CameraManager::GetInstance()->GetCamera(ORTHOGONAL);
     clicked = false;
+    actualEditMode = INSERTING;
 }
 
 Render2D::~Render2D()
@@ -19,11 +20,14 @@ Render2D::~Render2D()
 
 void Render2D::Draw()
 {
+    
     camera->update();
     CScenary * scene = CScenary::getInstance();
     scene->DrawAxis();
-    scene->DrawGrid();
     scene->Draw();
+    scene->DrawFloor();
+    scene->DrawGrid();
+
     if(clicked)
     {
         Types t = scene->getActiveType();
@@ -47,28 +51,29 @@ void Render2D::Update()
 bool Render2D::KeyEvent(int key)
 {
     bool update = true;
-
+    Point2D move;
     switch(key)
     {
     case Qt::Key_A:
-        camera->move(0.0,-0.6);
+        move.y -= .6;
         gridX -= 0.6;
         break;
     case Qt::Key_S:
-        camera->move(-0.6,0.0);
+        move.x -= .6;
         gridY += 0.6;
         break;
     case Qt::Key_D:
-        camera->move(0.0,0.6);
+        move.y += .6;
         gridX += 0.6;
         break;
     case Qt::Key_W:
-        camera->move(0.6,0.0);
+        move.x += .6;
         gridY -= 0.6;
         break;
     default:
         update = false;
     }
+    camera->move(move.x, move.y, false);
     return update;
 }
 
@@ -89,16 +94,46 @@ void Render2D::mousePressEvent(QMouseEvent *event)
     int x = event->x();
     int y = event->y();
     float wx, wz;
-
+   /* qDebug() << "1 Seleccionar =>" << event->x() ;
+    qDebug() << "1 Seleccionar =>" << event->y();
+    qDebug() << 0;*/
     getWorldMouseCoord(x, y, wx, wz);
 
-    switch(t)
+    qDebug() << "1 Seleccionar =>" <<wx;
+    qDebug() << "1 Seleccionar =>" <<wz;
+    qDebug() << 0;
+
+    switch(actualEditMode)
     {
-    case WALL:
-        FirstClickWall(wx, wz);
+    case INSERTING:
+        switch(t)
+        {
+        case WALL:
+            FirstClickWall(wx, wz);
+            break;
+        case OBJECT:
+            {
+                CPoint3D max = CModelManager::GetInstance()->getModelSize(scenary->getActiveModel());
+                if(wx < scenary->getGridMaxX() - max.x +1 && wz < scenary->getGridMaxZ() - max.z +1)
+                    FirstClickObject(wx, wz);
+
+                break;
+            }
+        case STAIR:
+            {
+                if(wx < scenary->getGridMaxX() - 4 && wz < scenary->getGridMaxZ() - 4)
+                    FirstClickStair(wx, wz);
+                break;
+            }
+        }
         break;
-    case OBJECT:
-        FirstClickObject(wx, wz);
+    case SELECTING:/* for(int i=0; i<scenary->m_ObjectModels.size(); i++)
+                    {
+                    scenary->m_ObjectModels
+                    ModelInfo.position.x;
+                    }*/
+        break;
+    case DELETING:
         break;
     }
 }
@@ -110,14 +145,22 @@ void Render2D::mouseReleaseEvent(QMouseEvent *event)
         CScenary *scenary = CScenary::getInstance();
         Types t = scenary->getActiveType();
         clicked = false;
-
-        switch(t)
+        switch(actualEditMode)
         {
-        case WALL:
-            AddWall();
+        case INSERTING:
+            switch(t)
+            {
+            case WALL:
+                AddWall();
+                break;
+            case OBJECT:
+                AddObject();
+                break;
+            }
             break;
-        case OBJECT:
-            AddObject();
+        case DELETING:
+            break;
+        case SELECTING:
             break;
         }
     }    
@@ -134,17 +177,30 @@ void Render2D::mouseMoveEvent(QMouseEvent *event, int xG, int yG)
     CScenary *scenary = CScenary::getInstance();
     Types t = scenary->getActiveType();
 
-    if(wx > 0.0 && wz > 0.0)
+    if(wx > 0.0 && wz > 0.0 && wx < scenary->getGridMaxX() && wz < scenary->getGridMaxZ())
     {
         if(clicked)
         {
-            switch(t)
+            switch(actualEditMode)
             {
-            case WALL:
-                MoveLine(wx, wz);
+            case INSERTING:
+                switch(t)
+                {
+                case WALL:
+                    MoveLine(wx, wz);
+                    break;
+                case OBJECT:
+                    {
+                        CPoint3D max = CModelManager::GetInstance()->getModelSize(scenary->getActiveModel());
+                        if(wx < scenary->getGridMaxX() - max.x +1 && wz < scenary->getGridMaxZ() - max.z +1)
+                            MoveQuad(wx, wz);
+                        break;
+                    }
+                }
                 break;
-            case OBJECT:
-                MoveQuad(wx, wz);
+            case DELETING:
+                break;
+            case SELECTING:
                 break;
             }
         }
@@ -174,23 +230,26 @@ void Render2D::getWorldMouseCoord(int x, int y, float &wx, float &wz)
 
 void Render2D::DrawLine()
 {
+    CScenary *scenary = CScenary::getInstance();
     glLineWidth(5);
     glColor3f(1.0, 0.0, 1.0);
     glBegin(GL_LINES);
-        glVertex3f(firstTile.x, 0.05, firstTile.y);
-        glVertex3f(secondTile.x, 0.05, secondTile.y);
+        glVertex3f(firstTile.x, 0.05 + scenary->getHeightForModels(), firstTile.y);
+        glVertex3f(secondTile.x, 0.05 + scenary->getHeightForModels(), secondTile.y);
     glEnd();
     glLineWidth(1);
 }
 
 void Render2D::DrawQuad()
 {
+    CScenary *scenary = CScenary::getInstance();
+
     glColor3f(1.0, 0.2, 1.0);
     glBegin(GL_QUADS);
-        glVertex3f(firstTile.x, -0.005, firstTile.y);
-        glVertex3f(firstTile.x, -0.005, secondTile.y);
-        glVertex3f(secondTile.x, -0.005, secondTile.y);
-        glVertex3f(secondTile.x, -0.005, firstTile.y);
+        glVertex3f(firstTile.x, 0.005 + scenary->getHeightForModels(), firstTile.y);
+        glVertex3f(firstTile.x, 0.005 + scenary->getHeightForModels(), secondTile.y);
+        glVertex3f(secondTile.x, 0.005 + scenary->getHeightForModels(), secondTile.y);
+        glVertex3f(secondTile.x, 0.005 + scenary->getHeightForModels(), firstTile.y);
     glEnd();
 }
 
@@ -239,7 +298,7 @@ void Render2D::AddObject()
     ii.scale = CPoint3D(1,1,1);
     ii.type = t;
     ii.rotation = CPoint3D();
-    ii.position = CPoint3D((firstTile.x + secondTile.x) / 2, 0, (firstTile.y + secondTile.y) / 2);
+    ii.position = CPoint3D((firstTile.x + secondTile.x) / 2, scenary->getHeightForModels(), (firstTile.y + secondTile.y) / 2);
     scenary->addModel(ii);
 }
 
@@ -270,7 +329,7 @@ void Render2D::AddWall()
         ii.rotation = CPoint3D(0, 180, 0);
         for(int i = start; i < end; i++)
         {
-            ii.position = CPoint3D(firstTile.x - 0.05 , 0, i);
+            ii.position = CPoint3D(firstTile.x - 0.05 , scenary->getHeightForModels(), i);
             scenary->addModel(ii);
         }
     }
@@ -291,7 +350,7 @@ void Render2D::AddWall()
         ii.rotation = CPoint3D(0, -90, 0);
         for(int i = start; i < end; i++)
         {
-            ii.position = CPoint3D(i, 0, firstTile.y + 0.05);
+            ii.position = CPoint3D(i, scenary->getHeightForModels(), firstTile.y + 0.05);
             scenary->addModel(ii);
         }
     }
@@ -336,4 +395,14 @@ void Render2D::FirstClickWall(float wx, float wz)
             clicked = true;
         }
     }
+}
+
+void Render2D::setEditMode(EditModes em)
+{
+    actualEditMode = em;
+}
+
+void Render2D::FirstClickStair(float wx, float wz)
+{
+
 }

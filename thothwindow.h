@@ -30,6 +30,8 @@ private slots:
     void on_lineEdit_editingFinished();
     void on_lineEdit_2_editingFinished();
 
+    void on_floorBox_valueChanged(int arg1);
+
 private:
     Ui::ThothWindow     *ui;
     QDirModel           *treeModel;

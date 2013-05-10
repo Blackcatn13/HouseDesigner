@@ -1,4 +1,5 @@
 #include "CameraOrtho.h"
+#include "Scenary.h"
 
 CameraOrtho::CameraOrtho()
 {
@@ -24,25 +25,21 @@ void CameraOrtho::setProjection(int, int)
 {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(-0.1, 10 - orthoZoom, -0.1, 10 - orthoZoom, 0.1, 50);
-    glMatrixMode(GL_MODELVIEW);
+    glOrtho(-0.1, 10 - orthoZoom, -0.1, 10 - orthoZoom, 0.01, 1000);
 }
 
 void CameraOrtho::update()
 {
-    glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-    glOrtho(-0.1, 10 - orthoZoom, -0.1, 10 - orthoZoom, 0.1, 50);
-
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-    gluLookAt(orthoAngleH, 3.0, orthoAngleV,
+    int height = (CScenary::getInstance()->getCurrentFloor()+ 1) * 3;
+    gluLookAt(orthoAngleH, height, orthoAngleV,
                 orthoAngleH, 0.0, orthoAngleV,
                 1.0, 0.0, 0.0);
 }
 
-void CameraOrtho::move(float ah, float av)
+void CameraOrtho::move(float ah, float av, bool)
 {
     orthoAngleH += ah;
     orthoAngleV += av;
@@ -55,4 +52,5 @@ void CameraOrtho::AddDistance(float d)
         orthoZoom = 4;
     if(orthoZoom <= -20)
         orthoZoom = -20;
+    setProjection(0,0);
 }

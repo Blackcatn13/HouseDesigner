@@ -8,6 +8,7 @@
 RenderExplorer::RenderExplorer()
 {
     camera = CameraManager::GetInstance()->GetCamera(FP);
+    fly = false;
 }
 
 RenderExplorer::~RenderExplorer()
@@ -23,6 +24,9 @@ void RenderExplorer::Draw()
     scene->DrawAxis();
     scene->DrawGrid();
     scene->Draw();
+    scene->DrawFloor();
+    scene->DrawSkyBox();
+    scene->DrawCeil();
 }
 
 void RenderExplorer::Update()
@@ -32,24 +36,42 @@ void RenderExplorer::Update()
 bool RenderExplorer::KeyEvent(int key)
 {
     bool update = true;
-
+    Point2D move;
     switch(key)
     {
     case Qt::Key_A:
-        camera->move(0.0, -1);
+        move.y += 1;
         break;
     case Qt::Key_S:
-        camera->move(-1, 0.0);
+        move.x -= 1;
         break;
     case Qt::Key_D:
-        camera->move(0.0, 1);
+        move.y -= 1;
         break;
     case Qt::Key_W:
-        camera->move(1, 0.0);
+        move.x += 1;
         break;
+    case Qt::Key_Space:
+        fly = !fly;
+        break;
+    case Qt::Key_PageDown:
+        {
+            int floor = CScenary::getInstance()->getCurrentFloor();
+            if(floor > 0)
+                CScenary::getInstance()->ChangeFloor(floor - 1);
+            break;
+        }
+    case Qt::Key_PageUp:
+        {
+            int floor = CScenary::getInstance()->getCurrentFloor();
+            if(floor < CScenary::getMaxFloors() - 1)
+                CScenary::getInstance()->ChangeFloor(floor + 1);
+            break;
+        }
     default:
         update = false;
     }
+    camera->move(move.x, move.y, fly);
     return update;
 }
 
@@ -58,6 +80,7 @@ void RenderExplorer::SetCameraProjection(int w, int h)
     camera->setProjection(w, h);
     width = w;
     heigth = h;
+    camera->update();
 }
 
 void RenderExplorer::AddCameraDistance(float d)
@@ -80,7 +103,7 @@ void RenderExplorer::mouseMoveEvent(QMouseEvent *event, int x, int y)
     Point2D mousePos(event->pos().x(), event->pos().y());
 
     Point2D mouseRelPos(mousePos.x - width/2, mousePos.y - heigth/2);
-    yaw = -mouseRelPos.x *0.1;
+    yaw = mouseRelPos.x *0.1;
     pitch = -mouseRelPos.y * 0.1;
     camera->AddYawAndPitch(yaw, pitch);
 

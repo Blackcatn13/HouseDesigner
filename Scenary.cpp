@@ -1,6 +1,9 @@
 #include "Scenary.h"
 #include "Util.h"
 #include "ModelManager.h"
+#include <QImage>
+#include <QGLWidget>
+
 
 CScenary* CScenary::m_Scenary = 0;
 
@@ -9,12 +12,14 @@ CScenary::CScenary(void)
     //Initialize grid maximum.
     m_gridMaxX = 20;
     m_gridMaxZ = 20;
+    m_scenaryMat = vector< vector<int> >(MAXGRIDX, vector<int>(MAXGRIDZ));
     m_WallModels = vector<vector<ModelInfo> >();
     m_ObjectModels = vector<vector<ModelInfo> >();
-    addNewFloor();
+    m_FloorModels = vector<vector<ModelInfo> >();
     activeFloor = 0;
+    m_nFloors = 0;
+    addNewFloor();
 }
-
 
 CScenary::~CScenary(void)
 {
@@ -29,11 +34,26 @@ CScenary* CScenary::getInstance()
 
 void CScenary::addNewFloor()
 {
-    m_WallModels.push_back( vector<ModelInfo>());
-    m_ObjectModels.push_back( vector<ModelInfo>());
+    if (m_WallModels.size() < MAXFLOORS)
+    {
+        m_WallModels.push_back( vector<ModelInfo>());
+        m_ObjectModels.push_back( vector<ModelInfo>());
+        if(m_nFloors == 0)
+            m_FloorModels.push_back( vector<ModelInfo>());
+        m_FloorModels.push_back( vector<ModelInfo>());
+        fillFloor(); 
+        m_nFloors += 1;
+    }
 }
+
+void CScenary::ChangeFloor(int newFloor)
+{
+    activeFloor = newFloor;
+}
+
 bool CScenary::addModel(ModelInfo m_Info)
 {
+
     switch(m_Info.type)
     {
     case WALL:
@@ -44,10 +64,17 @@ bool CScenary::addModel(ModelInfo m_Info)
         if(!getObject2WallCollision(m_Info) && !getObject2ObjectCollision(m_Info))
             m_ObjectModels[activeFloor].push_back(m_Info);
         break;
+    case STAIR:
+        m_ObjectModels[activeFloor].push_back(m_Info);
+        break;
     }
-    
-    qDebug() << "Models in floor" << m_WallModels[activeFloor].size() + m_ObjectModels[activeFloor].size();
+
+    qDebug() << "Models in floor" << m_WallModels[activeFloor].size() + m_ObjectModels[activeFloor].size() + m_FloorModels[activeFloor].size();
     return true;
+}
+
+void CScenary::SelectModel(){
+
 }
 
 bool CScenary::Draw()
@@ -60,6 +87,7 @@ bool CScenary::Draw()
     {
         ModelInfo model = m_WallModels[activeFloor][i];
         glPushMatrix();
+            glColor3f(0,1,0);
             glTranslatef(model.position.x, model.position.y, model.position.z);
             glRotatef(model.rotation.x, 1, 0 ,0);
             glRotatef(model.rotation.y, 0, 1 ,0);
@@ -73,6 +101,7 @@ bool CScenary::Draw()
     {
         ModelInfo model = m_ObjectModels[activeFloor][i];
         glPushMatrix();
+            glColor3f(1,0,0);
             glTranslatef(model.position.x, model.position.y, model.position.z);
             glRotatef(model.rotation.x, 1, 0 ,0);
             glRotatef(model.rotation.y, 0, 1 ,0);
@@ -84,16 +113,66 @@ bool CScenary::Draw()
     return true;
 }
 
-bool CScenary::SaveMap(string fileName)
+void CScenary::DrawFloor()
 {
-    // Implementation of the save funtion, need to write all the ModelInfo in the m_Info
-    return false;
+     CModelManager *modelManager = CModelManager::GetInstance();
+    if(activeFloor < m_FloorModels.size())
+    {
+        for(int i = 0; i < m_FloorModels[activeFloor].size(); ++i)
+        {
+            ModelInfo model = m_FloorModels[activeFloor][i];
+            glPushMatrix();
+                glColor3f(1,1,0);
+                glTranslatef(model.position.x, model.position.y, model.position.z);
+                glRotatef(model.rotation.x, 1, 0 ,0);
+                glRotatef(model.rotation.y, 0, 1 ,0);
+                glRotatef(model.rotation.z, 0, 0 ,1);
+                glScalef(model.scale.x, model.scale.y, model.scale.z);
+                modelManager->Draw(model.modelName);
+            glPopMatrix();
+        }
+    }
 }
 
-bool CScenary::LoadMap(string fileName)
+
+void CScenary::DrawSkyBox()
 {
-    // Implementation of the read file function, need to read all the ModelInfo to the m_Info
-    return false;
+   // LoadTexture("sky.jpg");
+    glEnable(GL_ALPHA_TEST);
+    glEnable(GL_BLEND);
+    GLUquadricObj *quadric;
+    glColor3f(0.3,0.3,0.7);
+
+ //   glBindTexture(GL_TEXTURE_2D,textures[0]);
+    glPushMatrix();
+        quadric = gluNewQuadric();
+        gluQuadricDrawStyle(quadric,GLU_FILL);
+        gluQuadricOrientation(quadric, GLU_INSIDE);
+        gluQuadricTexture(quadric, GL_TRUE);
+        gluSphere(quadric,200,100,1000);
+    glPopMatrix();
+}
+
+
+void CScenary::DrawCeil()
+{
+    CModelManager *modelManager = CModelManager::GetInstance();
+    if(activeFloor < m_FloorModels.size())
+    {
+        for(int i = 0; i < m_FloorModels[activeFloor + 1].size(); ++i)
+        {
+            ModelInfo model = m_FloorModels[activeFloor + 1][i];
+            glPushMatrix();
+                glColor3f(1,0,1);
+                glTranslatef(model.position.x, model.position.y, model.position.z);
+                glRotatef(model.rotation.x, 1, 0 ,0);
+                glRotatef(model.rotation.y, 0, 1 ,0);
+                glRotatef(model.rotation.z, 0, 0 ,1);
+                glScalef(model.scale.x, model.scale.y, model.scale.z);
+                modelManager->Draw(model.modelName);
+            glPopMatrix();
+        }
+    }
 }
 
 void CScenary::DrawAxis()
@@ -123,27 +202,29 @@ void CScenary::DrawAxis()
 
 void CScenary::DrawGrid()
 {
-
+    int heightPlane = HEIGTH * activeFloor - 1;
+    int heightGrid = HEIGTH * activeFloor + 0.001;
     glColor3f(0.0, 0.0, 0.0);
     glBegin(GL_POLYGON);
-    glVertex3f(0, -0.01, 0);
-    glVertex3f(0, -0.01, m_gridMaxZ);
-    glVertex3f(m_gridMaxX, -0.01, m_gridMaxZ);
-    glVertex3f(m_gridMaxX, -0.01, 0);
+    glVertex3f(0, heightPlane, 0);
+    glVertex3f(0, heightPlane, m_gridMaxZ);
+    glVertex3f(m_gridMaxX, heightPlane, m_gridMaxZ);
+    glVertex3f(m_gridMaxX, heightPlane, 0);
     glEnd();
     glColor3f(1.0, 1.0, 1.0);
     glBegin(GL_LINES);
+
     //Vertical lines.
     for(int i = 0; i < m_gridMaxX+1; ++i)
     {
-        glVertex3f((float)i, 0, 0);
-        glVertex3f((float)i, 0, m_gridMaxZ);
+        glVertex3f((float)i, heightGrid, 0);
+        glVertex3f((float)i, heightGrid, m_gridMaxZ);
     }
     //Horizontal lines.
     for (int i = 0; i < m_gridMaxZ+1; ++i)
     {
-        glVertex3f(0, 0, (float)i);
-        glVertex3f(m_gridMaxX, 0, (float)i);
+        glVertex3f(0, heightGrid, (float)i);
+        glVertex3f(m_gridMaxX, heightGrid, (float)i);
     }
     glEnd();
     glEnable (GL_LINE_STIPPLE);
@@ -154,24 +235,26 @@ void CScenary::DrawGrid()
     //Vertical Dashed lines.
     for(int i = 0; i < m_gridMaxX; ++i)
     {
-        glVertex3f((float)i + 0.5, 0, 0);
-        glVertex3f((float)i + 0.5, 0, m_gridMaxZ);
+        glVertex3f((float)i + 0.5, heightGrid, 0);
+        glVertex3f((float)i + 0.5, heightGrid, m_gridMaxZ);
     }
     //Horizontal Dashed lines.
     for (int i = 0; i < m_gridMaxZ; ++i)
     {
-        glVertex3f(0, 0, (float)i + 0.5);
-        glVertex3f(m_gridMaxX, 0, (float)i + 0.5);
+        glVertex3f(0, heightGrid, (float)i + 0.5);
+        glVertex3f(m_gridMaxX, heightGrid, (float)i + 0.5);
     }
     glEnd();
     glDisable(GL_LINE_STIPPLE);
 }
+
 
 void CScenary::CleanUp()
 {
     CModelManager::GetInstance()->CleanUp();
     m_WallModels.clear();
     m_ObjectModels.clear();
+    m_FloorModels.clear();
 }
 
 bool CScenary::getWall2WallCollision(ModelInfo mi)
@@ -241,14 +324,22 @@ bool CScenary::getObject2ObjectCollision(ModelInfo mi)
 
 void CScenary::setGridMaxX(int gridMaxX)
 {
-    m_gridMaxX = gridMaxX;
-    this->DrawGrid();
+    if (gridMaxX < MAXGRIDX)
+    {
+        m_gridMaxX = gridMaxX;
+        this->DrawGrid();
+    }else
+        m_gridMaxX = MAXGRIDX;
 }
 
 void CScenary::setGridMaxZ(int gridMaxZ)
 {
-    m_gridMaxZ = gridMaxZ;
-    this->DrawGrid();
+    if (gridMaxZ < MAXGRIDZ)
+    {
+        m_gridMaxZ = gridMaxZ;
+        this->DrawGrid();
+    }else
+        m_gridMaxZ= MAXGRIDZ;
 }
 
 bool CScenary::getObject2WallCollision(ModelInfo mi)
@@ -292,4 +383,32 @@ void CScenary::setActiveModel(string model)
 void CScenary::setActiveType(Types t)
 {
     activeType = t;
+}
+
+void CScenary::fillFloor()
+{
+    for (int i = 0; i < m_FloorModels.size(); ++i)
+    {
+        if(m_FloorModels[i].size() == 0)
+        {
+            for(int x = 0; x < m_gridMaxX; ++x)
+            {
+                for(int z = 1; z <= m_gridMaxZ; ++z)
+                {
+                    ModelInfo mi;
+                    mi.rotation = CPoint3D();
+                    mi.scale = CPoint3D(1,1,1);
+                    mi.type = FLOOR;
+                    mi.modelName = "Models/Sin_t_tulo.obj";
+                    mi.position = CPoint3D(x, i*HEIGTH, z);
+                    m_FloorModels[i].push_back(mi);
+                }
+            }
+        }
+    }
+}
+
+vector< vector<int> > CScenary::getScenaryMat()
+{
+    return m_scenaryMat;
 }

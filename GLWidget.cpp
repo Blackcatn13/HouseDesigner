@@ -74,7 +74,8 @@ void GLWidget::resizeGL(int w, int h)
     width = w;
     heigth = h;
     RenderManager* RM = RenderManager::GetInstance();
-    RM->SetProjection(w, h);
+    //RM->SetProjection(w, h, actualMode);
+
 }
 
 /*****************************************************************************
@@ -91,7 +92,17 @@ void GLWidget::paintGL()
 
     // Call the draw function of the actual render Mode.
     RenderManager* RM = RenderManager::GetInstance();
+    switch (actualMode)
+    {
+    case EXPLORER:
+    case EXPLORER_ISO:
+        setCursor(Qt::BlankCursor);
+        break;
+    case EDITOR_2D:
+        setCursor(Qt::ArrowCursor);
+    }
     RM->GetRenderMode(actualMode)->Draw();
+
 }
 
 /*****************************************************************************
@@ -140,13 +151,16 @@ void GLWidget::wheelEvent(QWheelEvent *event)
  *****************************************************************************/
 void GLWidget::keyPressEvent(QKeyEvent* event)
 {
+    RenderManager* RM = RenderManager::GetInstance();
     if(event->key() == Qt::Key_L)
     {
         actualMode = EXPLORER;
+        RM->GetRenderMode(actualMode)->SetCameraProjection(width, heigth);
     }
     else if(event->key() == Qt::Key_P)
     {
         actualMode = EDITOR_2D;
+        RM->GetRenderMode(actualMode)->SetCameraProjection(width, heigth);
     }
     else
     {
