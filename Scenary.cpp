@@ -9,7 +9,6 @@ CScenary::CScenary(void)
     //Initialize grid maximum.
     m_gridMaxX = 20;
     m_gridMaxZ = 20;
-    m_scenaryMat = vector< vector<int> >(MAXGRIDX, vector<int>(MAXGRIDZ));
     m_WallModels = vector<vector<ModelInfo> >();
     m_ObjectModels = vector<vector<ModelInfo> >();
     m_FloorModels = vector<vector<ModelInfo> >();
@@ -42,6 +41,8 @@ void CScenary::addNewFloor()
         m_StairModels.push_back( vector<ModelInfo>());
         fillFloor(); 
         m_nFloors += 1;
+
+        //TODO: Add scenaryMat to use it with more than 1 floor.
     }
 }
 
@@ -56,17 +57,21 @@ bool CScenary::addModel(ModelInfo m_Info)
     {
     case WALL:
         if(!getWall2WallCollision(m_Info) && !getWall2ObjectCollision(m_Info) && !getWall2StairCollision(m_Info))
+        {
             m_WallModels[activeFloor].push_back(m_Info);
+        }
         break;
     case OBJECT:
         if(!getObject2WallCollision(m_Info) && !getObject2ObjectCollision(m_Info) && !getObject2StairCollision(m_Info))
+        {
             m_ObjectModels[activeFloor].push_back(m_Info);
+        }
         break;
     case STAIR:
         m_StairModels[activeFloor].push_back(m_Info);
         break;
     }
-    
+
     qDebug() << "Models in floor" << m_WallModels[activeFloor].size() + m_ObjectModels[activeFloor].size() + m_FloorModels[activeFloor].size();
     return true;
 }
@@ -427,11 +432,6 @@ void CScenary::fillFloor()
     }
 }
 
-vector< vector<int> > CScenary::getScenaryMat()
-{
-    return m_scenaryMat;
-}
-
 void CScenary::deleteFloor(int x, int z, int floor)
 {
     if(unsigned int(floor) < m_FloorModels.size())
@@ -682,5 +682,3 @@ bool CScenary::getWall2StairCollision(ModelInfo mi)
     }
     return false;
 }
-
-
