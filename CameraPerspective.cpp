@@ -13,7 +13,7 @@ CameraPerspective::CameraPerspective()
     R      = 2.5;
     angleh = 15;
     anglev = 35;
-    Cnear   = .1;
+    Cnear   = .1f;
     Cfar    = 500;
 }
 

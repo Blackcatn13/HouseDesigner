@@ -41,7 +41,7 @@ void Illumination::draw()
     glDisable(GL_LIGHTING);
 
     glPushMatrix();
-    glColor3f(0.8,0.8,0.0);
+    glColor3f(0.8f, 0.8f, 0.0f);
     glTranslatef(pos[0],pos[1],pos[2]);
     glutSolidSphere(.1,10,10);
     glPopMatrix();
