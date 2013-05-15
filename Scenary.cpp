@@ -9,7 +9,6 @@ CScenary::CScenary(void)
     //Initialize grid maximum.
     m_gridMaxX = 20;
     m_gridMaxZ = 20;
-    m_scenaryMat = vector< vector<int> >(MAXGRIDX, vector<int>(MAXGRIDZ));
     m_WallModels = vector<vector<ModelInfo> >();
     m_ObjectModels = vector<vector<ModelInfo> >();
     m_FloorModels = vector<vector<ModelInfo> >();
@@ -379,7 +378,8 @@ void CScenary::fillFloor()
     }
 }
 
-vector< vector<int> > CScenary::getScenaryMat()
+void CScenary::ClearFloor()
 {
-    return m_scenaryMat;
+    m_WallModels[activeFloor].clear();
+    m_ObjectModels[activeFloor].clear();
 }

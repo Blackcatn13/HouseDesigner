@@ -161,6 +161,10 @@ void GLWidget::keyPressEvent(QKeyEvent* event)
         actualMode = EDITOR_2D;
         RM->GetRenderMode(actualMode)->SetCameraProjection(width, heigth);
     }
+    else if(event->key() == Qt::Key_C)
+    {
+        CScenary::getInstance()->ClearFloor();
+    }
     else
     {
         // Call the actual render mode key update to make its changes.
