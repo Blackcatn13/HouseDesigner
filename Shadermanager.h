@@ -24,6 +24,9 @@ public:
     sType getShader (){return m_SelShader;}
     void UseActiveShader(ModelInfo mi);
     void ReleaseActiveShader();
+    void setShaderProgram(QGLShaderProgram *sp) {m_ShaderP = sp;}
+    void CompileShaders(const QGLContext *c);
+
 private:
     static CShaderManager*  m_ShaderManager;
     CShaderManager(void);

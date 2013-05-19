@@ -6,27 +6,11 @@ CShaderManager *CShaderManager::m_ShaderManager = 0;
 CShaderManager::CShaderManager(void)
 {
     m_ShadersName = MapNames();
-    m_ShadersName[LIGHTSHADER] = "Shaders/phong";
-    m_ShadersName[TEXTURE] = "Shaders/mask";
+    //m_ShadersName[LIGHTSHADER] = "Shaders/phong";
+    //m_ShadersName[TEXTURE] = "Shaders/mask";
     m_ShadersName[SIMPLE] = "Shaders/texture";
     //selShader init.
-    m_SelShader = SIMPLE;
-    bool r;
-    // Create Shaders and compile it for best performance.
-    for (MapNames::iterator it = m_ShadersName.begin(); it != m_ShadersName.end(); ++it)
-    {
-        QGLShader *Fshader = new QGLShader(QGLShader::Fragment);
-        r = Fshader->compileSourceFile(QString(it->second.c_str()) + ".frag");
-        if(!r)
-            qDebug() << "Fragment: " << Fshader->log();
-        QGLShader *Vshader = new QGLShader(QGLShader::Vertex);
-        r = Vshader->compileSourceFile(QString(it->second.c_str()) + ".vert");
-        if(!r)
-            qDebug() << "Vertex: " << Vshader->log();
-        m_FragmentShaders[it->first] = Fshader;
-        m_VertexShaders[it->first] = Vshader;
-    }
-    m_ShaderP = new QGLShaderProgram();
+    m_SelShader = NOSHADER;
 }
 
 CShaderManager::~CShaderManager(void)
@@ -81,6 +65,11 @@ bool CShaderManager::setShader(sType type)
 
 void CShaderManager::UseActiveShader(ModelInfo mi)
 {
+    //m_ShaderP->link();
+    bool r;
+    r = m_ShaderP->bind();
+    if(!r)
+        qDebug() << "Error" << m_ShaderP->log();
     glEnable(GL_TEXTURE_2D);
     switch(m_SelShader)
     {
@@ -104,11 +93,29 @@ void CShaderManager::UseActiveShader(ModelInfo mi)
         CTextureManager::GetInstance()->Bind(mi.textureName.base);
         break;
     }
-    m_ShaderP->bind();
 }
 
 void CShaderManager::ReleaseActiveShader()
 {
     glDisable(GL_TEXTURE_2D);
     m_ShaderP->release();
+}
+
+void CShaderManager::CompileShaders(const QGLContext *c)
+{
+    bool r;
+    // Create Shaders and compile it for best performance.
+    for (MapNames::iterator it = m_ShadersName.begin(); it != m_ShadersName.end(); ++it)
+    {
+        QGLShader *Fshader = new QGLShader(QGLShader::Fragment, c);
+        r = Fshader->compileSourceFile(QString(it->second.c_str()) + ".frag");
+        if(!r)
+            qDebug() << "Fragment: " << Fshader->log();
+        QGLShader *Vshader = new QGLShader(QGLShader::Vertex, c);
+        r = Vshader->compileSourceFile(QString(it->second.c_str()) + ".vert");
+        if(!r)
+            qDebug() << "Vertex: " << Vshader->log();
+        m_FragmentShaders[it->first] = Fshader;
+        m_VertexShaders[it->first] = Vshader;
+    }
 }

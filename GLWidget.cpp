@@ -11,7 +11,6 @@ GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent)
 {
     setMouseTracking(true);
     actualMode = EDITOR_2D;
-    CShaderManager::GetInstance();
 }
 
 GLWidget::~GLWidget()
@@ -66,6 +65,11 @@ void GLWidget::initializeGL()
     // 1c) Enable depth testing
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
+
+    shader = new QGLShaderProgram(this->context());
+    CShaderManager::GetInstance()->setShaderProgram(shader);
+    CShaderManager::GetInstance()->CompileShaders(this->context());
+    CShaderManager::GetInstance()->setShader(SIMPLE);
 
 }
 
