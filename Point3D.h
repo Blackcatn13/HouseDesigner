@@ -14,6 +14,7 @@ public:
     CPoint3D operator-(const CPoint3D p);
     CPoint3D operator*(const CPoint3D p);
     CPoint3D operator*(const float val);
+    CPoint3D operator/(const float val);
     CPoint3D &operator=(const CPoint3D p);
     CPoint3D &operator+=(const CPoint3D p);
     bool operator==(const CPoint3D &p) const;

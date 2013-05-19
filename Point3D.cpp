@@ -83,3 +83,8 @@ CPoint3D CPoint3D::operator*(const float val)
 {
     return CPoint3D(x*val, y*val, z*val);
 }
+
+CPoint3D CPoint3D::operator/(const float val)
+{
+    return CPoint3D(x/val, y/val, z/val);
+}
