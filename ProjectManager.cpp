@@ -115,8 +115,26 @@ std::string CProjectManager::getInfoFromObject(int currentFloor, ModelInfo objec
     std::string texture = object.textureName.base;
     if(texture.empty())
         texture = "NO_TEXTURE";
-    else
-        texture = texture.substr(currentPathLength);
+    info << texture << " ";
+
+    texture = object.textureName.material.M1;
+    if(texture.empty())
+        texture = "NO_TEXTURE";
+    info << texture << " ";
+
+    texture = object.textureName.material.M2;
+    if(texture.empty())
+        texture = "NO_TEXTURE";
+    info << texture << " ";
+
+    texture = object.textureName.material.M3;
+    if(texture.empty())
+        texture = "NO_TEXTURE";
+    info << texture << " ";
+
+    texture = object.textureName.material.Mask;
+    if(texture.empty())
+        texture = "NO_TEXTURE";
     info << texture << " ";
 
     info << object.type;
@@ -147,7 +165,27 @@ ModelInfo CProjectManager::getObjectFromInfo(std::string line, int &currentFloor
     info.modelName = QDir::currentPath().toUtf8().constData() + model;
     iss >> texture;
     if(texture != "NO_TEXTURE")
-        info.textureName = QDir::currentPath().toUtf8().constData() + texture;
+        info.textureName.base = QDir::currentPath().toUtf8().constData() + texture;
+
+    texture = "";
+    iss >> texture;
+    if(texture != "NO_TEXTURE")
+        info.textureName.material.M1 = QDir::currentPath().toUtf8().constData() + texture;
+
+    texture = "";
+    iss >> texture;
+    if(texture != "NO_TEXTURE")
+        info.textureName.material.M2 = QDir::currentPath().toUtf8().constData() + texture;
+
+    texture = "";
+    iss >> texture;
+    if(texture != "NO_TEXTURE")
+        info.textureName.material.M3 = QDir::currentPath().toUtf8().constData() + texture;
+
+    texture = "";
+    iss >> texture;
+    if(texture != "NO_TEXTURE")
+        info.textureName.material.Mask = QDir::currentPath().toUtf8().constData() + texture;
 
     int type;
     iss >> type;
