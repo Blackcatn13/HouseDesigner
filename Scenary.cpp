@@ -436,6 +436,7 @@ void CScenary::ClearFloor()
 {
     m_WallModels[activeFloor].clear();
     m_ObjectModels[activeFloor].clear();
+    m_StairModels[activeFloor].clear();
 }
 
 void CScenary::deleteFloor(int x, int z, int floor)
