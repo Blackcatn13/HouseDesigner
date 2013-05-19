@@ -1,14 +1,18 @@
 #ifndef SHADERMANAGER_H
 #define SHADERMANAGER_H
 
+#include "Util.h"
 #include <map>
 #include <string>
 #include <vector>
+#include <QGLShader>
+#include <qglshaderprogram.h>
+
 using namespace std;
 
-enum sType {LIGHT, TEXTURE, NEITHER};
-typedef map< string, sType > MapShader;
-typedef pair< string, sType> pair_Shader;
+typedef map< sType, string > MapNames;
+typedef pair< sType, string> pair_Shader;
+typedef map< sType, *QGLShader> ShaderMap;
 
 class CShaderManager
 {
@@ -16,13 +20,18 @@ public:
     ~CShaderManager(void);
     static CShaderManager* GetInstance();
     void CleanUp();
-    bool setShader(string shaderName, sType type);
-    pair_Shader getShader (){return m_SelShader;}
+    bool setShader(sType type);
+    sType getShader (){return m_SelShader;}
+    void UseActiveShader();
+    void ReleaseActiveShader();
 private:
     static CShaderManager*  m_ShaderManager;
     CShaderManager(void);
-    pair_Shader             m_SelShader;
-    MapShader               m_Shaders;
+    QGLShaderProgram*       m_ShaderP;
+    sType                   m_SelShader;
+    MapNames                m_ShadersName;
+    ShaderMap               m_FragmentShaders;
+    ShaderMap               m_VertexShaders;
 };
 
 #endif // SHADERMANAGER_H

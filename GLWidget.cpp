@@ -4,6 +4,8 @@
 #include "Scenary.h"
 #include "Render2D.h"
 #include "RenderManager.h"
+#include "Shadermanager.h"
+#include "ModelManager.h"
 
 GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent)
 {
@@ -15,6 +17,8 @@ GLWidget::~GLWidget()
 {
     CScenary::getInstance()->CleanUp();
     RenderManager::GetInstance()->CleanUp();
+    CShaderManager::GetInstance()->CleanUp();
+    CModelManager::GetInstance()->CleanUp();
 }
 
 /*****************************************************************************

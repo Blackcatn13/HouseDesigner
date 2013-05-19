@@ -96,6 +96,7 @@ bool CScenary::Draw()
         glPopMatrix();
     }
 
+
     for(size_t i = 0; i < m_ObjectModels[activeFloor].size(); ++i)
     {
         ModelInfo model = m_ObjectModels[activeFloor][i];
