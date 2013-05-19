@@ -106,5 +106,20 @@ struct ModelInfo{
     // Override metode ==
 };
 
+struct materials
+{
+    string M1;
+    string M2;
+    string M3;
+    string Mask;
+    int nMask;
+};
+
+struct textures
+{
+    string base;
+    materials material;
+};
+
 
 #endif  /* _UTIL_H */
