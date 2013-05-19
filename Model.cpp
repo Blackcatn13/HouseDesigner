@@ -8,6 +8,7 @@ CModel::CModel(void)
     BBMin = CPoint3D(FLT_MAX, FLT_MAX, FLT_MAX);
     BBMax = CPoint3D(FLT_MIN, FLT_MIN, FLT_MIN);
     size = CPoint3D();
+    center = CPoint3D(0,0,0);
     radius = 0;
 }
 

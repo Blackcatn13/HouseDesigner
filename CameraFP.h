@@ -21,6 +21,7 @@ public:
     void AddDistance(float) {;}
     float getZoom() {return 1;}
     void AddYawAndPitch(float yaw, float pitch);
+    bool testSphereFrustrum(CPoint3D center, float radius);
 private:
     //Define frustum planes.
     enum{TOP=0, BOTTOM=1, LEFT=2, RIGHT=3, NEAR=4, FAR=5};
@@ -34,7 +35,7 @@ private:
     CPoint3D ntl, ntr, nbl, nbr, ftl, ftr, fbl, fbr;
     //Define sizes of near and far planes.
     float mNearWidth, mNearHeight, mFarWidth, mFarHeight;
-    float mNearD, mFarD, mAngle, mRatio;
+    float mNearD, mFarD, mAngle, mRatio, mtan;
     void SetCamValues();
     void setCamSpecs();
     void CalculateFrustrumPlanes();

@@ -83,7 +83,7 @@ void CameraFP::AddYawAndPitch(float yaw, float pitch)
 //gluPerspective(mAngle, mRatio, Cnear, Cfar);
 void CameraFP::SetCamValues()
 {
-    float tan1 = (float)tan(toRad(mAngle)*0.5);
+    mtan = (float)tan(toRad(mAngle)*0.5);
 
     mNearHeight = mNearD * tan1;
     mFarHeight = mFarD * tan1;
@@ -133,6 +133,19 @@ void CameraFP::setCamSpecs()
     plane[RIGHT].setNormalPoint(Y * ((nc + X * mNearWidth) - position), nc + X * mNearWidth);
     plane[NEAR].setNormalPoint(Z*-1, nc);
     plane[FAR].setNormalPoint(Z, fc);
+}
 
+bool CameraFP::testSphereFrustrum(CPoint3D center, float radius)
+{
+    float dist;
 
+    for(int i=0; i < NPLANES; ++i)
+    {
+        dist = plane[i].distance(center);
+        if (dist < -radius)
+            return false;
+        else if (distance < radius)
+            return true;
+    }
+    return true;
 }
