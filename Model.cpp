@@ -78,7 +78,10 @@ void CModel::RecursiveRender(aiNode* node)
                     glColor4fv((GLfloat*)&mesh->mColors[0][index]);
                 if(mesh->mNormals != NULL)
                     glNormal3fv(&mesh->mNormals[index].x);
+                if(mesh->HasTextureCoords(0))
+				    glTexCoord2f(mesh->mTextureCoords[0][index].x, mesh->mTextureCoords[0][index].y);
                 glVertex3fv(&mesh->mVertices[index].x);
+                
             }
         glEnd();
         }

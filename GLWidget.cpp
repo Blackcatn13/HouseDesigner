@@ -18,7 +18,6 @@ GLWidget::~GLWidget()
     CScenary::getInstance()->CleanUp();
     RenderManager::GetInstance()->CleanUp();
     CShaderManager::GetInstance()->CleanUp();
-    CModelManager::GetInstance()->CleanUp();
 }
 
 /*****************************************************************************
