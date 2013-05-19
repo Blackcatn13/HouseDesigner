@@ -12,7 +12,7 @@ using namespace std;
 
 typedef map< sType, string > MapNames;
 typedef pair< sType, string> pair_Shader;
-typedef map< sType, *QGLShader> ShaderMap;
+typedef map< sType, QGLShader*> ShaderMap;
 
 class CShaderManager
 {

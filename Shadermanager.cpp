@@ -5,7 +5,7 @@ CShaderManager *CShaderManager::m_ShaderManager = 0;
 CShaderManager::CShaderManager(void)
 {
     m_ShadersName = MapNames();
-    m_ShadersName[LIGHT] = "Shaders/phong";
+    m_ShadersName[LIGHTSHADER] = "Shaders/phong";
     m_ShadersName[TEXTURE] = "Shaders/mask";
     m_ShadersName[SIMPLE] = "Shaders/texture";
     //selShader init.
