@@ -113,7 +113,9 @@ std::string CProjectManager::getInfoFromObject(int currentFloor, ModelInfo objec
     info << object.modelName.substr(currentPathLength) << " ";
 
     std::string texture = object.textureName.base;
-    if(!texture.empty())
+    if(texture.empty())
+        texture = "NO_TEXTURE";
+    else
         texture = texture.substr(currentPathLength);
     info << texture << " ";
 
@@ -144,7 +146,8 @@ ModelInfo CProjectManager::getObjectFromInfo(std::string line, int &currentFloor
     iss >> model;
     info.modelName = QDir::currentPath().toUtf8().constData() + model;
     iss >> texture;
-    info.textureName = QDir::currentPath().toUtf8().constData() + texture;
+    if(texture != "NO_TEXTURE")
+        info.textureName = QDir::currentPath().toUtf8().constData() + texture;
 
     int type;
     iss >> type;
