@@ -62,12 +62,27 @@ struct Point2D{
     }
 };
 
+struct materials
+{
+    string M1;
+    string M2;
+    string M3;
+    string Mask;
+    int nMask;
+};
+
+struct textures
+{
+    string base;
+    materials material;
+};
+
 struct ModelInfo{
     CPoint3D position;
     CPoint3D rotation;
     CPoint3D scale;
     string modelName;
-    string textureName;
+    textures textureName;
     Types type;
 
     ModelInfo()
@@ -76,7 +91,12 @@ struct ModelInfo{
         rotation = CPoint3D();
         scale = CPoint3D(1, 1, 1);
         modelName = "";
-        textureName = "";
+        textureName.base = "";
+        textureName.material.M1 = "";
+        textureName.material.M2 = "";
+        textureName.material.M3 = "";
+        textureName.material.Mask = "";
+        textureName.material.nMask = 0;
         type = NEITHER;
     }
 
@@ -86,7 +106,7 @@ struct ModelInfo{
         rotation = rot;
         scale = sc;
         modelName = name;
-        textureName = texture;
+        textureName.base = texture;
         type = t;
     }
 
@@ -106,21 +126,5 @@ struct ModelInfo{
     // fdeixarne alguns com a predefinits.
     // Override metode ==
 };
-
-struct materials
-{
-    string M1;
-    string M2;
-    string M3;
-    string Mask;
-    int nMask;
-};
-
-struct textures
-{
-    string base;
-    materials material;
-};
-
 
 #endif  /* _UTIL_H */
