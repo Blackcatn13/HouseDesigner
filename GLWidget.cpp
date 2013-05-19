@@ -11,6 +11,7 @@ GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent)
 {
     setMouseTracking(true);
     actualMode = EDITOR_2D;
+    CShaderManager::GetInstance();
 }
 
 GLWidget::~GLWidget()

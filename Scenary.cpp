@@ -1,6 +1,7 @@
 #include "Scenary.h"
 #include "Util.h"
 #include "ModelManager.h"
+#include "Shadermanager.h"
 
 CScenary* CScenary::m_Scenary = 0;
 
@@ -79,6 +80,7 @@ bool CScenary::addModel(ModelInfo m_Info)
 bool CScenary::Draw()
 {
     CModelManager *modelManager = CModelManager::GetInstance();
+    CShaderManager *shader = CShaderManager::GetInstance();
     if(activeFloor > m_WallModels.size())
         return false;
 
@@ -100,6 +102,7 @@ bool CScenary::Draw()
     for(size_t i = 0; i < m_ObjectModels[activeFloor].size(); ++i)
     {
         ModelInfo model = m_ObjectModels[activeFloor][i];
+        shader->UseActiveShader(model);
         glPushMatrix();
             glColor3f(1,0,0);
             glTranslatef(model.position.x, model.position.y, model.position.z);
@@ -109,6 +112,7 @@ bool CScenary::Draw()
             glScalef(model.scale.x, model.scale.y, model.scale.z);
             modelManager->Draw(model.modelName);
         glPopMatrix();
+        shader->ReleaseActiveShader();
     }
     return true;
 }

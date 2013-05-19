@@ -21,11 +21,11 @@ public:
     static CTextureManager * GetInstance();
     bool Bind(string TextureName);
     void CleanUp();
-    static int getName();
+    static GLuint getName();
 private:
     static CTextureManager*    m_TextureManager;
     MapTexture                 m_Textures;
-    static int                 m_NextTextureName;
+    static GLuint              m_NextTextureName;
     CTextureManager(void);
     bool LoadTexture(string textureName);
 };

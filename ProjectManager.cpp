@@ -71,7 +71,7 @@ std::string CProjectManager::getInfoFromObject(ModelInfo object)
 
     info << object.modelName << " ";
 
-    info << object.textureName << " ";
+    //info << object.textureName << " ";
 
     info << object.type << endl;
 

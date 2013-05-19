@@ -387,6 +387,9 @@ void Render2D::AddObject()
     ModelInfo ii;
     ii.modelName = scenary->getActiveModel();
     ii.type = t;
+    int namesize = ii.modelName.find_last_of('.') - ii.modelName.find_last_of('/');
+    string name = ii.modelName.substr(ii.modelName.find_last_of('/'), namesize);
+    ii.textureName.base = "BaseTextures" + name + ".png";
     ii.rotation = CPoint3D(0, rotation * 90, 0);
     ii.position = CPoint3D((firstTile.x + secondTile.x) / 2, scenary->getHeightForModels(), (firstTile.y + secondTile.y) / 2);
     scenary->addModel(ii);

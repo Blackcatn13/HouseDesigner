@@ -1,7 +1,7 @@
 #include "TextureManager.h"
 #include "Texture.h"
 CTextureManager *CTextureManager::m_TextureManager = 0;
-int CTextureManager::m_NextTextureName = 1;
+GLuint CTextureManager::m_NextTextureName = 0;
 CTextureManager::CTextureManager(void)
 {
     m_Textures = MapTexture();
@@ -55,7 +55,9 @@ void CTextureManager::CleanUp()
 
 }
 
-int CTextureManager::getName()
+GLuint CTextureManager::getName()
 {
-    return m_NextTextureName++;
+    m_NextTextureName++;
+    glGenTextures(1, &m_NextTextureName);
+    return m_NextTextureName;
 }

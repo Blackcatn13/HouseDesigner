@@ -10,14 +10,19 @@ CShaderManager::CShaderManager(void)
     m_ShadersName[TEXTURE] = "Shaders/mask";
     m_ShadersName[SIMPLE] = "Shaders/texture";
     //selShader init.
-    m_SelShader = NOSHADER;
+    m_SelShader = SIMPLE;
+    bool r;
     // Create Shaders and compile it for best performance.
     for (MapNames::iterator it = m_ShadersName.begin(); it != m_ShadersName.end(); ++it)
     {
         QGLShader *Fshader = new QGLShader(QGLShader::Fragment);
-        Fshader->compileSourceFile(QString(it->second.c_str()) + ".frag");
+        r = Fshader->compileSourceFile(QString(it->second.c_str()) + ".frag");
+        if(!r)
+            qDebug() << "Fragment: " << Fshader->log();
         QGLShader *Vshader = new QGLShader(QGLShader::Vertex);
-        Vshader->compileSourceFile(QString(it->second.c_str()) + ".vert");
+        r = Vshader->compileSourceFile(QString(it->second.c_str()) + ".vert");
+        if(!r)
+            qDebug() << "Vertex: " << Vshader->log();
         m_FragmentShaders[it->first] = Fshader;
         m_VertexShaders[it->first] = Vshader;
     }
@@ -37,19 +42,24 @@ CShaderManager* CShaderManager::GetInstance()
 
 void CShaderManager::CleanUp()
 {
-    if(m_ShaderManager != NULL)
-        delete m_ShaderManager;
     if(m_ShaderP != NULL)
+    {
         m_ShaderP->removeAllShaders();
         delete m_ShaderP;
+    }
+
     for(MapNames::iterator it = m_ShadersName.begin(); it != m_ShadersName.end(); ++it)
     {
         delete m_VertexShaders[it->first];
         delete m_FragmentShaders[it->first];
     }
+
     m_VertexShaders.clear();
     m_FragmentShaders.clear();
     m_ShadersName.clear();
+
+    if(m_ShaderManager != NULL)
+        delete m_ShaderManager;
 }
 
 bool CShaderManager::setShader(sType type)
@@ -71,6 +81,7 @@ bool CShaderManager::setShader(sType type)
 
 void CShaderManager::UseActiveShader(ModelInfo mi)
 {
+    glEnable(GL_TEXTURE_2D);
     switch(m_SelShader)
     {
     case TEXTURE:
@@ -98,5 +109,6 @@ void CShaderManager::UseActiveShader(ModelInfo mi)
 
 void CShaderManager::ReleaseActiveShader()
 {
+    glDisable(GL_TEXTURE_2D);
     m_ShaderP->release();
 }
