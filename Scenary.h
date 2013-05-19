@@ -237,6 +237,9 @@ private:
         Actual number of floors
     */
     int m_nFloors;
+    //Debug frustrum culling.
+    int m_printM;
+
 };
 
 #endif

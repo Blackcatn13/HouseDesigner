@@ -16,7 +16,7 @@ CameraManager::CameraManager()
 
     // Resize all the render modes camera.
     SetProjection(INIT_WIDTH, INIT_HEIGHT);
-    currentCamera = ORTHOGONAL;
+    currentCamera = FP;
 }
 
 CameraManager::~CameraManager()

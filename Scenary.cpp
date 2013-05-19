@@ -1,6 +1,9 @@
 #include "Scenary.h"
 #include "Util.h"
 #include "ModelManager.h"
+#include "CameraManager.h"
+#include "Camera.h"
+#include "CameraFP.h"
 
 CScenary* CScenary::m_Scenary = 0;
 
@@ -79,35 +82,53 @@ bool CScenary::addModel(ModelInfo m_Info)
 bool CScenary::Draw()
 {
     CModelManager *modelManager = CModelManager::GetInstance();
+    Camera *cam = CameraManager::GetInstance()->getCurrentCamera();
+
     if(activeFloor > m_WallModels.size())
         return false;
 
     for(size_t i = 0; i < m_WallModels[activeFloor].size(); ++i)
     {
         ModelInfo model = m_WallModels[activeFloor][i];
-        glPushMatrix();
-            glColor3f(0,1,0);
-            glTranslatef(model.position.x, model.position.y, model.position.z);
-            glRotatef(model.rotation.x, 1, 0 ,0);
-            glRotatef(model.rotation.y, 0, 1 ,0);
-            glRotatef(model.rotation.z, 0, 0 ,1);
-            glScalef(model.scale.x, model.scale.y, model.scale.z);
-            modelManager->Draw(model.modelName);
-        glPopMatrix();
+
+        if(cam->testSphereFrustrum(model.center, model.radius))
+        {
+            glPushMatrix();
+                glColor3f(0,1,0);
+                glTranslatef(model.position.x, model.position.y, model.position.z);
+                glRotatef(model.rotation.x, 1, 0 ,0);
+                glRotatef(model.rotation.y, 0, 1 ,0);
+                glRotatef(model.rotation.z, 0, 0 ,1);
+                glScalef(model.scale.x, model.scale.y, model.scale.z);
+                modelManager->Draw(model.modelName);
+            glPopMatrix();
+        }
+
     }
 
     for(size_t i = 0; i < m_ObjectModels[activeFloor].size(); ++i)
     {
         ModelInfo model = m_ObjectModels[activeFloor][i];
-        glPushMatrix();
-            glColor3f(1,0,0);
-            glTranslatef(model.position.x, model.position.y, model.position.z);
-            glRotatef(model.rotation.x, 1, 0 ,0);
-            glRotatef(model.rotation.y, 0, 1 ,0);
-            glRotatef(model.rotation.z, 0, 0 ,1);
-            glScalef(model.scale.x, model.scale.y, model.scale.z);
-            modelManager->Draw(model.modelName);
-        glPopMatrix();
+        CPoint3D fakeCenter = CPoint3D(11.f,0.f,10.f);
+
+        float radius = 1;
+        //if(cam->testSphereFrustrum(fakeCenter, radius))
+            CPoint3D test = CPoint3D(model.center.x + model.position.x, model.center.y + model.position.y, model.center.z + model.position.z);
+        if(cam->testSphereFrustrum(test, model.radius))
+        {
+            qDebug() << "Printing...";
+            glPushMatrix();
+                glColor3f(1,0,0);
+                glTranslatef(model.position.x, model.position.y, model.position.z);
+                glRotatef(model.rotation.x, 1, 0 ,0);
+                glRotatef(model.rotation.y, 0, 1 ,0);
+                glRotatef(model.rotation.z, 0, 0 ,1);
+                glScalef(model.scale.x, model.scale.y, model.scale.z);
+                modelManager->Draw(model.modelName);
+            glPopMatrix();
+        }
+        else
+            qDebug() << "NO printing...";
     }
     return true;
 }
@@ -120,6 +141,8 @@ void CScenary::DrawFloor()
         for(size_t i = 0; i < m_FloorModels[activeFloor].size(); ++i)
         {
             ModelInfo model = m_FloorModels[activeFloor][i];
+            //TODO: if(cam->testSphereFrustrum(model.center, model.radius))
+
             glPushMatrix();
                 glColor3f(1,1,0);
                 glTranslatef(model.position.x, model.position.y, model.position.z);
@@ -141,6 +164,7 @@ void CScenary::DrawCeil()
         for(size_t i = 0; i < m_FloorModels[activeFloor + 1].size(); ++i)
         {
             ModelInfo model = m_FloorModels[activeFloor + 1][i];
+
             glPushMatrix();
                 glColor3f(1,0,1);
                 glTranslatef(model.position.x, model.position.y, model.position.z);

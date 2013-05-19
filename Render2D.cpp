@@ -389,6 +389,10 @@ void Render2D::AddObject()
     ii.type = t;
     ii.rotation = CPoint3D(0, rotation * 90, 0);
     ii.position = CPoint3D((firstTile.x + secondTile.x) / 2, scenary->getHeightForModels(), (firstTile.y + secondTile.y) / 2);
+    //FIXME: Remove de debug print
+    qDebug() << "Position: " << ii.position.x << ii.position.y << ii.position.z;
+    ii.center = CModelManager::GetInstance()->getModelCenter(ii.modelName);
+    ii.radius = CModelManager::GetInstance()->getModelRadius(ii.modelName);
     scenary->addModel(ii);
 }
 
@@ -399,6 +403,8 @@ void Render2D::AddWall()
     ModelInfo ii;
     ii.modelName = scenary->getActiveModel();
     ii.type = t;
+    ii.center = CModelManager::GetInstance()->getModelCenter(ii.modelName);
+    ii.radius = CModelManager::GetInstance()->getModelRadius(ii.modelName);
     int angle;
     int start, end;
     if(firstTile.x == secondTile.x)
@@ -524,6 +530,8 @@ void Render2D::AddStair()
     m.rotation = CPoint3D(0, rotation * 90, 0);
     m.type = t;
     m.modelName = scenary->getActiveModel();
+    m.center = CModelManager::GetInstance()->getModelCenter(m.modelName);
+    m.radius = CModelManager::GetInstance()->getModelRadius(m.modelName);
     CPoint3D position;
     switch (rotation)
     {

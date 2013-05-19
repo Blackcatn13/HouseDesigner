@@ -65,8 +65,10 @@ struct ModelInfo{
     CPoint3D position;
     CPoint3D rotation;
     CPoint3D scale;
+    CPoint3D center;
     string modelName;
     string textureName;
+    float radius;
     Types type;
 
     ModelInfo()
@@ -74,18 +76,22 @@ struct ModelInfo{
         position = CPoint3D();
         rotation = CPoint3D();
         scale = CPoint3D(1, 1, 1);
+        center = CPoint3D(0,0,0);
         modelName = "";
         textureName = "";
+        radius = 0;
         type = NEITHER;
     }
 
-    ModelInfo(CPoint3D pos, CPoint3D rot, CPoint3D sc, string name, string texture, Types t)
+    ModelInfo(CPoint3D pos, CPoint3D rot, CPoint3D sc, CPoint3D c, string name, string texture, float rad, Types t)
     {
         position = pos;
         rotation = rot;
         scale = sc;
+        center = c;
         modelName = name;
         textureName = texture;
+        radius = rad;
         type = t;
     }
 

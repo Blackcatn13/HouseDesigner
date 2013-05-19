@@ -129,6 +129,8 @@ void CModel::CalculateBBAndSize(aiNode* node)
     float auxY = pow((BBMax.y - center.y), 2.f);
     float auxZ = pow((BBMax.z - center.z), 2.f);
     radius = sqrt(auxX + auxY + auxZ);
+    //qDebug() << "Model Center: " << center.x << " " << center.y << " " << center.z;
+    //qDebug() << "Model Radius: " << radius;
 }
 
 CPoint3D CModel::getSize()

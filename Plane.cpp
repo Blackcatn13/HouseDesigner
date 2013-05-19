@@ -9,7 +9,7 @@ void CPlane::setNormalPoint(CPoint3D normal, CPoint3D point)
     mNormal = normal;
     mPoint = point;
     //Calculate angle between normal and p2 vectors
-    mD = acos(mNormal.Dot(point)/(mNormal.Norma()*point.Norma()))*-1;
+    mD = mNormal.Dot(point)*-1;
 }
 
 float CPlane::distance(CPoint3D point)

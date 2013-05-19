@@ -16,6 +16,7 @@ public:
     void AddDistance(float d);
     float getZoom() {return orthoZoom;}
     void AddYawAndPitch(float, float) {;}
+    bool testSphereFrustrum(CPoint3D center, float radius){return true;}
 private:
     float orthoZoom, orthoAngleH, orthoAngleV;
 };

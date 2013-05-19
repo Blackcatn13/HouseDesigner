@@ -153,7 +153,7 @@ void GLWidget::keyPressEvent(QKeyEvent* event)
     RenderManager* RM = RenderManager::GetInstance();
     if(event->key() == Qt::Key_L)
     {
-        actualMode = EXPLORER;
+        actualMode = ORTHOGONAL;
         RM->GetRenderMode(actualMode)->SetCameraProjection(width, heigth);
     }
     else if(event->key() == Qt::Key_P)

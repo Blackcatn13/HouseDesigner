@@ -85,8 +85,8 @@ void CameraFP::SetCamValues()
 {
     mtan = (float)tan(toRad(mAngle)*0.5);
 
-    mNearHeight = mNearD * tan1;
-    mFarHeight = mFarD * tan1;
+    mNearHeight = mNearD * mtan;
+    mFarHeight = mFarD * mtan;
 
     mNearWidth = mNearD * mRatio;
     mFarWidth = mFarD * mRatio;
@@ -144,7 +144,7 @@ bool CameraFP::testSphereFrustrum(CPoint3D center, float radius)
         dist = plane[i].distance(center);
         if (dist < -radius)
             return false;
-        else if (distance < radius)
+        else if (dist < radius)
             return true;
     }
     return true;
