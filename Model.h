@@ -25,6 +25,8 @@ public:
     CPoint3D getBBMin() {return BBMin;}
     CPoint3D getBBMax() {return BBMax;}
     CPoint3D getSize();
+    CPoint3D getCenter();
+    CPoint3D getRadius();
 private:
     const struct aiScene* scene;
     void RecursiveRender(aiNode* node);
@@ -32,6 +34,9 @@ private:
     CPoint3D BBMin;
     CPoint3D BBMax;
     CPoint3D size;
+    CPoint3D center;
+    float    radius;
+
 };
 
 #endif

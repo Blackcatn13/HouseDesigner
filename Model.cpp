@@ -8,6 +8,7 @@ CModel::CModel(void)
     BBMin = CPoint3D(FLT_MAX, FLT_MAX, FLT_MAX);
     BBMax = CPoint3D(FLT_MIN, FLT_MIN, FLT_MIN);
     size = CPoint3D();
+    radius = 0;
 }
 
 
@@ -120,6 +121,13 @@ void CModel::CalculateBBAndSize(aiNode* node)
         //BBMin = CPoint3D(FLT_MAX, FLT_MAX, FLT_MAX);
         //BBMax = CPoint3D(FLT_MIN, FLT_MIN, FLT_MIN);
     }
+    //Calculate center of the model using BB values calculated before.
+    center = (BBMax + BBMin) / 2.f;
+    //Calculate radius of the model;
+    float auxX = pow((BBMax.x - center.x),2.f);
+    float auxY = pow((BBMax.y - center.y), 2.f);
+    float auxZ = pow((BBMax.z - center.z), 2.f);
+    radius = sqrt(auxX + auxY + auxZ);
 }
 
 CPoint3D CModel::getSize()
