@@ -29,6 +29,7 @@ void CameraFP::setProjection(int w, int h)
         gluPerspective(mAngle, mRatio, Cnear, Cfar);
     else
         gluPerspective(mAngle , mRatio, Cnear, Cfar);
+    SetCamValues();
 }
 
 void CameraFP::update()
@@ -45,6 +46,7 @@ void CameraFP::update()
     gluLookAt(position.x, position.y, position.z,
         position.x + dir.x, position.y + dir.y, position.z + dir.z,
         up.x, up.y, up.z);
+    setCamSpecs();
 }
 
 void CameraFP::move(float f, float s, bool fly)
@@ -81,9 +83,9 @@ void CameraFP::AddYawAndPitch(float yaw, float pitch)
 //gluPerspective(mAngle, mRatio, Cnear, Cfar);
 void CameraFP::SetCamValues()
 {
-    tan1 = (float)tan(toRad(mAngle)*0.5);
+    float tan1 = (float)tan(toRad(mAngle)*0.5);
 
-    mNearHeigh = mNearD * tan1;
+    mNearHeight = mNearD * tan1;
     mFarHeight = mFarD * tan1;
 
     mNearWidth = mNearD * mRatio;
