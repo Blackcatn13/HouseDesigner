@@ -69,6 +69,16 @@ void CPoint3D::Normalize()
     z /= mod;
 }
 
+float CPoint3D::Norma()
+{
+    return sqrt(x*x + y*y + z*z);
+}
+
+float CPoint3D::Dot(const CPoint3D p)
+{
+    return x*p.x + y*p.y + z*p.z;
+}
+
 CPoint3D CPoint3D::operator*(const float val)
 {
     return CPoint3D(x*val, y*val, z*val);
