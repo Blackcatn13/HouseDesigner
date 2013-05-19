@@ -22,7 +22,7 @@ public:
     void CleanUp();
     bool setShader(sType type);
     sType getShader (){return m_SelShader;}
-    void UseActiveShader();
+    void UseActiveShader(ModelInfo mi);
     void ReleaseActiveShader();
 private:
     static CShaderManager*  m_ShaderManager;

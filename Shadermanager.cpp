@@ -1,4 +1,5 @@
 #include "Shadermanager.h"
+#include "TextureManager.h"
 
 CShaderManager *CShaderManager::m_ShaderManager = 0;
 
@@ -58,7 +59,44 @@ bool CShaderManager::setShader(sType type)
     if (ShaderIter != m_ShadersName.end())
     {
         m_SelShader = type;
+        if(m_SelShader != NOSHADER)
+        {
+            m_ShaderP->addShader(m_FragmentShaders[m_SelShader]);
+            m_ShaderP->addShader(m_VertexShaders[m_SelShader]);
+        }
         return true;
     }
     return false;
+}
+
+void CShaderManager::UseActiveShader(ModelInfo mi)
+{
+    switch(m_SelShader)
+    {
+    case TEXTURE:
+        glActiveTexture(GL_TEXTURE1);
+        m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("material1"), 0);
+        CTextureManager::GetInstance()->Bind(mi.textureName.material.M1);
+        glActiveTexture(GL_TEXTURE2);
+        m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("material2"), 0);
+        CTextureManager::GetInstance()->Bind(mi.textureName.material.M2);
+        glActiveTexture(GL_TEXTURE3);
+        m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("material3"), 0);
+        CTextureManager::GetInstance()->Bind(mi.textureName.material.M3);
+        glActiveTexture(GL_TEXTURE4);
+        m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("mask"), 0);
+        CTextureManager::GetInstance()->Bind(mi.textureName.material.Mask);
+    case SIMPLE:
+    case LIGHTSHADER:
+        glActiveTexture(GL_TEXTURE0);
+        m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("base"), 0);
+        CTextureManager::GetInstance()->Bind(mi.textureName.base);
+        break;
+    }
+    m_ShaderP->bind();
+}
+
+void CShaderManager::ReleaseActiveShader()
+{
+    m_ShaderP->release();
 }
