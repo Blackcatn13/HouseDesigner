@@ -1,5 +1,6 @@
 varying vec2 texture_coord;
 uniform sampler2D base;
+uniform sampler2D over;
 
 void main()
 {

@@ -8,6 +8,11 @@
 #include <QGLShader>
 #include <qglshaderprogram.h>
 
+#define PATHTEXTURES "BaseTextures/"
+#define PNG ".png"
+#define MASK "Mask.png"
+#define OVER "Over.png"
+
 using namespace std;
 
 typedef map< sType, string > MapNames;
