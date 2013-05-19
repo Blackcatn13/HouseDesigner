@@ -125,11 +125,14 @@ void CameraFP::setCamSpecs()
     fbr = fc - Y * mFarHeight + X * mFarWidth;
     fbl = fc - Y * mFarHeight - X * mFarWidth;
 
-    //Calculate planes
-    plane[TOP].set3Points(ntr,ntl,ftl);
-    plane[BOTTOM].set3Points(nbl,nbr,fbr);
-    plane[LEFT].set3Points(ntl,nbl,fbl);
-    plane[RIGHT].set3Points(nbr,ntr,fbr);
-    plane[NEAR].set3Points(ntl,ntr,nbr);
-    plane[FAR].set3Points(ftr,ftl,fbl);
+    //Whole planes can be computed using normal vector and the center point.
+    //This is more efficient than use 3 points to calculate the plane.
+    plane[TOP].setNormalPoint(((nc + Y * mNearHeight) - position) * X, nc + Y * mNearWidth);
+    plane[BOTTOM].setNormalPoint(X * ((nc - Y * mNearHeight) - position), nc + Y * mNearWidth);
+    plane[LEFT].setNormalPoint(((nc - X * mNearWidth) - position) * Y,nc-X*mNearWidth);
+    plane[RIGHT].setNormalPoint(Y * ((nc + X * mNearWidth) - position), nc + X * mNearWidth);
+    plane[NEAR].setNormalPoint(Z*-1, nc);
+    plane[FAR].setNormalPoint(Z, fc);
+
+
 }

@@ -8,12 +8,9 @@ class CPlane
 {
 public:
     CPlane(void);
-    //Set plane with 3 points.
-    void set3Points (CPoint3D v1, CPoint3D v2, CPoint3D v3);
     //Set plane with Normal and a point.
-    void setNormalAndPoint(CPoint3D normal, CPoint3D point);
-    //Set plane using Ax + By + Cz + D equation.
-    void setCoefficients(float a, float b, float c, float d);
+    void setNormalPoint(CPoint3D normal, CPoint3D point);
+    //Calculate distance between plane and a given point.
     float distance(CPoint3D point);
 
 private:
