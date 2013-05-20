@@ -23,8 +23,13 @@ void CameraFP::setProjection(int w, int h)
     glViewport(0, 0, w, h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    mRatio = w/h;
-    mAngle = 60.0f;
+    //Prevent division by zero.
+    if (h > 0)
+        mRatio = w/h;
+    else
+        mRatio = w/1.f;
+    //FIXME: Angle was at 60 degrees.
+    mAngle = 45.0f;
     if(w >= h)
         gluPerspective(mAngle, mRatio, Cnear, Cfar);
     else
@@ -82,14 +87,14 @@ void CameraFP::AddYawAndPitch(float yaw, float pitch)
 //This function gets same inputs as gluPerspective...
 //gluPerspective(mAngle, mRatio, Cnear, Cfar);
 void CameraFP::SetCamValues()
-{
-    mtan = (float)tan(toRad(mAngle)*0.5);
+{    
+    tang = (float)tan(3.14159265358979323846/180.0 * mAngle * 0.5);
 
-    mNearHeight = mNearD * mtan;
-    mFarHeight = mFarD * mtan;
+    mNearHeight = mNearD * tang;
+    mFarHeight = mFarD * tang;
 
-    mNearWidth = mNearD * mRatio;
-    mFarWidth = mFarD * mRatio;
+    mNearWidth = mNearHeight * mRatio;
+    mFarWidth = mFarHeight * mRatio;
 }
 
 //gluLookAt: Eye(position of camera), center(point to look), Up
@@ -99,7 +104,7 @@ void CameraFP::setCamSpecs()
     CPoint3D X, Y, Z;
     //Vector of direction is dir.
     //Z axis of a camera is the opposite direction from the looking direction.
-    Z = dir * -1;
+    Z = dir;
     Z.Normalize();
 
     //X axis of camera
@@ -125,21 +130,31 @@ void CameraFP::setCamSpecs()
     fbr = fc - Y * mFarHeight + X * mFarWidth;
     fbl = fc - Y * mFarHeight - X * mFarWidth;
 
+    plane[TOP].set3Point(ntr,ntl,ftl);
+    plane[BOTTOM].set3Point(nbl,nbr,fbr);
+    plane[LEFT].set3Point(ntl,nbl,fbl);
+    plane[RIGHT].set3Point(nbr,ntr,fbr);
+    plane[NEAR].set3Point(ntl,ntr,nbr);
+    plane[FAR].set3Point(ftr,ftl,fbl);
+
+
     //Whole planes can be computed using normal vector and the center point.
     //This is more efficient than use 3 points to calculate the plane.
-    plane[TOP].setNormalPoint(((nc + Y * mNearHeight) - position) * X, nc + Y * mNearWidth);
-    plane[BOTTOM].setNormalPoint(X * ((nc - Y * mNearHeight) - position), nc + Y * mNearWidth);
-    plane[LEFT].setNormalPoint(((nc - X * mNearWidth) - position) * Y,nc-X*mNearWidth);
-    plane[RIGHT].setNormalPoint(Y * ((nc + X * mNearWidth) - position), nc + X * mNearWidth);
-    plane[NEAR].setNormalPoint(Z*-1, nc);
-    plane[FAR].setNormalPoint(Z, fc);
+//    plane[TOP].setNormalPoint(((nc + Y * mNearHeight) - position) * X, nc + Y * mNearHeight);
+//    plane[BOTTOM].setNormalPoint(X * ((nc - Y * mNearHeight) - position), nc - Y * mNearHeight);
+
+//    plane[LEFT].setNormalPoint(((nc - X * mNearWidth) - position) * Y,nc-X*mNearWidth);
+//    plane[RIGHT].setNormalPoint(Y * ((nc + X * mNearWidth) - position), nc + X * mNearWidth);
+
+//    plane[NEAR].setNormalPoint(Z*-1, nc);
+//    plane[FAR].setNormalPoint(Z, fc);
 }
 
 bool CameraFP::testSphereFrustrum(CPoint3D center, float radius)
 {
     float dist;
 
-    for(int i=0; i < NPLANES; ++i)
+     for(int i=0; i < NPLANES; ++i)
     {
         dist = plane[i].distance(center);
         if (dist < -radius)

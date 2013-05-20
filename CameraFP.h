@@ -34,8 +34,9 @@ private:
     //N: Near, F: Far, T: Top, B: Bottom, R: Right, L: Left
     CPoint3D ntl, ntr, nbl, nbr, ftl, ftr, fbl, fbr;
     //Define sizes of near and far planes.
-    float mNearWidth, mNearHeight, mFarWidth, mFarHeight;
-    float mNearD, mFarD, mAngle, mRatio, mtan;
+    float mNearD, mFarD, mAngle, mAngleR, mRatio, mtan;
+    double mNearWidth, mNearHeight, mFarWidth, mFarHeight;
+    double tang;
     void SetCamValues();
     void setCamSpecs();
     void CalculateFrustrumPlanes();

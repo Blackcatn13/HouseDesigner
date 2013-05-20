@@ -85,18 +85,18 @@ bool CScenary::Draw()
 {
     CModelManager *modelManager = CModelManager::GetInstance();
     Camera *cam = CameraManager::GetInstance()->getCurrentCamera();
-    if (dynamic_cast<CameraFP*>(cam) != 0)
-    {
-        qDebug() << "Camera FP";
-    }
-    if (dynamic_cast<CameraOrtho*>(cam) != 0)
-    {
-        qDebug() << "Camera Ortho";
-    }
-    if (dynamic_cast<CameraPerspective*>(cam) != 0)
-    {
-        qDebug() << "Camera Perspective";
-    }
+//    if (dynamic_cast<CameraFP*>(cam) != 0)
+//    {
+//        qDebug() << "Camera FP";
+//    }
+//    if (dynamic_cast<CameraOrtho*>(cam) != 0)
+//    {
+//        qDebug() << "Camera Ortho";
+//    }
+//    if (dynamic_cast<CameraPerspective*>(cam) != 0)
+//    {
+//        qDebug() << "Camera Perspective";
+//    }
 
     if(activeFloor > m_WallModels.size())
         return false;
@@ -104,7 +104,6 @@ bool CScenary::Draw()
     for(size_t i = 0; i < m_WallModels[activeFloor].size(); ++i)
     {
         ModelInfo model = m_WallModels[activeFloor][i];
-
         if(cam->testSphereFrustrum(model.center, model.radius))
         {
             glPushMatrix();
@@ -123,12 +122,9 @@ bool CScenary::Draw()
     for(size_t i = 0; i < m_ObjectModels[activeFloor].size(); ++i)
     {
         ModelInfo model = m_ObjectModels[activeFloor][i];
-        CPoint3D fakeCenter = CPoint3D(11.f,0.f,10.f);
-
-        float radius = 1;
-        //if(cam->testSphereFrustrum(fakeCenter, radius))
-            CPoint3D test = CPoint3D(model.center.x + model.position.x, model.center.y + model.position.y, model.center.z + model.position.z);
-        if(cam->testSphereFrustrum(test, model.radius))
+        qDebug() << "Posx: " << model.position.x << "Posy: " << model.position.y
+                 << "Posz: " << model.position.z << "Rad: " << model.radius;
+        if(cam->testSphereFrustrum(model.position, model.radius))
         {
             qDebug() << "Printing...";
             glPushMatrix();

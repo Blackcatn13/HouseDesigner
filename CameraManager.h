@@ -17,6 +17,7 @@ public:
     void SetProjection(int w, int h);
     void CleanUp();
     Camera* getCurrentCamera();
+    void setCurrentCamera(Views view);
 private:
     CameraManager();
     static CameraManager*   m_CameraManager;

@@ -4,6 +4,7 @@
 #include "Scenary.h"
 #include "Render2D.h"
 #include "RenderManager.h"
+#include "CameraManager.h"
 
 GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent)
 {
@@ -151,14 +152,17 @@ void GLWidget::wheelEvent(QWheelEvent *event)
 void GLWidget::keyPressEvent(QKeyEvent* event)
 {
     RenderManager* RM = RenderManager::GetInstance();
+    CameraManager *cm = CameraManager::GetInstance();
     if(event->key() == Qt::Key_L)
     {
         actualMode = EXPLORER;
+        cm->setCurrentCamera(FP);
         RM->GetRenderMode(actualMode)->SetCameraProjection(width, heigth);
     }
     else if(event->key() == Qt::Key_P)
     {
         actualMode = EDITOR_2D;
+        cm->setCurrentCamera(ORTHOGONAL);
         RM->GetRenderMode(actualMode)->SetCameraProjection(width, heigth);
     }
     else if(event->key() == Qt::Key_C)

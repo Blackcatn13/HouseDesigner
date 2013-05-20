@@ -62,3 +62,11 @@ Camera* CameraManager::getCurrentCamera()
 {
     return GetCamera(currentCamera);
 }
+
+void CameraManager::setCurrentCamera(Views view)
+{
+    if (view == ORTHOGONAL || view == FP || view == PERSPECTIVE)
+    {
+        currentCamera = view;
+    }
+}
