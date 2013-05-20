@@ -4,6 +4,8 @@
 #include "CameraManager.h"
 #include "Camera.h"
 #include "CameraFP.h"
+#include "CameraOrtho.h"
+#include "CameraPerspective.h"
 
 CScenary* CScenary::m_Scenary = 0;
 
@@ -83,6 +85,18 @@ bool CScenary::Draw()
 {
     CModelManager *modelManager = CModelManager::GetInstance();
     Camera *cam = CameraManager::GetInstance()->getCurrentCamera();
+    if (dynamic_cast<CameraFP*>(cam) != 0)
+    {
+        qDebug() << "Camera FP";
+    }
+    if (dynamic_cast<CameraOrtho*>(cam) != 0)
+    {
+        qDebug() << "Camera Ortho";
+    }
+    if (dynamic_cast<CameraPerspective*>(cam) != 0)
+    {
+        qDebug() << "Camera Perspective";
+    }
 
     if(activeFloor > m_WallModels.size())
         return false;
