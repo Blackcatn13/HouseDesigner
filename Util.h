@@ -68,8 +68,6 @@ struct materials
     string M2;
     string M3;
     string M4;
-    string Mask;
-    int nMask;
 };
 
 struct textures
@@ -96,8 +94,7 @@ struct ModelInfo{
         textureName.material.M1 = "";
         textureName.material.M2 = "";
         textureName.material.M3 = "";
-        textureName.material.Mask = "";
-        textureName.material.nMask = 0;
+        textureName.material.M4 = "";
         type = NEITHER;
     }
 

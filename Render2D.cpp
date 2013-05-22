@@ -390,10 +390,6 @@ void Render2D::AddObject()
     int namesize = ii.modelName.find_last_of('.') - ii.modelName.find_last_of('/');
     string name = ii.modelName.substr(ii.modelName.find_last_of('/') + 1, namesize - 1);
     ii.textureName.ObjectName = name;
-    ii.textureName.material.M1 = ("Models/Textures/Material2.jpg");
-    ii.textureName.material.M2 = ("Models/Textures/Material3.jpg");
-    ii.textureName.material.M3 = ("Models/Textures/Material9.jpg");
-    ii.textureName.material.M4 = ("Models/Textures/Material8.jpg");
     ii.rotation = CPoint3D(0, rotation * 90, 0);
     ii.position = CPoint3D((firstTile.x + secondTile.x) / 2, scenary->getHeightForModels(), (firstTile.y + secondTile.y) / 2);
     scenary->addModel(ii);
