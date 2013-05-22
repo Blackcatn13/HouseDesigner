@@ -16,8 +16,7 @@ public:
     void AddDistance(float d);
     float getZoom() {return R;}
     void AddYawAndPitch(float, float) {;}
-    bool testSphereFrustrum(CPoint3D center, float radius){return true;}
-
+    Views virtual getCameraType(){return PERSPECTIVE;}
 private:
     float R,angleh,anglev;
     float Cnear,Cfar;

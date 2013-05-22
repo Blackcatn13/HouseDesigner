@@ -22,6 +22,7 @@ CScenary::CScenary(void)
     activeFloor = 0;
     m_nFloors = 0;
     addNewFloor();
+    m_sphereDebug = true;
 }
 
 CScenary::~CScenary(void)
@@ -86,28 +87,28 @@ bool CScenary::Draw()
 {
     CModelManager *modelManager = CModelManager::GetInstance();
     Camera *cam = CameraManager::GetInstance()->getCurrentCamera();
+    Views camType = cam->getCameraType();
     bool drawModel = true;
-//    if (dynamic_cast<CameraFP*>(cam) != 0)
-//    {
-//        qDebug() << "Camera FP";
-//    }
-//    if (dynamic_cast<CameraOrtho*>(cam) != 0)
-//    {
-//        qDebug() << "Camera Ortho";
-//    }
-//    if (dynamic_cast<CameraPerspective*>(cam) != 0)
-//    {
-//        qDebug() << "Camera Perspective";
-//    }
-
     if(activeFloor > m_WallModels.size())
         return false;
 
     for(size_t i = 0; i < m_WallModels[activeFloor].size(); ++i)
     {
         ModelInfo model = m_WallModels[activeFloor][i];
-        if(true)
+        if (camType != FP)
+            drawModel = true;
+        else
+            drawModel = CFrustrumManager::GetInstance()->sphereInFrustum(
+                        model.position, 3);
+        if(drawModel)
         {
+            if (m_sphereDebug)
+            {
+                glPushMatrix();
+                    glTranslatef(model.position.x, model.position.y, model.position.z);
+                    glutWireSphere(3, 16, 16);
+                glPopMatrix();
+            }
             glPushMatrix();
                 glColor3f(0,1,0);
                 glTranslatef(model.position.x, model.position.y, model.position.z);
@@ -124,18 +125,22 @@ bool CScenary::Draw()
     for(size_t i = 0; i < m_ObjectModels[activeFloor].size(); ++i)
     {
         ModelInfo model = m_ObjectModels[activeFloor][i];
-        qDebug() << "Posx: " << model.position.x << "Posy: " << model.position.y
-                 << "Posz: " << model.position.z << "Rad: " << model.radius;
-        if (dynamic_cast<CameraFP*>(cam) == 0)
+        if (camType != FP)
             drawModel = true;
         else
             drawModel = CFrustrumManager::GetInstance()->sphereInFrustum(
-                        Vec3(model.position.x, model.position.y, model.position.z),
-                        model.radius);
-
+                        model.position, model.radius);
         if(drawModel)
         {
-            qDebug() << "Printing...";
+            qDebug() << "Printing..." << "Model rad" << model.radius;
+            if (m_sphereDebug)
+            {
+                glPushMatrix();
+                    glTranslatef(model.position.x, model.position.y, model.position.z);
+                    glutWireSphere(model.radius, 16, 16);
+                glPopMatrix();
+            }
+
             glPushMatrix();
                 glColor3f(1,0,0);
                 glTranslatef(model.position.x, model.position.y, model.position.z);
@@ -154,23 +159,36 @@ bool CScenary::Draw()
 
 void CScenary::DrawFloor()
 {
-     CModelManager *modelManager = CModelManager::GetInstance();
+    CModelManager *modelManager = CModelManager::GetInstance();
+    Camera *cam = CameraManager::GetInstance()->getCurrentCamera();
+    Views camType = cam->getCameraType();
+    bool drawModel = true;
     if(activeFloor < m_FloorModels.size())
     {
         for(size_t i = 0; i < m_FloorModels[activeFloor].size(); ++i)
         {
             ModelInfo model = m_FloorModels[activeFloor][i];
-            //TODO: if(cam->testSphereFrustrum(model.center, model.radius))
-
-            glPushMatrix();
-                glColor3f(1,1,0);
-                glTranslatef(model.position.x, model.position.y, model.position.z);
-                glRotatef(model.rotation.x, 1, 0 ,0);
-                glRotatef(model.rotation.y, 0, 1 ,0);
-                glRotatef(model.rotation.z, 0, 0 ,1);
-                glScalef(model.scale.x, model.scale.y, model.scale.z);
-                modelManager->Draw(model.modelName);
-            glPopMatrix();
+            if (camType != FP)
+                drawModel = true;
+            else
+            {
+                //FIXME: Control drawing of ceil and floor.
+                drawModel = true;
+                //drawModel = CFrustrumManager::GetInstance()->sphereInFrustum(
+                            //model.position, model.radius);
+            }
+            if(drawModel)
+            {
+                glPushMatrix();
+                    glColor3f(1,1,0);
+                    glTranslatef(model.position.x, model.position.y, model.position.z);
+                    glRotatef(model.rotation.x, 1, 0 ,0);
+                    glRotatef(model.rotation.y, 0, 1 ,0);
+                    glRotatef(model.rotation.z, 0, 0 ,1);
+                    glScalef(model.scale.x, model.scale.y, model.scale.z);
+                    modelManager->Draw(model.modelName);
+                glPopMatrix();
+            }
         }
     }
 }
@@ -178,21 +196,35 @@ void CScenary::DrawFloor()
 void CScenary::DrawCeil()
 {
     CModelManager *modelManager = CModelManager::GetInstance();
+    Camera *cam = CameraManager::GetInstance()->getCurrentCamera();
+    Views camType = cam->getCameraType();
+    bool drawModel = true;
     if(activeFloor < m_FloorModels.size())
     {
         for(size_t i = 0; i < m_FloorModels[activeFloor + 1].size(); ++i)
         {
             ModelInfo model = m_FloorModels[activeFloor + 1][i];
-
-            glPushMatrix();
-                glColor3f(1,0,1);
-                glTranslatef(model.position.x, model.position.y, model.position.z);
-                glRotatef(model.rotation.x, 1, 0 ,0);
-                glRotatef(model.rotation.y, 0, 1 ,0);
-                glRotatef(model.rotation.z, 0, 0 ,1);
-                glScalef(model.scale.x, model.scale.y, model.scale.z);
-                modelManager->Draw(model.modelName);
-            glPopMatrix();
+            if (camType != FP)
+                drawModel = true;
+            else
+            {
+                //FIXME: Control drawing of ceil and floor.
+                drawModel = true;
+                //drawModel = CFrustrumManager::GetInstance()->sphereInFrustum(
+                            //model.position - 2, model.radius);
+            }
+            if(drawModel)
+            {
+                glPushMatrix();
+                    glColor3f(1,0,1);
+                    glTranslatef(model.position.x, model.position.y, model.position.z);
+                    glRotatef(model.rotation.x, 1, 0 ,0);
+                    glRotatef(model.rotation.y, 0, 1 ,0);
+                    glRotatef(model.rotation.z, 0, 0 ,1);
+                    glScalef(model.scale.x, model.scale.y, model.scale.z);
+                    modelManager->Draw(model.modelName);
+                glPopMatrix();
+            }
         }
     }
 }
@@ -200,20 +232,37 @@ void CScenary::DrawCeil()
 void CScenary::DrawStairs()
 {
     CModelManager *modelManager = CModelManager::GetInstance();
-    if(activeFloor < m_StairModels.size())
+    Camera *cam = CameraManager::GetInstance()->getCurrentCamera();
+    Views camType = cam->getCameraType();
+    bool drawModel = true;    if(activeFloor < m_StairModels.size())
     {
         for(size_t i = 0; i < m_StairModels[activeFloor].size(); ++i)
         {
             ModelInfo model = m_StairModels[activeFloor][i];
-            glPushMatrix();
-                glColor3f(0, 0, 1);
-                glTranslatef(model.position.x, model.position.y, model.position.z);
-                glRotatef(model.rotation.x, 1, 0 ,0);
-                glRotatef(model.rotation.y, 0, 1 ,0);
-                glRotatef(model.rotation.z, 0, 0 ,1);
-                glScalef(model.scale.x, model.scale.y, model.scale.z);
-                modelManager->Draw(model.modelName);
-            glPopMatrix();
+            if (camType != FP)
+                drawModel = true;
+            else
+                drawModel = CFrustrumManager::GetInstance()->sphereInFrustum(
+                            model.position, 1);
+            if (m_sphereDebug)
+            {
+                glPushMatrix();
+                    glTranslatef(model.position.x, model.position.y, model.position.z);
+                    glutWireSphere(2, 16, 16);
+                glPopMatrix();
+            }
+            if(drawModel)
+            {
+                glPushMatrix();
+                    glColor3f(0, 0, 1);
+                    glTranslatef(model.position.x, model.position.y, model.position.z);
+                    glRotatef(model.rotation.x, 1, 0 ,0);
+                    glRotatef(model.rotation.y, 0, 1 ,0);
+                    glRotatef(model.rotation.z, 0, 0 ,1);
+                    glScalef(model.scale.x, model.scale.y, model.scale.z);
+                    modelManager->Draw(model.modelName);
+                glPopMatrix();
+            }
         }
     }
 }

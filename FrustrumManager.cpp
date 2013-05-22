@@ -31,15 +31,15 @@ void CFrustrumManager::setCamInternals(float angle, float ratio, float nearD, fl
     fw = fh * ratio;
 }
 
-void CFrustrumManager::setCamDef(Vec3 p, Vec3 l, Vec3 u)
+void CFrustrumManager::setCamDef(CPoint3D p, CPoint3D l, CPoint3D u)
 {
-    Vec3 dir,nc,fc,X,Y,Z;
+    CPoint3D dir,nc,fc,X,Y,Z;
 
     Z = p - l;
-    Z.normalize();
+    Z.Normalize();
 
     X = u * Z;
-    X.normalize();
+    X.Normalize();
 
     Y = Z * X;
 
@@ -64,13 +64,13 @@ void CFrustrumManager::setCamDef(Vec3 p, Vec3 l, Vec3 u)
     pl[FARP].set3Points(ftr,ftl,fbl);
 }
 
-bool CFrustrumManager::sphereInFrustum(Vec3 p, float raio)
+bool CFrustrumManager::sphereInFrustum(CPoint3D p, float radius)
 {
         float distance;
 
         for(int i=0; i < 6; i++) {
             distance = pl[i].distance(p);
-            if (distance < -raio)
+            if (distance < -radius)
                 return false;
         }
     return true;

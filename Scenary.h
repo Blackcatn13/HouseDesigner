@@ -239,6 +239,7 @@ private:
     int m_nFloors;
     //Debug frustrum culling.
     int m_printM;
+    bool m_sphereDebug;
 
 };
 

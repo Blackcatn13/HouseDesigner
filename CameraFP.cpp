@@ -1,6 +1,4 @@
 #include "CameraFP.h"
-#include <cmath>
-#include "Vec3.h"
 
 CameraFP::CameraFP()
 {
@@ -34,7 +32,6 @@ void CameraFP::setProjection(int w, int h)
         gluPerspective(mAngle, mRatio, Cnear, Cfar);
     else
         gluPerspective(mAngle , mRatio, Cnear, Cfar);
-    SetCamValues();
     CFrustrumManager::GetInstance()->setCamInternals(mAngle, mRatio, Cnear, Cfar);
 
 }
@@ -53,10 +50,7 @@ void CameraFP::update()
     gluLookAt(position.x, position.y, position.z,
         position.x + dir.x, position.y + dir.y, position.z + dir.z,
         up.x, up.y, up.z);
-    setCamSpecs();
-    CFrustrumManager::GetInstance()->setCamDef(Vec3(position.x, position.y, position.z),
-                                               Vec3(position.x + dir.x, position.y + dir.y, position.z + dir.z),
-                                               Vec3(up.x, up.y, up.z));
+    CFrustrumManager::GetInstance()->setCamDef(position, position + dir, up);
 }
 
 void CameraFP::move(float f, float s, bool fly)
@@ -89,61 +83,7 @@ void CameraFP::AddYawAndPitch(float yaw, float pitch)
         m_yaw -= 360;
 }
 
-//This function gets same inputs as gluPerspective...
-//gluPerspective(mAngle, mRatio, Cnear, Cfar);
-void CameraFP::SetCamValues()
-{    
-/*
-    tang = (float)tan(3.14159265358979323846/180.0 * mAngle * 0.5);
 
-    mNearHeight = mNearD * tang;
-    mFarHeight = mFarD * tang;
-
-    mNearWidth = mNearHeight * mRatio;
-    mFarWidth = mFarHeight * mRatio;
-*/
-}
-
-//gluLookAt: Eye(position of camera), center(point to look), Up
-void CameraFP::setCamSpecs()
-{
-/*
-    //X, Y and Z.
-    CPoint3D X, Y, Z;
-    //Vector of direction is dir.
-    //Z axis of a camera is the opposite direction from the looking direction.
-    Z = dir;
-    Z.Normalize();
-
-    //X axis of camera
-    X = up * Z;
-    X.Normalize();
-
-    //X axis of camera (real "up" vector).
-    Y = Z * X;
-
-    //Calculate the centers of the near (nc) and far (fc) planes.
-    CPoint3D nc = position - Z * mNearD;
-    CPoint3D fc = position - Z * mFarD;
-
-    //Corners of the near plane.
-    ntr = nc + Y * mNearHeight + X * mNearWidth;
-    ntl = nc + Y * mNearHeight - X * mNearWidth;
-    nbr = nc - Y * mNearHeight + X * mNearWidth;
-    nbl = nc - Y * mNearHeight - X * mNearWidth;
-
-    //Corners of the far plane.
-    ftr = fc + Y * mFarHeight + X * mFarWidth;
-    ftl = fc + Y * mFarHeight - X * mFarWidth;
-    fbr = fc - Y * mFarHeight + X * mFarWidth;
-    fbl = fc - Y * mFarHeight - X * mFarWidth;
-
-    plane[TOP].set3Point(ntr,ntl,ftl);
-    plane[BOTTOM].set3Point(nbl,nbr,fbr);
-    plane[LEFT].set3Point(ntl,nbl,fbl);
-    plane[RIGHT].set3Point(nbr,ntr,fbr);
-    plane[NEAR].set3Point(ntl,ntr,nbr);
-    plane[FAR].set3Point(ftr,ftl,fbl);
 
 
     //Whole planes can be computed using normal vector and the center point.
@@ -156,22 +96,3 @@ void CameraFP::setCamSpecs()
 
 //    plane[NEAR].setNormalPoint(Z*-1, nc);
 //    plane[FAR].setNormalPoint(Z, fc);
-*/
-}
-
-bool CameraFP::testSphereFrustrum(CPoint3D center, float radius)
-{
-/*
-    float dist;
-
-     for(int i=0; i < NPLANES; ++i)
-    {
-        dist = plane[i].distance(center);
-        if (dist < -radius)
-            return false;
-        else if (dist < radius)
-            return true;
-    }
-*/
-    return true;
-}

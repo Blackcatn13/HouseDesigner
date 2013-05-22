@@ -1,63 +1,22 @@
-/*
-#ifndef PLANE_H
-#define PLANE_H
+#ifndef _CPlane_
+#define _CPlane_
 
 #include "Point3D.h"
-#include "Util.h"
+
+class CPoint3D;
 
 class CPlane
 {
+
 public:
+
     CPlane(void);
-    void set3Point(CPoint3D p1, CPoint3D p2, CPoint3D p3);
-    //Set plane with Normal and a point.
-    void setNormalPoint(CPoint3D normal, CPoint3D point);
-    //Calculate distance between plane and a given point.
-    float distance(CPoint3D point);
-
+    void set3Points(CPoint3D p1,  CPoint3D p2,  CPoint3D p3);
+    void setNormalAndPoint(CPoint3D normal, CPoint3D point);
+    float distance(CPoint3D p);
 private:
-    CPoint3D mNormal, mPoint;
-    float mD;
-
-};
-
-#endif // PLANE_H
-*/
-
-// Plane.h
-//
-//////////////////////////////////////////////////////////////////////
-
-
-#ifndef _PLANE_
-#define _PLANE_
-
-#ifndef _Vec3_
-#include "Vec3.h"
-#endif
-
-class Vec3;
-
-class Plane
-{
-
-public:
-
-    Vec3 normal,point;
-    float d;
-
-
-    Plane( Vec3 &v1,  Vec3 &v2,  Vec3 &v3);
-    Plane(void);
-    ~Plane();
-
-    void set3Points(Vec3 v1,  Vec3 v2,  Vec3 v3);
-    void setNormalAndPoint(Vec3 &normal, Vec3 &point);
-    void setCoefficients(float a, float b, float c, float d);
-    float distance(Vec3 &p);
-
-    void print();
-
+    CPoint3D m_normal, m_point;
+    float m_dist;
 };
 
 

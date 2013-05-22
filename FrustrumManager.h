@@ -2,21 +2,21 @@
 #define FRUSTRUMMANAGER_H
 
 #include "Plane.h"
-#include "Vec3.h"
+#include "Point3D.h"
 
-class Vec3;
+class CPoint3D;
 class Plane;
 
 class CFrustrumManager
 {
 public:
     enum {OUTSIDE, INTERSECT, INSIDE};
-    Plane pl[6];
+    CPlane pl[6];
 
     static CFrustrumManager* GetInstance();
     void setCamInternals(float angle, float ratio, float nearD, float farD);
-    void setCamDef(Vec3 p, Vec3 l, Vec3 u);
-    bool sphereInFrustum(Vec3 p, float raio);
+    void setCamDef(CPoint3D p, CPoint3D l, CPoint3D u);
+    bool sphereInFrustum(CPoint3D p, float radius);
 
 
 private:
@@ -32,7 +32,7 @@ private:
     ~CFrustrumManager();
     static CFrustrumManager*   m_FrustrumManager;
 
-    Vec3 ntl,ntr,nbl,nbr,ftl,ftr,fbl,fbr;
+    CPoint3D ntl,ntr,nbl,nbr,ftl,ftr,fbl,fbr;
     float nearD, farD, ratio, angle,tang;
     float nw,nh,fw,fh;
 };

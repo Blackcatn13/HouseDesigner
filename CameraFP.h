@@ -22,25 +22,12 @@ public:
     void AddDistance(float) {;}
     float getZoom() {return 1;}
     void AddYawAndPitch(float yaw, float pitch);
-    bool testSphereFrustrum(CPoint3D center, float radius);
+    Views getCameraType(){return FP;}
 private:
-    //Define frustum planes.
-    enum{TOP=0, BOTTOM=1, LEFT=2, RIGHT=3, NEAR=4, FAR=5};
-    float m_yaw, m_pitch, speedy, speedp, speedf;
-    float Cnear,Cfar;
+    float m_yaw, m_pitch, speedy, speedp, speedf, mRatio;
+    float mAngle;
     CPoint3D position, dir, up;
-    //Create frustum planes
-    Plane plane[NPLANES];
-    //Points of planes
-    //N: Near, F: Far, T: Top, B: Bottom, R: Right, L: Left
-    CPoint3D ntl, ntr, nbl, nbr, ftl, ftr, fbl, fbr;
-    //Define sizes of near and far planes.
-    float mNearD, mFarD, mAngle, mAngleR, mRatio, mtan;
-    double mNearWidth, mNearHeight, mFarWidth, mFarHeight;
-    double tang;
-    void SetCamValues();
-    void setCamSpecs();
-    void CalculateFrustrumPlanes();
+    float Cnear,Cfar;
 };
 
 #endif // CAMERA_FP_H
