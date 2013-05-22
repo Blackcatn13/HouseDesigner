@@ -68,7 +68,7 @@ void GLWidget::initializeGL()
     shader = new QGLShaderProgram(this->context());
     CShaderManager::GetInstance()->setShaderProgram(shader);
     CShaderManager::GetInstance()->CompileShaders(this->context());
-    CShaderManager::GetInstance()->setShader(SIMPLE);
+    CShaderManager::GetInstance()->setShader(TEXTURE);
 
 }
 

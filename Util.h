@@ -67,6 +67,7 @@ struct materials
     string M1;
     string M2;
     string M3;
+    string M4;
     string Mask;
     int nMask;
 };

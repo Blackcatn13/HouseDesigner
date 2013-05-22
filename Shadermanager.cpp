@@ -7,7 +7,7 @@ CShaderManager::CShaderManager(void)
 {
     m_ShadersName = MapNames();
     //m_ShadersName[LIGHTSHADER] = "Shaders/phong";
-    //m_ShadersName[TEXTURE] = "Shaders/mask";
+    m_ShadersName[TEXTURE] = "Shaders/mask";
     m_ShadersName[SIMPLE] = "Shaders/texture";
     //selShader init.
     m_SelShader = NOSHADER;
@@ -73,19 +73,6 @@ void CShaderManager::UseActiveShader(ModelInfo mi)
     glEnable(GL_TEXTURE_2D);
     switch(m_SelShader)
     {
-    case TEXTURE:
-        glActiveTexture(GL_TEXTURE2);
-        m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("material1"), 0);
-        CTextureManager::GetInstance()->Bind(mi.textureName.material.M1);
-        glActiveTexture(GL_TEXTURE3);
-        m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("material2"), 0);
-        CTextureManager::GetInstance()->Bind(mi.textureName.material.M2);
-        glActiveTexture(GL_TEXTURE4);
-        m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("material3"), 0);
-        CTextureManager::GetInstance()->Bind(mi.textureName.material.M3);
-        glActiveTexture(GL_TEXTURE5);
-        m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("mask"), 0);
-        CTextureManager::GetInstance()->Bind(PATHTEXTURES + mi.textureName.material.Mask + MASK);
     case SIMPLE:
     case LIGHTSHADER:
         glActiveTexture(GL_TEXTURE0);
@@ -96,6 +83,37 @@ void CShaderManager::UseActiveShader(ModelInfo mi)
         CTextureManager::GetInstance()->Bind(PATHTEXTURES + mi.textureName.ObjectName + OVER);
         m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("over"), 1);
         
+        break;
+
+    case TEXTURE:
+        glActiveTexture(GL_TEXTURE0);
+        CTextureManager::GetInstance()->Bind(PATHTEXTURES + mi.textureName.ObjectName + PNG);
+        m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("base"), 0);
+        
+        glActiveTexture(GL_TEXTURE1);
+        CTextureManager::GetInstance()->Bind(PATHTEXTURES + mi.textureName.ObjectName + OVER);
+        m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("over"), 1);
+
+        glActiveTexture(GL_TEXTURE2);
+        CTextureManager::GetInstance()->Bind(mi.textureName.material.M1);
+        m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("m1"), 2);
+
+        glActiveTexture(GL_TEXTURE3);
+        CTextureManager::GetInstance()->Bind(mi.textureName.material.M2);
+        m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("m2"), 3);
+        
+        glActiveTexture(GL_TEXTURE4);
+        CTextureManager::GetInstance()->Bind(mi.textureName.material.M3);
+        m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("m3"), 4);
+        
+        glActiveTexture(GL_TEXTURE5);
+        CTextureManager::GetInstance()->Bind(mi.textureName.material.M4);
+        m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("m4"), 5);
+        
+        glActiveTexture(GL_TEXTURE6);
+        CTextureManager::GetInstance()->Bind(PATHTEXTURES + mi.textureName.ObjectName + MASK);
+        m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("mask"), 6);
+
         break;
     }
 }
@@ -115,6 +133,8 @@ void CShaderManager::ReleaseActiveShader()
     glActiveTexture(GL_TEXTURE4);
     glBindTexture(GL_TEXTURE_2D, 0);
     glActiveTexture(GL_TEXTURE5);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glActiveTexture(GL_TEXTURE6);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
