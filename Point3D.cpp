@@ -51,12 +51,12 @@ CPoint3D & CPoint3D::operator=(const CPoint3D p)
     return *this;
 }
 
-bool CPoint3D::operator==(const CPoint3D &p) const
+bool CPoint3D::operator==(const CPoint3D p) const
 {
     return (x==p.x && y == p.y && z == p.z);
 }
 
-bool CPoint3D::operator!=(const CPoint3D &p) const
+bool CPoint3D::operator!=(const CPoint3D p) const
 {
     return !(x==p.x && y == p.y && z == p.z);
 }

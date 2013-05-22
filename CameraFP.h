@@ -4,6 +4,7 @@
 #include "Util.h"
 #include "Camera.h"
 #include "Plane.h"
+#include "FrustrumManager.h"
 
 #define toRad(v) (v*PI/180.0)
 #define NPLANES 6
@@ -29,7 +30,7 @@ private:
     float Cnear,Cfar;
     CPoint3D position, dir, up;
     //Create frustum planes
-    CPlane plane[NPLANES];
+    Plane plane[NPLANES];
     //Points of planes
     //N: Near, F: Far, T: Top, B: Bottom, R: Right, L: Left
     CPoint3D ntl, ntr, nbl, nbr, ftl, ftr, fbl, fbr;

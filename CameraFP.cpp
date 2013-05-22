@@ -1,5 +1,6 @@
 #include "CameraFP.h"
 #include <cmath>
+#include "Vec3.h"
 
 CameraFP::CameraFP()
 {
@@ -19,7 +20,6 @@ CameraFP::CameraFP()
 
 void CameraFP::setProjection(int w, int h)
 {
-
     glViewport(0, 0, w, h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -35,6 +35,8 @@ void CameraFP::setProjection(int w, int h)
     else
         gluPerspective(mAngle , mRatio, Cnear, Cfar);
     SetCamValues();
+    CFrustrumManager::GetInstance()->setCamInternals(mAngle, mRatio, Cnear, Cfar);
+
 }
 
 void CameraFP::update()
@@ -52,6 +54,9 @@ void CameraFP::update()
         position.x + dir.x, position.y + dir.y, position.z + dir.z,
         up.x, up.y, up.z);
     setCamSpecs();
+    CFrustrumManager::GetInstance()->setCamDef(Vec3(position.x, position.y, position.z),
+                                               Vec3(position.x + dir.x, position.y + dir.y, position.z + dir.z),
+                                               Vec3(up.x, up.y, up.z));
 }
 
 void CameraFP::move(float f, float s, bool fly)
@@ -88,6 +93,7 @@ void CameraFP::AddYawAndPitch(float yaw, float pitch)
 //gluPerspective(mAngle, mRatio, Cnear, Cfar);
 void CameraFP::SetCamValues()
 {    
+/*
     tang = (float)tan(3.14159265358979323846/180.0 * mAngle * 0.5);
 
     mNearHeight = mNearD * tang;
@@ -95,11 +101,13 @@ void CameraFP::SetCamValues()
 
     mNearWidth = mNearHeight * mRatio;
     mFarWidth = mFarHeight * mRatio;
+*/
 }
 
 //gluLookAt: Eye(position of camera), center(point to look), Up
 void CameraFP::setCamSpecs()
 {
+/*
     //X, Y and Z.
     CPoint3D X, Y, Z;
     //Vector of direction is dir.
@@ -148,10 +156,12 @@ void CameraFP::setCamSpecs()
 
 //    plane[NEAR].setNormalPoint(Z*-1, nc);
 //    plane[FAR].setNormalPoint(Z, fc);
+*/
 }
 
 bool CameraFP::testSphereFrustrum(CPoint3D center, float radius)
 {
+/*
     float dist;
 
      for(int i=0; i < NPLANES; ++i)
@@ -162,5 +172,6 @@ bool CameraFP::testSphereFrustrum(CPoint3D center, float radius)
         else if (dist < radius)
             return true;
     }
+*/
     return true;
 }

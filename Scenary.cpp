@@ -6,6 +6,7 @@
 #include "CameraFP.h"
 #include "CameraOrtho.h"
 #include "CameraPerspective.h"
+#include "FrustrumManager.h"
 
 CScenary* CScenary::m_Scenary = 0;
 
@@ -85,6 +86,7 @@ bool CScenary::Draw()
 {
     CModelManager *modelManager = CModelManager::GetInstance();
     Camera *cam = CameraManager::GetInstance()->getCurrentCamera();
+    bool drawModel = true;
 //    if (dynamic_cast<CameraFP*>(cam) != 0)
 //    {
 //        qDebug() << "Camera FP";
@@ -104,7 +106,7 @@ bool CScenary::Draw()
     for(size_t i = 0; i < m_WallModels[activeFloor].size(); ++i)
     {
         ModelInfo model = m_WallModels[activeFloor][i];
-        if(cam->testSphereFrustrum(model.center, model.radius))
+        if(true)
         {
             glPushMatrix();
                 glColor3f(0,1,0);
@@ -124,7 +126,14 @@ bool CScenary::Draw()
         ModelInfo model = m_ObjectModels[activeFloor][i];
         qDebug() << "Posx: " << model.position.x << "Posy: " << model.position.y
                  << "Posz: " << model.position.z << "Rad: " << model.radius;
-        if(cam->testSphereFrustrum(model.position, model.radius))
+        if (dynamic_cast<CameraFP*>(cam) == 0)
+            drawModel = true;
+        else
+            drawModel = CFrustrumManager::GetInstance()->sphereInFrustum(
+                        Vec3(model.position.x, model.position.y, model.position.z),
+                        model.radius);
+
+        if(drawModel)
         {
             qDebug() << "Printing...";
             glPushMatrix();
