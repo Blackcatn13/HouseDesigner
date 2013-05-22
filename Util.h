@@ -67,13 +67,12 @@ struct materials
     string M1;
     string M2;
     string M3;
-    string Mask;
-    int nMask;
+    string M4;
 };
 
 struct textures
 {
-    string base;
+    string ObjectName;
     materials material;
 };
 
@@ -91,12 +90,11 @@ struct ModelInfo{
         rotation = CPoint3D();
         scale = CPoint3D(1, 1, 1);
         modelName = "";
-        textureName.base = "";
+        textureName.ObjectName = "";
         textureName.material.M1 = "";
         textureName.material.M2 = "";
         textureName.material.M3 = "";
-        textureName.material.Mask = "";
-        textureName.material.nMask = 0;
+        textureName.material.M4 = "";
         type = NEITHER;
     }
 
@@ -106,7 +104,7 @@ struct ModelInfo{
         rotation = rot;
         scale = sc;
         modelName = name;
-        textureName.base = texture;
+        textureName.ObjectName = texture;
         type = t;
     }
 

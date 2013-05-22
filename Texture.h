@@ -17,7 +17,7 @@ public:
     bool Bind();
 private:
     QImage texture;
-    int m_Name;
+    GLuint m_Name;
 };
 
 #endif // TEXTURE_H

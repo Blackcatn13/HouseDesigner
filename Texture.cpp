@@ -19,19 +19,22 @@ bool CTexture::LoadTexture(string textureName)
     texture = QGLWidget::convertToGLFormat(texture);
     if(texture.isNull())
         return false;
+    glGenTextures(1, &m_Name);
+    glBindTexture(GL_TEXTURE_2D, m_Name);
+
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA,
+            texture.width(), texture.height(),
+            0, GL_RGBA, GL_UNSIGNED_BYTE, texture.bits() );
+    
     return true;     
 }
 
 bool CTexture::Bind()
 {
-    if(m_Name == 0)
-        m_Name = CTextureManager::getName();
     glBindTexture(GL_TEXTURE_2D, m_Name);
-    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA,
-            texture.width(), texture.height(),
-            0, GL_RGBA, GL_UNSIGNED_BYTE, texture.bits() );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
     return true;
 }
 

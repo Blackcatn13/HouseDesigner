@@ -8,6 +8,11 @@
 #include <QGLShader>
 #include <qglshaderprogram.h>
 
+#define PATHTEXTURES "BaseTextures/"
+#define PNG ".png"
+#define MASK "Mask.png"
+#define OVER "Over.png"
+
 using namespace std;
 
 typedef map< sType, string > MapNames;
@@ -24,6 +29,9 @@ public:
     sType getShader (){return m_SelShader;}
     void UseActiveShader(ModelInfo mi);
     void ReleaseActiveShader();
+    void setShaderProgram(QGLShaderProgram *sp) {m_ShaderP = sp;}
+    void CompileShaders(const QGLContext *c);
+
 private:
     static CShaderManager*  m_ShaderManager;
     CShaderManager(void);
