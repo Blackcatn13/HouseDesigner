@@ -100,9 +100,12 @@ void RenderExplorer::mousePressEvent(QMouseEvent *event)
     qDebug() << WX << " " << WY << " " << WZ;
     ModelInfo pickedModel = CScenary::getInstance()->getPickedObject(round(WX), WY,
                                                                      WZ, indx);
-    qDebug() << "pickedModel" << pickedModel.modelName.c_str() << "type" << pickedModel.type;
-    qDebug() << "Index" << indx;
-    //Now we get de pickedModel (info of the picked model) and own index (indx);
+    if (indx != -1)
+    {
+        //Now we get de pickedModel (info of the picked model) and own index (indx);
+        qDebug() << "pickedModel" << pickedModel.modelName.c_str() << "type" << pickedModel.type;
+        qDebug() << "Index" << indx;
+    }
 }
 
 void RenderExplorer::mouseReleaseEvent(QMouseEvent *event)

@@ -91,7 +91,7 @@ bool CScenary::Draw()
     bool drawModel = true;
     if(activeFloor > m_WallModels.size())
         return false;
-
+    m_PickableWall.clear();
     for(size_t i = 0; i < m_WallModels[activeFloor].size(); ++i)
     {
         ModelInfo model = m_WallModels[activeFloor][i];
@@ -109,6 +109,8 @@ bool CScenary::Draw()
                     glutWireSphere(3, 16, 16);
                 glPopMatrix();
             }
+            //Add pickable object to vector.
+            m_PickableWall.push_back(std::make_pair(model, i));
             glPushMatrix();
                 glColor3f(0,1,0);
                 glTranslatef(model.position.x, model.position.y, model.position.z);
@@ -168,6 +170,7 @@ void CScenary::DrawFloor()
     bool drawModel = true;
     if(activeFloor < m_FloorModels.size())
     {
+        m_PickableFloor.clear();
         for(size_t i = 0; i < m_FloorModels[activeFloor].size(); ++i)
         {
             ModelInfo model = m_FloorModels[activeFloor][i];
@@ -182,6 +185,8 @@ void CScenary::DrawFloor()
             }
             if(drawModel)
             {
+                //Add pickable object to vector.
+                m_PickableFloor.push_back(std::make_pair(model, i));
                 glPushMatrix();
                     glColor3f(1,1,0);
                     glTranslatef(model.position.x, model.position.y, model.position.z);
@@ -237,8 +242,10 @@ void CScenary::DrawStairs()
     CModelManager *modelManager = CModelManager::GetInstance();
     Camera *cam = CameraManager::GetInstance()->getCurrentCamera();
     Views camType = cam->getCameraType();
-    bool drawModel = true;    if(activeFloor < m_StairModels.size())
+    bool drawModel = true;
+    if(activeFloor < m_StairModels.size())
     {
+        m_PickableStair.clear();
         for(size_t i = 0; i < m_StairModels[activeFloor].size(); ++i)
         {
             ModelInfo model = m_StairModels[activeFloor][i];
@@ -256,6 +263,8 @@ void CScenary::DrawStairs()
             }
             if(drawModel)
             {
+                //Add pickable object to vector.
+                m_PickableStair.push_back(std::make_pair(model, i));
                 glPushMatrix();
                     glColor3f(0, 0, 1);
                     glTranslatef(model.position.x, model.position.y, model.position.z);
@@ -559,6 +568,17 @@ ModelInfo CScenary::getPickedObject(float x, float y, float z, size_t &index)
     ModelInfo model;
     size_t indx;
 
+    for (size_t i = 0; i < m_PickableWall.size(); ++i)
+    {
+        model = m_PickableWall[i].first;
+        if (pow(x-model.position.x,2) + pow(y-model.position.y,2)
+                + pow(y-model.position.y,2) <= pow(model.radius,2))
+        {
+            index = m_PickableWall[i].second;
+            return model;
+        }
+    }
+
     for (size_t i = 0; i < m_PickableObject.size(); ++i)
     {
         model = m_PickableObject[i].first;
@@ -569,7 +589,41 @@ ModelInfo CScenary::getPickedObject(float x, float y, float z, size_t &index)
             return model;
         }
     }
-    index = __null;
+
+    for (size_t i = 0; i < m_PickableObject.size(); ++i)
+    {
+        model = m_PickableObject[i].first;
+        if (pow(x-model.position.x,2) + pow(y-model.position.y,2)
+                + pow(y-model.position.y,2) <= pow(model.radius,2))
+        {
+            index = m_PickableObject[i].second;
+            return model;
+        }
+    }
+
+    for (size_t i = 0; i < m_PickableFloor.size(); ++i)
+    {
+        model = m_PickableFloor[i].first;
+        if (pow(x-model.position.x,2) + pow(y-model.position.y,2)
+                + pow(y-model.position.y,2) <= pow(model.radius,2))
+        {
+            index = m_PickableFloor[i].second;
+            return model;
+        }
+    }
+
+    for (size_t i = 0; i < m_PickableStair.size(); ++i)
+    {
+        model = m_PickableStair[i].first;
+        if (pow(x-model.position.x,2) + pow(y-model.position.y,2)
+                + pow(y-model.position.y,2) <= pow(model.radius,2))
+        {
+            index = m_PickableStair[i].second;
+            return model;
+        }
+    }
+
+    index = -1;
     return ModelInfo();
 }
 
