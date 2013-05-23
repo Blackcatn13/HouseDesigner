@@ -121,7 +121,7 @@ bool CScenary::Draw()
         }
 
     }
-
+    m_PickableObject.clear();
     for(size_t i = 0; i < m_ObjectModels[activeFloor].size(); ++i)
     {
         ModelInfo model = m_ObjectModels[activeFloor][i];
@@ -132,6 +132,8 @@ bool CScenary::Draw()
                         model.position, model.radius);
         if(drawModel)
         {
+            //Add pickable object to vector.
+            m_PickableObject.push_back(std::make_pair(model, i));
             qDebug() << "Pos" << model.position.x << " " << model.position.y
                      << " " << model.position.z << "Model rad" << model.radius;
             if (m_sphereDebug)
@@ -550,6 +552,25 @@ void CScenary::deleteFloor(int x, int z, int floor)
 bool CScenary::getStairCollition(CPoint3D s, int rotation)
 {
     return (getStair2WallCollision(s, rotation) || getStair2ObjectCollision(s, rotation) || getStair2StairCollision(s, rotation));
+}
+
+ModelInfo CScenary::getPickedObject(float x, float y, float z, size_t &index)
+{
+    ModelInfo model;
+    size_t indx;
+
+    for (size_t i = 0; i < m_PickableObject.size(); ++i)
+    {
+        model = m_PickableObject[i].first;
+        if (pow(x-model.position.x,2) + pow(y-model.position.y,2)
+                + pow(y-model.position.y,2) <= pow(model.radius,2))
+        {
+            index = m_PickableObject[i].second;
+            return model;
+        }
+    }
+    index = __null;
+    return ModelInfo();
 }
 
 bool CScenary::getStair2WallCollision(CPoint3D s, int rotation)

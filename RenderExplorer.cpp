@@ -94,10 +94,14 @@ void RenderExplorer::mousePressEvent(QMouseEvent *event)
     float WY;
     float WZ;
     getWorldMouseCoord(event->x(),event->y(), WX, WY, WZ);
-    qDebug() << WX << " " << WY << " " << WZ;
     size_t indx;
-    ModelInfo pickedModel = CScenary::getInstance()->getPickedObject(WX, WY,
+    //Round nearest middle.
+    WX = round(WX*2)/2; WY = round(WY*2)/2; WZ = round(WZ*2)/2;
+    qDebug() << WX << " " << WY << " " << WZ;
+    ModelInfo pickedModel = CScenary::getInstance()->getPickedObject(round(WX), WY,
                                                                      WZ, indx);
+    qDebug() << "pickedModel" << pickedModel.modelName.c_str() << "type" << pickedModel.type;
+    qDebug() << "Index" << indx;
     //Now we get de pickedModel (info of the picked model) and own index (indx);
 }
 

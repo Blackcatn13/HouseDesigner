@@ -2,6 +2,7 @@
 #define SCENARY_H
 
 #include "Util.h"
+#include "utility"
 #include <vector>
 
 #define HEIGTH 3
@@ -9,6 +10,8 @@
 #define MAXGRIDX 40
 #define MAXGRIDZ 40
 #define MAXFLOORS 5
+
+typedef std::pair<ModelInfo, size_t> mInfoIndex;
 
 class CScenary
 {
@@ -157,7 +160,7 @@ public:
     void deleteFloor(int x, int z, int floor);
 
     bool getStairCollition(CPoint3D s, int rotation);
-
+    ModelInfo getPickedObject(float x, float y, float z, size_t &index);
 private:
 
     CScenary(void);
@@ -165,18 +168,22 @@ private:
         Vector with all the Walls
     */
     vector< vector<ModelInfo> > m_WallModels;
+    vector<mInfoIndex> m_PickableWall;
     /*
         Vector with all the Objects
     */
     vector< vector<ModelInfo> > m_ObjectModels;
+    vector<mInfoIndex> m_PickableObject;
     /*
         Vector with all the Ceil or Floor
     */
     vector< vector<ModelInfo> > m_FloorModels;
+    vector<mInfoIndex> m_PickableFloor;
     /*
         Vector with all the Stairs
     */
     vector< vector<ModelInfo> > m_StairModels;
+    vector<mInfoIndex> m_PickableStair;
     /*
         Singleton variable
     */
