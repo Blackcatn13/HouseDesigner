@@ -120,14 +120,14 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
 {
     RenderManager* RM = RenderManager::GetInstance();
     RM->GetRenderMode(actualMode)->mousePressEvent(event);
-    updateGL();
+    //updateGL();
 }
 
 void GLWidget::mouseReleaseEvent(QMouseEvent *event)
 {
     RenderManager* RM = RenderManager::GetInstance();
     RM->GetRenderMode(actualMode)->mouseReleaseEvent(event);
-    updateGL();
+    //updateGL();
 }
 
 
@@ -139,7 +139,7 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
 {
     RenderManager* RM = RenderManager::GetInstance();
     RM->GetRenderMode(actualMode)->mouseMoveEvent(event, mapToGlobal(QPoint(width/2, heigth/2)).x(), mapToGlobal(QPoint(width/2, heigth/2)).y());
-    updateGL();
+    //updateGL();
 }
 
 void GLWidget::wheelEvent(QWheelEvent *event)
@@ -149,7 +149,7 @@ void GLWidget::wheelEvent(QWheelEvent *event)
         RM->GetRenderMode(actualMode)->AddCameraDistance(0.5);
     else
         RM->GetRenderMode(actualMode)->AddCameraDistance(-0.5);
-    updateGL();
+    //updateGL();
 }
 
 /*****************************************************************************
@@ -179,5 +179,5 @@ void GLWidget::keyPressEvent(QKeyEvent* event)
         RM->GetRenderMode(actualMode)->KeyEvent(event->key());
     }
 
-    updateGL();
+    //updateGL();
 }
