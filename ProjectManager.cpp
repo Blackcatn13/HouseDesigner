@@ -30,6 +30,8 @@ bool CProjectManager::SaveMap(string fileName)
     CScenary * scenary = CScenary::getInstance();
     vector< vector<ModelInfo> > walls = scenary->getWalls();
     vector< vector<ModelInfo> > objects = scenary->getObjects();
+    vector< vector<ModelInfo> > stairs = scenary->getStairs();
+    vector< vector<ModelInfo> > floors = scenary->getFloors();
     ofstream file;
     file.open(fileName.c_str());
     int totalFloors = walls.size();
@@ -43,6 +45,10 @@ bool CProjectManager::SaveMap(string fileName)
             file << getInfoFromObject(currentFloor, walls[currentFloor][index]) << endl;
         for(int index = 0; index < objects[currentFloor].size(); ++index)
             file << getInfoFromObject(currentFloor, objects[currentFloor][index]) << endl;
+        for(int index = 0; index < stairs[currentFloor].size(); ++index)
+            file << getInfoFromObject(currentFloor, stairs[currentFloor][index]) << endl;
+        for(int index = 0; index < floors[currentFloor].size(); ++index)
+            file << getInfoFromObject(currentFloor, floors[currentFloor][index]) << endl;
     }
     file.close();
 
@@ -56,7 +62,7 @@ bool CProjectManager::LoadMap(string fileName)
     int totalFloors, maxX, maxZ, currentFloor;
     ModelInfo info;
 
-    vector< vector<ModelInfo> > walls, objects;
+    vector< vector<ModelInfo> > walls, objects, stairs, floors;
 
     file.open(fileName.c_str());
     if(file.is_open())
@@ -74,6 +80,8 @@ bool CProjectManager::LoadMap(string fileName)
         {
             walls.push_back( vector<ModelInfo>());
             objects.push_back( vector<ModelInfo>());
+            stairs.push_back( vector<ModelInfo>());
+            floors.push_back( vector<ModelInfo>());
         }
 
         while(getline(file, line))
@@ -84,12 +92,18 @@ bool CProjectManager::LoadMap(string fileName)
                 walls[currentFloor].push_back(info);
             else if(info.type == OBJECT)
                 objects[currentFloor].push_back(info);
+            else if(info.type == STAIR)
+                stairs[currentFloor].push_back(info);
+            else if(info.type == FLOOR)
+                floors[currentFloor].push_back(info);
         }
     }
     file.close();
 
     CScenary::getInstance()->setWalls(walls);
     CScenary::getInstance()->setObjects(objects);
+    CScenary::getInstance()->setStairs(stairs);
+    CScenary::getInstance()->setFloors(floors);
     return true;
 }
 
@@ -112,7 +126,7 @@ std::string CProjectManager::getInfoFromObject(int currentFloor, ModelInfo objec
     int currentPathLength = QDir::currentPath().size();
     info << object.modelName.substr(currentPathLength) << " ";
 
-    std::string texture = object.textureName.base;
+    std::string texture = object.textureName.ObjectName;
     if(texture.empty())
         texture = "NO_TEXTURE";
     info << texture << " ";
@@ -132,7 +146,7 @@ std::string CProjectManager::getInfoFromObject(int currentFloor, ModelInfo objec
         texture = "NO_TEXTURE";
     info << texture << " ";
 
-    texture = object.textureName.material.Mask;
+    texture = object.textureName.material.M4;
     if(texture.empty())
         texture = "NO_TEXTURE";
     info << texture << " ";
@@ -165,7 +179,7 @@ ModelInfo CProjectManager::getObjectFromInfo(std::string line, int &currentFloor
     info.modelName = QDir::currentPath().toUtf8().constData() + model;
     iss >> texture;
     if(texture != "NO_TEXTURE")
-        info.textureName.base = QDir::currentPath().toUtf8().constData() + texture;
+        info.textureName.ObjectName = QDir::currentPath().toUtf8().constData() + texture;
 
     texture = "";
     iss >> texture;
@@ -185,7 +199,7 @@ ModelInfo CProjectManager::getObjectFromInfo(std::string line, int &currentFloor
     texture = "";
     iss >> texture;
     if(texture != "NO_TEXTURE")
-        info.textureName.material.Mask = QDir::currentPath().toUtf8().constData() + texture;
+        info.textureName.material.M4 = QDir::currentPath().toUtf8().constData() + texture;
 
     int type;
     iss >> type;

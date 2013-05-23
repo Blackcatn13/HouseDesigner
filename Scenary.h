@@ -145,6 +145,16 @@ public:
     */
     vector< vector<ModelInfo> > getObjects() {return m_ObjectModels;}
     /*
+        vector<vector<ModelInfo>> getFloors()
+        Function to get the Floors of the Scenary
+    */
+    vector< vector<ModelInfo> > getFloors() {return m_FloorModels;}
+    /*
+        vector<vector<ModelInfo>> getStairs()
+        Function to get the Stairs of the Scenary
+    */
+    vector< vector<ModelInfo> > getStairs() {return m_StairModels;}
+    /*
         vector<vector<int>> getScenaryMat()
         Function to get the ScenaryMat
     */
@@ -170,6 +180,8 @@ public:
 
     void setWalls(vector< vector<ModelInfo> > walls) {m_WallModels = walls;}
     void setObjects(vector< vector<ModelInfo> > objects) {m_ObjectModels = objects;}
+    void setFloors(vector< vector<ModelInfo> > floors) {m_FloorModels = floors;}
+    void setStairs(vector< vector<ModelInfo> > stairs) {m_StairModels = stairs;}
 
 private:
     CScenary(QObject *parent = 0);
