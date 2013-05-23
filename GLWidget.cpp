@@ -96,7 +96,7 @@ void GLWidget::paintGL()
     {
     case EXPLORER:
     case EXPLORER_ISO:
-        setCursor(Qt::BlankCursor);
+        setCursor(Qt::CrossCursor);
         break;
     case EDITOR_2D:
         setCursor(Qt::ArrowCursor);
