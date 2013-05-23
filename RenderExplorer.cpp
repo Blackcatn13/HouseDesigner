@@ -88,12 +88,16 @@ void RenderExplorer::AddCameraDistance(float)
 {
 }
 
-void RenderExplorer::mousePressEvent(QMouseEvent*)
+void RenderExplorer::mousePressEvent(QMouseEvent *event)
 {
-
+    float WX;
+    float WY;
+    float WZ;
+    getWorldMouseCoord(event->x(),event->y(), WX, WY, WZ);
+    int a = 3;
 }
 
-void RenderExplorer::mouseReleaseEvent(QMouseEvent*)
+void RenderExplorer::mouseReleaseEvent(QMouseEvent *event)
 {
 
 }
@@ -111,10 +115,10 @@ void RenderExplorer::mouseMoveEvent(QMouseEvent *event, int x, int y)
     QCursor::setPos(QPoint(x,y));
 }
 
-void RenderExplorer::getWorldMouseCoord(int x, int y, float &wx, float &wz)
+void RenderExplorer::getWorldMouseCoord(int x, int y, float &wx, float &wy, float &wz)
 {
-    GLfloat MWX, MWY;
-    GLdouble rx, ry, rz;
+    GLfloat MWX=0.0, MWY=0.0, MWZ=0.0;
+    GLdouble rx=0.0, ry=0.0, rz=0.0;
 
     GLdouble modelview[16];
     GLdouble projection[16];
@@ -127,7 +131,8 @@ void RenderExplorer::getWorldMouseCoord(int x, int y, float &wx, float &wz)
     MWX = (float)x;
     MWY = (float)viewport[3] - (float)y;
 
-    gluUnProject(MWX, MWY, 0, modelview, projection, viewport, &rx, &ry, &rz);
+    gluUnProject(MWX, MWY, MWZ, modelview, projection, viewport, &rx, &ry, &rz);
     wx = rx;
+    wy = ry;
     wz = rz;
 }

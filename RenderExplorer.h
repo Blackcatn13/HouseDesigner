@@ -28,7 +28,7 @@ private:
     float width, heigth;
     Point2D mousePosition;
     bool clicked;
-    void getWorldMouseCoord(int x, int y, float &wx, float &wz);
+    void getWorldMouseCoord(int x, int y, float &wx, float &wy, float &wz);
 };
 
 #endif
