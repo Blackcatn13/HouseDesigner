@@ -132,7 +132,8 @@ bool CScenary::Draw()
                         model.position, model.radius);
         if(drawModel)
         {
-            qDebug() << "Printing..." << "Model rad" << model.radius;
+            qDebug() << "Pos" << model.position.x << " " << model.position.y
+                     << " " << model.position.z << "Model rad" << model.radius;
             if (m_sphereDebug)
             {
                 glPushMatrix();

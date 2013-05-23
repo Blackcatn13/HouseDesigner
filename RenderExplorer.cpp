@@ -95,6 +95,7 @@ void RenderExplorer::mousePressEvent(QMouseEvent *event)
     float WZ;
     getWorldMouseCoord(event->x(),event->y(), WX, WY, WZ);
     int a = 3;
+    qDebug() << WX << " " << WY << " " << WZ;
 }
 
 void RenderExplorer::mouseReleaseEvent(QMouseEvent *event)
@@ -130,7 +131,7 @@ void RenderExplorer::getWorldMouseCoord(int x, int y, float &wx, float &wy, floa
 
     MWX = (float)x;
     MWY = (float)viewport[3] - (float)y;
-
+    glReadPixels(x, int(MWY), 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &MWZ);
     gluUnProject(MWX, MWY, MWZ, modelview, projection, viewport, &rx, &ry, &rz);
     wx = rx;
     wy = ry;
