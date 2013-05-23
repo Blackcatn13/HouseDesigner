@@ -94,8 +94,11 @@ void RenderExplorer::mousePressEvent(QMouseEvent *event)
     float WY;
     float WZ;
     getWorldMouseCoord(event->x(),event->y(), WX, WY, WZ);
-    int a = 3;
     qDebug() << WX << " " << WY << " " << WZ;
+    size_t indx;
+    ModelInfo pickedModel = CScenary::getInstance()->getPickedObject(WX, WY,
+                                                                     WZ, indx);
+    //Now we get de pickedModel (info of the picked model) and own index (indx);
 }
 
 void RenderExplorer::mouseReleaseEvent(QMouseEvent *event)
