@@ -1,0 +1,47 @@
+# Alias OBJ Model File
+# Exported from SketchUp, (c) 2000-2006 Google, Inc.
+# File units = meters
+
+mtllib Sin_t_tulo.mtl
+
+g Mesh1 Model
+
+usemtl Tile_Checker_BW
+v 1 0 -1
+vt 1 1
+vn 0 1 -0
+v 0 0 -1
+vt 0 1
+v 0 0 -0
+vt 0 0
+v 1 0 -0
+vt 1 0
+f 1/1/1 2/2/1 3/3/1 4/4/1 
+
+usemtl FrontColor
+vn 0 0 -1
+vt -39.3701 0
+v 1 -0.00996775 -1
+vt -39.3701 -0.392431
+v 0 -0.00996775 -1
+vt 0 -0.392431
+f 2/3/2 1/5/2 5/6/2 6/7/2 
+
+vt 39.3701 0
+vn 1 0 -0
+v 1 -0.00996775 -0
+vt 39.3701 -0.392431
+f 1/8/3 4/3/3 7/7/3 5/9/3 
+
+vn 0 0 1
+v 0 -0.00996775 -0
+f 4/8/4 3/3/4 8/7/4 7/9/4 
+
+vn -1 0 -0
+f 3/3/5 2/5/5 6/6/5 8/7/5 
+
+vt 0 39.3701
+vn 0 -1 -0
+vt -39.3701 39.3701
+f 6/10/6 5/11/6 7/5/6 8/3/6 
+
