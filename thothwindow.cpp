@@ -53,6 +53,7 @@ ThothWindow::ThothWindow(QWidget *parent) :
     connect(ui->ColorButton, SIGNAL(clicked(bool)), SLOT(on_colorButton_clicked()));
     connect(this, SIGNAL(newModel(ModelInfo, int)), RenderManager::GetInstance()->GetRenderMode(EXPLORER), SLOT(changeModelTexture(ModelInfo, int)));
     connect(ui->actionOpen_project, SIGNAL(triggered()), this, SLOT(actionOpen_project_triggered()));
+    connect(CScenary::getInstance(), SIGNAL(setNameModel(string)), SLOT(getModelName(string)));
 }
 
 ThothWindow::~ThothWindow()
@@ -85,6 +86,10 @@ void ThothWindow::on_pushButton_4_clicked()
                 CScenary::getInstance()->setActiveModel(info.canonicalFilePath().toStdString());
                 CScenary::getInstance()->setActiveType(STAIR);
             }
+            string path = info.canonicalFilePath().toStdString();
+            int namesize = path.find_last_of('.') - path.find_last_of('/');
+            string name = path.substr(path.find_last_of('/') + 1, namesize - 1);
+            message->setText(QString("Selected model: ").append(QString(name.c_str())));
         }
     }
     ui->contextGL->setFocus();
@@ -116,6 +121,10 @@ void ThothWindow::on_pushButton_clicked()
             qDebug("Create model with path: %s", qPrintable(info.absoluteFilePath()));
             CScenary::getInstance()->setActiveModel(info.canonicalFilePath().toStdString());
                 CScenary::getInstance()->setActiveType(OBJECT);
+            string path = info.canonicalFilePath().toStdString();
+            int namesize = path.find_last_of('.') - path.find_last_of('/');
+            string name = path.substr(path.find_last_of('/') + 1, namesize - 1);
+            message->setText(QString("Selected model: ").append(QString(name.c_str())));
         }
     }
     ui->contextGL->setFocus();
@@ -154,6 +163,7 @@ void ThothWindow::on_pushButton_6_clicked()
             message->setText(QString("Selected texture :").append(QString(name.c_str())));
         }
     }
+    ui->contextGL->setFocus();
 }
 
 void ThothWindow::on_pushButton_7_clicked()
@@ -169,6 +179,7 @@ void ThothWindow::on_pushButton_7_clicked()
             ui->statusBar->showMessage("Texture unselected...", 2000);
         }
     }
+    ui->contextGL->setFocus();
 }
 
 void ThothWindow::actionSave_project_triggered()

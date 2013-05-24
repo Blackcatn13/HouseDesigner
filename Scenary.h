@@ -18,6 +18,7 @@ class CScenary : public QObject
 {
     Q_OBJECT
 public:
+    CScenary(QObject *parent = 0);
     ~CScenary(void);
     /*
         bool Draw()
