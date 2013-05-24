@@ -54,6 +54,7 @@ ThothWindow::ThothWindow(QWidget *parent) :
     connect(this, SIGNAL(newModel(ModelInfo, int)), RenderManager::GetInstance()->GetRenderMode(EXPLORER), SLOT(changeModelTexture(ModelInfo, int)));
     connect(ui->actionOpen_project, SIGNAL(triggered()), this, SLOT(actionOpen_project_triggered()));
     connect(CScenary::getInstance(), SIGNAL(setNameModel(string)), SLOT(getModelName(string)));
+    connect(RenderManager::GetInstance(), SIGNAL(sendChangeTab()), SLOT(changeTab()));
 }
 
 ThothWindow::~ThothWindow()
@@ -296,5 +297,4 @@ void ThothWindow::on_colorButton_clicked()
     {
         popUp->setText("Select in which texture you want to put it");
     }
-
 }
