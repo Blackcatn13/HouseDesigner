@@ -6,16 +6,19 @@
 
 RenderManager *RenderManager::m_RenderManager = 0;
 
-RenderManager::RenderManager()
+RenderManager::RenderManager(QObject*)
 {
     m_Renders = RenderMap();
     m_Renders.insert(std::pair<Modes, Render*>(EDITOR_2D, new Render2D()));
-    m_Renders.insert(std::pair<Modes, Render*>(EXPLORER, new RenderExplorer()));
+    RenderExplorer* RE = new RenderExplorer();
+    connect(RE, SIGNAL(changeTab()), SLOT(getChangeTab()));
+    m_Renders.insert(std::pair<Modes, Render*>(EXPLORER, RE));
     // TODO:
     // Afegir els inserts per els renders que falten un cop creats.
 
     // Resize all the render modes camera.
     SetProjection(INIT_WIDTH, INIT_HEIGHT, EDITOR_2D);
+
 }
 
 RenderManager::~RenderManager()
@@ -25,7 +28,7 @@ RenderManager::~RenderManager()
 RenderManager* RenderManager::GetInstance()
 {
     if(m_RenderManager == NULL)
-        m_RenderManager = new RenderManager();
+        m_RenderManager = new RenderManager(0);
     return m_RenderManager;
 }
 
@@ -53,6 +56,11 @@ void RenderManager::CleanUp()
     m_Renders.clear();
     if(m_RenderManager != NULL)
         delete m_RenderManager;
+}
+
+void RenderManager::getChangeTab()
+{
+    emit sendChangeTab();
 }
 
 

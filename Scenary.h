@@ -18,7 +18,6 @@ class CScenary : public QObject
 {
     Q_OBJECT
 public:
-    CScenary(QObject *parent = 0);
     ~CScenary(void);
     /*
         bool Draw()
@@ -165,8 +164,7 @@ public:
     bool getStairCollition(CPoint3D s, int rotation);
     ModelInfo getPickedObject(float x, float y, float z, size_t &index);
 private:
-
-    CScenary(void);
+    CScenary(QObject *parent = 0);
     /*
         Vector with all the Walls
     */

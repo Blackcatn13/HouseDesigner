@@ -41,7 +41,8 @@ private slots:
     void on_floorBox_valueChanged(int arg1);
 
     void onColorChanged();
-    void getModelName(string name);
+    void getModelName(std::string name);
+    void changeTab();
 
 private:
     Ui::ThothWindow     *ui;

@@ -3,9 +3,11 @@
 
 #include "Util.h"
 #include <QMouseEvent>
+#include <qobject.h>
 
-class Render
+class Render : public QObject
 {
+    Q_OBJECT
 public:
     void virtual Draw() = 0;
     void virtual Update() = 0;
@@ -15,7 +17,7 @@ public:
     void virtual mousePressEvent(QMouseEvent *event) = 0;
     void virtual mouseReleaseEvent(QMouseEvent *event) = 0;
     void virtual mouseMoveEvent(QMouseEvent *event, int x, int y) = 0;
-    Render();
+    Render(QObject* p = 0);
     ~Render();
 };
 

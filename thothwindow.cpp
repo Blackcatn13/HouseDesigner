@@ -1,7 +1,6 @@
 #include "thothwindow.h"
 #include "ui_thothwindow.h"
 #include <QTreeWidget>
-#include "Scenary.h"
 //Important includes
 #include <QModelIndex>
 #include <QFileSystemModel>
@@ -10,6 +9,7 @@
 #include "Scenary.h"
 #include <qtimer.h>
 #include <qpalette.h>
+#include "RenderManager.h"
 
 #define TICK_PER_SECOND 1000/40
 
@@ -44,6 +44,7 @@ ThothWindow::ThothWindow(QWidget *parent) :
     connect(ui->SldB, SIGNAL(valueChanged(int)), SLOT(onColorChanged()));
     onColorChanged();
     connect(CScenary::getInstance(), SIGNAL(setNameModel(string)), SLOT(getModelName(string)));
+    connect(RenderManager::GetInstance(), SIGNAL(sendChangeTab()), SLOT(changeTab()));
 }
 
 ThothWindow::~ThothWindow()
@@ -213,4 +214,9 @@ void ThothWindow::getModelName(string path)
         message->setText("No model selected");
     else
         message->setText(QString("Selected model: ").append(QString(name.c_str())));
+}
+
+void ThothWindow::changeTab()
+{
+    ui->tabWidget->setCurrentWidget(ui->decorate_tab);
 }

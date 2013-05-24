@@ -9,6 +9,7 @@ class Camera;
 
 class RenderExplorer : public Render
 {
+    Q_OBJECT
 public:
     RenderExplorer();
     ~RenderExplorer();
@@ -31,6 +32,8 @@ private:
     ModelInfo selectedModel;
     int selectedPosition;
     void getWorldMouseCoord(int x, int y, float &wx, float &wy, float &wz);
+signals:
+    void changeTab();
 };
 
 #endif

@@ -11,23 +11,8 @@
 
 CScenary* CScenary::m_Scenary = 0;
 
-CScenary::CScenary(QObject *parent)
+CScenary::CScenary(QObject*)
 {
-    m_gridMaxX = 20;
-    m_gridMaxZ = 20;
-    m_WallModels = vector<vector<ModelInfo> >();
-    m_ObjectModels = vector<vector<ModelInfo> >();
-    m_FloorModels = vector<vector<ModelInfo> >();
-    m_StairModels = vector<vector<ModelInfo> >();
-    activeFloor = 0;
-    m_nFloors = 0;
-    addNewFloor();
-    m_sphereDebug = false;
-}
-
-CScenary::CScenary(void)
-{
-    //Initialize grid maximum.
     m_gridMaxX = 20;
     m_gridMaxZ = 20;
     m_WallModels = vector<vector<ModelInfo> >();
