@@ -41,6 +41,7 @@ private slots:
     void on_floorBox_valueChanged(int arg1);
 
     void onColorChanged();
+    void getModelName(string name);
 
 private:
     Ui::ThothWindow     *ui;
@@ -50,6 +51,8 @@ private:
     QFileSystemModel    *m_furnishModel;
     QFileSystemModel    *m_decorateModel;
     QColor m_color;
+    QLabel *message;
+    QLabel *popUp;
 };
 
 #endif // THOTHWINDOW_H

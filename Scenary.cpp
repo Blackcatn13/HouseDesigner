@@ -11,6 +11,20 @@
 
 CScenary* CScenary::m_Scenary = 0;
 
+CScenary::CScenary(QObject *parent)
+{
+    m_gridMaxX = 20;
+    m_gridMaxZ = 20;
+    m_WallModels = vector<vector<ModelInfo> >();
+    m_ObjectModels = vector<vector<ModelInfo> >();
+    m_FloorModels = vector<vector<ModelInfo> >();
+    m_StairModels = vector<vector<ModelInfo> >();
+    activeFloor = 0;
+    m_nFloors = 0;
+    addNewFloor();
+    m_sphereDebug = false;
+}
+
 CScenary::CScenary(void)
 {
     //Initialize grid maximum.
@@ -23,7 +37,7 @@ CScenary::CScenary(void)
     activeFloor = 0;
     m_nFloors = 0;
     addNewFloor();
-    m_sphereDebug = true;
+    m_sphereDebug = false;
 }
 
 CScenary::~CScenary(void)
@@ -33,7 +47,7 @@ CScenary::~CScenary(void)
 CScenary* CScenary::getInstance()
 {
     if(m_Scenary == NULL)
-        m_Scenary = new CScenary();
+        m_Scenary = new CScenary(0);
     return m_Scenary;
 }
 
@@ -114,6 +128,7 @@ bool CScenary::Draw()
             }
             //Add pickable object to vector.
             m_PickableWall.push_back(std::make_pair(model, i));
+            shader->UseActiveShader(model);
             glPushMatrix();
                 glColor3f(0,1,0);
                 glTranslatef(model.position.x, model.position.y, model.position.z);
@@ -123,6 +138,7 @@ bool CScenary::Draw()
                 glScalef(model.scale.x, model.scale.y, model.scale.z);
                 modelManager->Draw(model.modelName);
             glPopMatrix();
+            shader->ReleaseActiveShader();
         }
     }
 
@@ -139,8 +155,8 @@ bool CScenary::Draw()
         {
             //Add pickable object to vector.
             m_PickableObject.push_back(std::make_pair(model, i));
-            qDebug() << "Pos" << model.position.x << " " << model.position.y
-                     << " " << model.position.z << "Model rad" << model.radius;
+            /*qDebug() << "Pos" << model.position.x << " " << model.position.y
+                     << " " << model.position.z << "Model rad" << model.radius;*/
             if (m_sphereDebug)
             {
                 glPushMatrix();
@@ -160,8 +176,6 @@ bool CScenary::Draw()
             glPopMatrix();
             shader->ReleaseActiveShader();
         }
-        else
-            qDebug() << "NO printing...";
     }
     return true;
 }
@@ -171,6 +185,7 @@ void CScenary::DrawFloor()
     CModelManager *modelManager = CModelManager::GetInstance();
     Camera *cam = CameraManager::GetInstance()->getCurrentCamera();
     Views camType = cam->getCameraType();
+    CShaderManager *shader = CShaderManager::GetInstance();
     bool drawModel = true;
     if(activeFloor < m_FloorModels.size())
     {
@@ -191,6 +206,7 @@ void CScenary::DrawFloor()
             {
                 //Add pickable object to vector.
                 m_PickableFloor.push_back(std::make_pair(model, i));
+                //shader->UseActiveShader(model);
                 glPushMatrix();
                     glColor3f(1,1,0);
                     glTranslatef(model.position.x, model.position.y, model.position.z);
@@ -200,6 +216,7 @@ void CScenary::DrawFloor()
                     glScalef(model.scale.x, model.scale.y, model.scale.z);
                     modelManager->Draw(model.modelName);
                 glPopMatrix();
+                //shader->ReleaseActiveShader();
             }
         }
     }
@@ -210,6 +227,7 @@ void CScenary::DrawCeil()
     CModelManager *modelManager = CModelManager::GetInstance();
     Camera *cam = CameraManager::GetInstance()->getCurrentCamera();
     Views camType = cam->getCameraType();
+    CShaderManager *shader = CShaderManager::GetInstance();
     bool drawModel = true;
     if(activeFloor < m_FloorModels.size())
     {
@@ -227,6 +245,7 @@ void CScenary::DrawCeil()
             }
             if(drawModel)
             {
+                //shader->UseActiveShader(model);
                 glPushMatrix();
                     glColor3f(1,0,1);
                     glTranslatef(model.position.x, model.position.y, model.position.z);
@@ -236,6 +255,7 @@ void CScenary::DrawCeil()
                     glScalef(model.scale.x, model.scale.y, model.scale.z);
                     modelManager->Draw(model.modelName);
                 glPopMatrix();
+                //shader->ReleaseActiveShader();
             }
         }
     }
@@ -246,6 +266,7 @@ void CScenary::DrawStairs()
     CModelManager *modelManager = CModelManager::GetInstance();
     Camera *cam = CameraManager::GetInstance()->getCurrentCamera();
     Views camType = cam->getCameraType();
+    CShaderManager *shader = CShaderManager::GetInstance();
     bool drawModel = true;
     if(activeFloor < m_StairModels.size())
     {
@@ -269,6 +290,7 @@ void CScenary::DrawStairs()
             {
                 //Add pickable object to vector.
                 m_PickableStair.push_back(std::make_pair(model, i));
+                shader->UseActiveShader(model);
                 glPushMatrix();
                     glColor3f(0, 0, 1);
                     glTranslatef(model.position.x, model.position.y, model.position.z);
@@ -278,6 +300,7 @@ void CScenary::DrawStairs()
                     glScalef(model.scale.x, model.scale.y, model.scale.z);
                     modelManager->Draw(model.modelName);
                 glPopMatrix();
+                shader->ReleaseActiveShader();
             }
         }
     }
@@ -510,6 +533,7 @@ bool CScenary::getObject2WallCollision(ModelInfo mi)
 void CScenary::setActiveModel(string model)
 {
     activeModel = model;
+    emit setNameModel(model);
 }
 
 void CScenary::setActiveType(Types t)

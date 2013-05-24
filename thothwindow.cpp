@@ -21,7 +21,10 @@ ThothWindow::ThothWindow(QWidget *parent) :
     // ALERT! Use the following code to get keyboard focus at your OpenGL widget
     ui->contextGL->setFocusPolicy(Qt::StrongFocus);
     ui->contextGL->setFocus();
-
+    message = new QLabel(this);
+    ui->statusBar->showMessage("Ready");
+    ui->statusBar->addPermanentWidget(message);
+    message->setText("No model selected");
     //Tree file.
 
     //treeview of tabs
@@ -35,10 +38,12 @@ ThothWindow::ThothWindow(QWidget *parent) :
     QTimer *tim = new QTimer(this);
     connect(tim, SIGNAL(timeout()), ui->contextGL, SLOT(updateGL()));
     tim->start(TICK_PER_SECOND);
+    connect(tim, SIGNAL(timeout()), ui->contextGL, SLOT(checkActiveModel()));
     connect(ui->SldR, SIGNAL(valueChanged(int)), SLOT(onColorChanged()));
     connect(ui->SldG, SIGNAL(valueChanged(int)), SLOT(onColorChanged()));
     connect(ui->SldB, SIGNAL(valueChanged(int)), SLOT(onColorChanged()));
     onColorChanged();
+    connect(CScenary::getInstance(), SIGNAL(setNameModel(string)), SLOT(getModelName(string)));
 }
 
 ThothWindow::~ThothWindow()
@@ -63,16 +68,21 @@ void ThothWindow::on_pushButton_4_clicked()
             qDebug("Create model with path: %s", qPrintable(info.absoluteFilePath()));
             if(info.absoluteFilePath().contains(QString("wall"),Qt::CaseInsensitive))
             {
-                CScenary::getInstance()->setActiveModel(info.absoluteFilePath().toStdString());
+                CScenary::getInstance()->setActiveModel(info.canonicalFilePath().toStdString());
                 CScenary::getInstance()->setActiveType(WALL);
             }
             if(info.absoluteFilePath().contains(QString("stair"), Qt::CaseInsensitive))
             {
-                CScenary::getInstance()->setActiveModel(info.absoluteFilePath().toStdString());
+                CScenary::getInstance()->setActiveModel(info.canonicalFilePath().toStdString());
                 CScenary::getInstance()->setActiveType(STAIR);
             }
+            string path = info.canonicalFilePath().toStdString();
+            int namesize = path.find_last_of('.') - path.find_last_of('/');
+            string name = path.substr(path.find_last_of('/') + 1, namesize - 1);
+            message->setText(QString("Selected model: ").append(QString(name.c_str())));
         }
     }
+    ui->contextGL->setFocus();
 }
 
 void ThothWindow::on_pushButton_5_clicked()
@@ -86,6 +96,7 @@ void ThothWindow::on_pushButton_5_clicked()
             qDebug("Delete model with path: %s", qPrintable(m_buildModel->fileInfo(indx).absoluteFilePath()));
         }
     }
+    ui->contextGL->setFocus();
 }
 
 void ThothWindow::on_pushButton_clicked()
@@ -98,10 +109,15 @@ void ThothWindow::on_pushButton_clicked()
         if(info.suffix() == QString("obj"))
         {
             qDebug("Create model with path: %s", qPrintable(info.absoluteFilePath()));
-                CScenary::getInstance()->setActiveModel(info.absoluteFilePath().toStdString());
+            CScenary::getInstance()->setActiveModel(info.canonicalFilePath().toStdString());
                 CScenary::getInstance()->setActiveType(OBJECT);
+            string path = info.canonicalFilePath().toStdString();
+            int namesize = path.find_last_of('.') - path.find_last_of('/');
+            string name = path.substr(path.find_last_of('/') + 1, namesize - 1);
+            message->setText(QString("Selected model: ").append(QString(name.c_str())));
         }
     }
+    ui->contextGL->setFocus();
 }
 
 void ThothWindow::on_pushButton_2_clicked()
@@ -115,6 +131,7 @@ void ThothWindow::on_pushButton_2_clicked()
             qDebug("Delete model with path: %s", qPrintable(m_furnishModel->fileInfo(indx).absoluteFilePath()));
         }
     }
+    ui->contextGL->setFocus();
 }
 
 void ThothWindow::on_pushButton_6_clicked()
@@ -128,6 +145,7 @@ void ThothWindow::on_pushButton_6_clicked()
             qDebug("Create model with path: %s", qPrintable(m_decorateModel->fileInfo(indx).absoluteFilePath()));
         }
     }
+    ui->contextGL->setFocus();
 }
 
 void ThothWindow::on_pushButton_7_clicked()
@@ -141,6 +159,7 @@ void ThothWindow::on_pushButton_7_clicked()
             qDebug("Delete model with path: %s", qPrintable(m_decorateModel->fileInfo(indx).absoluteFilePath()));
         }
     }
+    ui->contextGL->setFocus();
 }
 
 void ThothWindow::actionSave_project_triggered()
@@ -184,4 +203,14 @@ void ThothWindow::onColorChanged()
     pal.setColor(QPalette::Window, m_color);
     ui->ColorW->setPalette(pal);
     emit colorChanged(m_color);
+}
+
+void ThothWindow::getModelName(string path)
+{
+    int namesize = path.find_last_of('.') - path.find_last_of('/');
+    string name = path.substr(path.find_last_of('/') + 1, namesize - 1);
+    if(name.compare("") == 0)
+        message->setText("No model selected");
+    else
+        message->setText(QString("Selected model: ").append(QString(name.c_str())));
 }

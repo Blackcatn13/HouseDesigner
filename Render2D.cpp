@@ -113,6 +113,11 @@ bool Render2D::KeyEvent(int key)
             clicked = false;
             rotation = 0;
         }
+        else
+        {
+            scenary->setActiveModel("");
+            scenary->setActiveType(NEITHER);
+        }
         break;
     default:
         update = false;
@@ -396,14 +401,14 @@ void Render2D::AddObject()
     //qDebug() << "Position: " << ii.position.x << ii.position.y << ii.position.z;
     ii.center = CModelManager::GetInstance()->getModelCenter(ii.modelName);
     ii.radius = CModelManager::GetInstance()->getModelRadius(ii.modelName);
-    //ii.textureName.color.c1 = CPoint3D(0.5, 0.5, 0.5);
-    //ii.textureName.color.c2 = CPoint3D(1.0, 0.1, 0.1);
-    //ii.textureName.color.c3 = CPoint3D(0.5, 0.2, 1.0);
-    //ii.textureName.color.c4 = CPoint3D(0.2, 1.0, 0.1);
-    //ii.textureName.material.M1 = "Models/Textures/Material2.jpg";
-    //ii.textureName.material.M2 = "Models/Textures/Material3.jpg";
-    //ii.textureName.material.M3 = "Models/Textures/Material9.jpg";
-    //ii.textureName.material.M4 = "Models/Textures/Material8.jpg";
+    ii.textureName.color.c1 = CPoint3D(0.5, 0.5, 0.5);
+    ii.textureName.color.c2 = CPoint3D(1.0, 0.1, 0.1);
+    ii.textureName.color.c3 = CPoint3D(0.5, 0.2, 1.0);
+    ii.textureName.color.c4 = CPoint3D(0.2, 1.0, 0.1);
+    ii.textureName.material.M1 = "Models/Textures/Material2.jpg";
+    ii.textureName.material.M2 = "Models/Textures/Material3.jpg";
+    ii.textureName.material.M3 = "Models/Textures/Material9.jpg";
+    ii.textureName.material.M4 = "Models/Textures/Material8.jpg";
     scenary->addModel(ii);
 }
 

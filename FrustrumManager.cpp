@@ -1,20 +1,12 @@
 #include "FrustrumManager.h"
-#define NULL __null
 #include "math.h"
+
 CFrustrumManager *CFrustrumManager::m_FrustrumManager = 0;
 
 #define ANG2RAD 3.14159265358979323846/180.0
 
 CFrustrumManager::CFrustrumManager()
 {
-
-}
-
-CFrustrumManager* CFrustrumManager::GetInstance()
-{
-    if(m_FrustrumManager == NULL)
-        m_FrustrumManager = new CFrustrumManager();
-    return m_FrustrumManager;
 }
 
 void CFrustrumManager::setCamInternals(float angle, float ratio, float nearD, float farD)
@@ -74,4 +66,11 @@ bool CFrustrumManager::sphereInFrustum(CPoint3D p, float radius)
                 return false;
         }
     return true;
+}
+
+CFrustrumManager* CFrustrumManager::GetInstance()
+{
+    if(m_FrustrumManager == 0)
+        m_FrustrumManager = new CFrustrumManager();
+    return m_FrustrumManager;
 }

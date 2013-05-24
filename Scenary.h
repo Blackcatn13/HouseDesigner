@@ -4,6 +4,7 @@
 #include "Util.h"
 #include "utility"
 #include <vector>
+#include <qobject.h>
 
 #define HEIGTH 3
 //Maximum surface = 40*40*5 = 8000m2
@@ -13,9 +14,11 @@
 
 typedef std::pair<ModelInfo, size_t> mInfoIndex;
 
-class CScenary
+class CScenary : public QObject
 {
+    Q_OBJECT
 public:
+    CScenary(QObject *parent = 0);
     ~CScenary(void);
     /*
         bool Draw()
@@ -247,7 +250,8 @@ private:
     //Debug frustrum culling.
     int m_printM;
     bool m_sphereDebug;
-
+signals:
+    void setNameModel(string name);
 };
 
 #endif
