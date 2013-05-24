@@ -4,6 +4,7 @@
 #include "Util.h"
 #include <QtOpenGL/QGLWidget>
 #include "Render.h"
+#include <qglshaderprogram.h>
 
 class GLWidget : public QGLWidget {
 
@@ -27,6 +28,7 @@ private:
     Modes actualMode;
     float width;
     float heigth;
+    QGLShaderProgram *shader;
 };
 
 #endif  /* _GLWIDGET_H */

@@ -1,7 +1,7 @@
 #include "TextureManager.h"
 #include "Texture.h"
 CTextureManager *CTextureManager::m_TextureManager = 0;
-
+GLuint CTextureManager::m_NextTextureName = 0;
 CTextureManager::CTextureManager(void)
 {
     m_Textures = MapTexture();
@@ -19,16 +19,16 @@ CTextureManager* CTextureManager::GetInstance()
     return m_TextureManager;
 }
 
-bool CTextureManager::Draw(string TextureName)
+bool CTextureManager::Bind(string TextureName)
 {
     MapTexture::iterator TextureIterator;
     TextureIterator = m_Textures.find(TextureName);
     if(TextureIterator != m_Textures.end())
-        return TextureIterator->second->Draw();
+        return TextureIterator->second->Bind();
     else
     {
         if(LoadTexture(TextureName))
-            return Draw(TextureName);
+            return Bind(TextureName);
     }
     return false;
 }
@@ -53,4 +53,11 @@ void CTextureManager::CleanUp()
     if(m_TextureManager != NULL)
         delete m_TextureManager;
 
+}
+
+GLuint CTextureManager::getName()
+{
+    m_NextTextureName++;
+    glGenTextures(1, &m_NextTextureName);
+    return m_NextTextureName;
 }

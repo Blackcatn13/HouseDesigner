@@ -3,6 +3,7 @@
 
 #include <string>
 #include "Util.h"
+#include <qimage.h>
 
 using namespace std;
 
@@ -12,9 +13,11 @@ public:
     CTexture(void);
     ~CTexture(void);
     void CleanUp();
-    bool Draw();
     bool LoadTexture(string textureName);
+    bool Bind();
 private:
+    QImage texture;
+    GLuint m_Name;
 };
 
 #endif // TEXTURE_H

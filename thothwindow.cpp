@@ -8,6 +8,10 @@
 #include <QDir>
 #include "ProjectManager.h"
 #include "Scenary.h"
+#include <qtimer.h>
+#include <qpalette.h>
+
+#define TICK_PER_SECOND 1000/40
 
 ThothWindow::ThothWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -28,6 +32,13 @@ ThothWindow::ThothWindow(QWidget *parent) :
     TreeFile *m_furnish = new TreeFile(ui->treeViewFurnish, "Furnish");
     m_furnishModel = m_furnish->getQFileSystemModel();
     connect(ui->actionSave_project, SIGNAL(triggered()), this, SLOT(actionSave_project_triggered()));
+    QTimer *tim = new QTimer(this);
+    connect(tim, SIGNAL(timeout()), ui->contextGL, SLOT(updateGL()));
+    tim->start(TICK_PER_SECOND);
+    connect(ui->SldR, SIGNAL(valueChanged(int)), SLOT(onColorChanged()));
+    connect(ui->SldG, SIGNAL(valueChanged(int)), SLOT(onColorChanged()));
+    connect(ui->SldB, SIGNAL(valueChanged(int)), SLOT(onColorChanged()));
+    onColorChanged();
 }
 
 ThothWindow::~ThothWindow()
@@ -164,4 +175,13 @@ void ThothWindow::on_floorBox_valueChanged(int setFloor)
         cs->addNewFloor();
     }
     cs->ChangeFloor(setFloor-1);
+}
+
+void ThothWindow::onColorChanged()
+{
+    m_color.setRgb(ui->SldR->value(), ui->SldG->value(), ui->SldB->value());
+    QPalette pal = ui->ColorW->palette();
+    pal.setColor(QPalette::Window, m_color);
+    ui->ColorW->setPalette(pal);
+    emit colorChanged(m_color);
 }

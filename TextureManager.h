@@ -19,12 +19,13 @@ class CTextureManager
 public:
     ~CTextureManager(void);
     static CTextureManager * GetInstance();
-    bool Draw(string textureName);
+    bool Bind(string TextureName);
     void CleanUp();
+    static GLuint getName();
 private:
-    static CTextureManager*     m_TextureManager;
+    static CTextureManager*    m_TextureManager;
     MapTexture                 m_Textures;
-
+    static GLuint              m_NextTextureName;
     CTextureManager(void);
     bool LoadTexture(string textureName);
 };

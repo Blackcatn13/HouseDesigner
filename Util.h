@@ -43,6 +43,7 @@ enum Views {PERSPECTIVE, ORTHOGONAL, FP};
 enum Modes {EDITOR_2D, EXPLORER, EXPLORER_ISO};
 enum Types {WALL, OBJECT, FLOOR, LIGHT, STAIR, NEITHER};
 enum EditModes {SELECTING, INSERTING, DELETING, NOTHING};
+enum sType {LIGHTSHADER, TEXTURE, SIMPLE, NOSHADER};
 
 struct Point2D{
     GLfloat x;
@@ -61,14 +62,37 @@ struct Point2D{
     }
 };
 
+struct materials
+{
+    string M1;
+    string M2;
+    string M3;
+    string M4;
+};
+
+struct colors
+{
+    CPoint3D c1;
+    CPoint3D c2;
+    CPoint3D c3;
+    CPoint3D c4;
+};
+
+struct textures
+{
+    string ObjectName;
+    materials material;
+    colors color;
+};
+
 struct ModelInfo{
     CPoint3D position;
     CPoint3D rotation;
     CPoint3D scale;
     CPoint3D center;
     string modelName;
-    string textureName;
     float radius;
+    textures textureName;
     Types type;
 
     ModelInfo()
@@ -78,8 +102,12 @@ struct ModelInfo{
         scale = CPoint3D(1, 1, 1);
         center = CPoint3D(0,0,0);
         modelName = "";
-        textureName = "";
         radius = 0;
+        textureName.ObjectName = "";
+        textureName.material.M1 = "";
+        textureName.material.M2 = "";
+        textureName.material.M3 = "";
+        textureName.material.M4 = "";
         type = NEITHER;
     }
 
@@ -90,8 +118,8 @@ struct ModelInfo{
         scale = sc;
         center = c;
         modelName = name;
-        textureName = texture;
         radius = rad;
+        textureName.ObjectName = texture;
         type = t;
     }
 
@@ -111,21 +139,5 @@ struct ModelInfo{
     // fdeixarne alguns com a predefinits.
     // Override metode ==
 };
-
-struct materials
-{
-    string M1;
-    string M2;
-    string M3;
-    string Mask;
-    int nMask;
-};
-
-struct textures
-{
-    string base;
-    materials material;
-};
-
 
 #endif  /* _UTIL_H */

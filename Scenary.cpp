@@ -7,6 +7,7 @@
 #include "CameraOrtho.h"
 #include "CameraPerspective.h"
 #include "FrustrumManager.h"
+#include "Shadermanager.h"
 
 CScenary* CScenary::m_Scenary = 0;
 
@@ -89,6 +90,8 @@ bool CScenary::Draw()
     Camera *cam = CameraManager::GetInstance()->getCurrentCamera();
     Views camType = cam->getCameraType();
     bool drawModel = true;
+    CShaderManager *shader = CShaderManager::GetInstance();
+
     if(activeFloor > m_WallModels.size())
         return false;
     m_PickableWall.clear();
@@ -121,8 +124,8 @@ bool CScenary::Draw()
                 modelManager->Draw(model.modelName);
             glPopMatrix();
         }
-
     }
+
     m_PickableObject.clear();
     for(size_t i = 0; i < m_ObjectModels[activeFloor].size(); ++i)
     {
@@ -145,7 +148,7 @@ bool CScenary::Draw()
                     glutWireSphere(model.radius, 16, 16);
                 glPopMatrix();
             }
-
+            shader->UseActiveShader(model);
             glPushMatrix();
                 glColor3f(1,0,0);
                 glTranslatef(model.position.x, model.position.y, model.position.z);
@@ -155,6 +158,7 @@ bool CScenary::Draw()
                 glScalef(model.scale.x, model.scale.y, model.scale.z);
                 modelManager->Draw(model.modelName);
             glPopMatrix();
+            shader->ReleaseActiveShader();
         }
         else
             qDebug() << "NO printing...";
@@ -540,6 +544,7 @@ void CScenary::ClearFloor()
 {
     m_WallModels[activeFloor].clear();
     m_ObjectModels[activeFloor].clear();
+    m_StairModels[activeFloor].clear();
 }
 
 void CScenary::deleteFloor(int x, int z, int floor)

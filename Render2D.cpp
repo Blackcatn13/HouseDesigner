@@ -387,12 +387,23 @@ void Render2D::AddObject()
     ModelInfo ii;
     ii.modelName = scenary->getActiveModel();
     ii.type = t;
+    int namesize = ii.modelName.find_last_of('.') - ii.modelName.find_last_of('/');
+    string name = ii.modelName.substr(ii.modelName.find_last_of('/') + 1, namesize - 1);
+    ii.textureName.ObjectName = name;
     ii.rotation = CPoint3D(0, rotation * 90, 0);
     ii.position = CPoint3D((firstTile.x + secondTile.x) / 2, scenary->getHeightForModels(), (firstTile.y + secondTile.y) / 2);
     //FIXME: Remove de debug print
-    qDebug() << "Position: " << ii.position.x << ii.position.y << ii.position.z;
+    //qDebug() << "Position: " << ii.position.x << ii.position.y << ii.position.z;
     ii.center = CModelManager::GetInstance()->getModelCenter(ii.modelName);
     ii.radius = CModelManager::GetInstance()->getModelRadius(ii.modelName);
+    //ii.textureName.color.c1 = CPoint3D(0.5, 0.5, 0.5);
+    //ii.textureName.color.c2 = CPoint3D(1.0, 0.1, 0.1);
+    //ii.textureName.color.c3 = CPoint3D(0.5, 0.2, 1.0);
+    //ii.textureName.color.c4 = CPoint3D(0.2, 1.0, 0.1);
+    //ii.textureName.material.M1 = "Models/Textures/Material2.jpg";
+    //ii.textureName.material.M2 = "Models/Textures/Material3.jpg";
+    //ii.textureName.material.M3 = "Models/Textures/Material9.jpg";
+    //ii.textureName.material.M4 = "Models/Textures/Material8.jpg";
     scenary->addModel(ii);
 }
 

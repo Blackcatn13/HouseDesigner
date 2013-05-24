@@ -5,6 +5,8 @@
 #include "Render2D.h"
 #include "RenderManager.h"
 #include "CameraManager.h"
+#include "Shadermanager.h"
+#include "ModelManager.h"
 
 GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent)
 {
@@ -16,6 +18,7 @@ GLWidget::~GLWidget()
 {
     CScenary::getInstance()->CleanUp();
     RenderManager::GetInstance()->CleanUp();
+    CShaderManager::GetInstance()->CleanUp();
 }
 
 /*****************************************************************************
@@ -62,6 +65,11 @@ void GLWidget::initializeGL()
     // 1c) Enable depth testing
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
+
+    shader = new QGLShaderProgram(this->context());
+    CShaderManager::GetInstance()->setShaderProgram(shader);
+    CShaderManager::GetInstance()->CompileShaders(this->context());
+    CShaderManager::GetInstance()->setShader(TEXTURE);
 
 }
 
@@ -113,14 +121,14 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
 {
     RenderManager* RM = RenderManager::GetInstance();
     RM->GetRenderMode(actualMode)->mousePressEvent(event);
-    updateGL();
+    //updateGL();
 }
 
 void GLWidget::mouseReleaseEvent(QMouseEvent *event)
 {
     RenderManager* RM = RenderManager::GetInstance();
     RM->GetRenderMode(actualMode)->mouseReleaseEvent(event);
-    updateGL();
+    //updateGL();
 }
 
 
@@ -132,7 +140,7 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
 {
     RenderManager* RM = RenderManager::GetInstance();
     RM->GetRenderMode(actualMode)->mouseMoveEvent(event, mapToGlobal(QPoint(width/2, heigth/2)).x(), mapToGlobal(QPoint(width/2, heigth/2)).y());
-    updateGL();
+    //updateGL();
 }
 
 void GLWidget::wheelEvent(QWheelEvent *event)
@@ -142,7 +150,7 @@ void GLWidget::wheelEvent(QWheelEvent *event)
         RM->GetRenderMode(actualMode)->AddCameraDistance(0.5);
     else
         RM->GetRenderMode(actualMode)->AddCameraDistance(-0.5);
-    updateGL();
+    //updateGL();
 }
 
 /*****************************************************************************
@@ -175,5 +183,5 @@ void GLWidget::keyPressEvent(QKeyEvent* event)
         RM->GetRenderMode(actualMode)->KeyEvent(event->key());
     }
 
-    updateGL();
+    //updateGL();
 }
