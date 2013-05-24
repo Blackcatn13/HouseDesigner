@@ -55,8 +55,6 @@ void CameraFP::move(float f, float s, bool fly)
         addPos.y = sin(p);
     
     position += addPos;
-    qDebug() << "Position to add: " << addPos.x << " , " << addPos.y << " , " << addPos.z;
-    qDebug() << "Actual Position: " << position.x << " , " << position.y << " , " << position.z;
 }
 
 void CameraFP::AddYawAndPitch(float yaw, float pitch)

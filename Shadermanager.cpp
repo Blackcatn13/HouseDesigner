@@ -114,6 +114,11 @@ void CShaderManager::UseActiveShader(ModelInfo mi)
         CTextureManager::GetInstance()->Bind(PATHTEXTURES + mi.textureName.ObjectName + MASK);
         m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("mask"), 6);
 
+        m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("c1"), mi.textureName.color.c1.x, mi.textureName.color.c1.y, mi.textureName.color.c1.z, 0);
+        m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("c2"), mi.textureName.color.c2.x, mi.textureName.color.c2.y, mi.textureName.color.c2.z, 0);
+        m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("c3"), mi.textureName.color.c3.x, mi.textureName.color.c3.y, mi.textureName.color.c3.z, 0);
+        m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("c4"), mi.textureName.color.c4.x, mi.textureName.color.c4.y, mi.textureName.color.c4.z, 0);
+
         break;
     }
 }

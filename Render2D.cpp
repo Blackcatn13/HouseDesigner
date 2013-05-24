@@ -392,6 +392,14 @@ void Render2D::AddObject()
     ii.textureName.ObjectName = name;
     ii.rotation = CPoint3D(0, rotation * 90, 0);
     ii.position = CPoint3D((firstTile.x + secondTile.x) / 2, scenary->getHeightForModels(), (firstTile.y + secondTile.y) / 2);
+    //ii.textureName.color.c1 = CPoint3D(0.5, 0.5, 0.5);
+    //ii.textureName.color.c2 = CPoint3D(1.0, 0.1, 0.1);
+    //ii.textureName.color.c3 = CPoint3D(0.5, 0.2, 1.0);
+    //ii.textureName.color.c4 = CPoint3D(0.2, 1.0, 0.1);
+    //ii.textureName.material.M1 = "Models/Textures/Material2.jpg";
+    //ii.textureName.material.M2 = "Models/Textures/Material3.jpg";
+    //ii.textureName.material.M3 = "Models/Textures/Material9.jpg";
+    //ii.textureName.material.M4 = "Models/Textures/Material8.jpg";
     scenary->addModel(ii);
 }
 

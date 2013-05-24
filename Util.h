@@ -70,10 +70,19 @@ struct materials
     string M4;
 };
 
+struct colors
+{
+    CPoint3D c1;
+    CPoint3D c2;
+    CPoint3D c3;
+    CPoint3D c4;
+};
+
 struct textures
 {
     string ObjectName;
     materials material;
+    colors color;
 };
 
 struct ModelInfo{
