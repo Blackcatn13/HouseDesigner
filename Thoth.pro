@@ -59,7 +59,8 @@ HEADERS += Camera.h \
     Shadermanager.h \
     Plane.h \
     FrustrumManager.h \
-    Vec3.h
+    Vec3.h \
+    lcdrange.h
 FORMS += thothwindow.ui
 OTHER_FILES += simple.vert \
     simple.frag
