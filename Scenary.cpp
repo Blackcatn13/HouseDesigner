@@ -22,7 +22,8 @@ CScenary::CScenary(QObject*)
     activeFloor = 0;
     m_nFloors = 0;
     addNewFloor();
-    m_sphereDebug = true;
+    m_sphereDebug = false;
+    m_pickingDebug = true;
 }
 
 CScenary::~CScenary(void)
@@ -191,7 +192,7 @@ void CScenary::DrawFloor()
         {
             ModelInfo model = m_FloorModels[activeFloor][i];
             CModelManager::GetInstance()->getModelSize(model.modelName);
-            float rad = CModelManager::GetInstance()->getModelRadius(model.modelName);
+            float rad = CModelManager::GetInstance()->getModelRadius(model.modelName) + 0.2;
             CPoint3D center = CModelManager::GetInstance()->getModelCenter(model.modelName);
             if (camType != FP)
                 drawModel = true;
@@ -240,7 +241,7 @@ void CScenary::DrawCeil()
         {
             ModelInfo model = m_FloorModels[activeFloor + 1][i];
             CModelManager::GetInstance()->getModelSize(model.modelName);
-            float rad = CModelManager::GetInstance()->getModelRadius(model.modelName);
+            float rad = CModelManager::GetInstance()->getModelRadius(model.modelName) + 0.2;
             CPoint3D center = CModelManager::GetInstance()->getModelCenter(model.modelName);
             if (camType != FP)
                 drawModel = true;
@@ -612,6 +613,7 @@ ModelInfo CScenary::getPickedObject(float x, float y, float z, size_t &index)
     for (size_t i = 0; i < m_PickableWall.size(); ++i)
     {
         ModelInfo model = m_WallModels[activeFloor][i];
+        CModelManager::GetInstance()->getModelSize(model.modelName);
         CPoint3D realSize = CModelManager::GetInstance()->getModelRealSize(model.modelName);
         CPoint3D spherePos;
         if (model.rotation.y == 270)
@@ -622,6 +624,14 @@ ModelInfo CScenary::getPickedObject(float x, float y, float z, size_t &index)
             spherePos = CPoint3D(model.position.x+realSize.x/2.f,
                                  model.position.y+realSize.y/2.f,
                                  model.position.z+realSize.z/2.f);
+        if (m_pickingDebug)
+        {
+            glPushMatrix();
+                glTranslatef(spherePos.x, spherePos.y, spherePos.z);
+                glutWireSphere(model.radius, 16, 16);
+            glPopMatrix();
+            qDebug() << "Posx: " << spherePos.x << "Posy: " << spherePos.y << "Posz: " << spherePos.z;
+        }
         if (pow(x-spherePos.x,2) + pow(y-spherePos.y,2)
                 + pow(y-spherePos.z,2) <= pow(model.radius,2))
         {
