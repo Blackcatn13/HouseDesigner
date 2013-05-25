@@ -139,34 +139,58 @@ std::string CProjectManager::getInfoFromObject(int currentFloor, ModelInfo objec
     int currentPathLength = QDir::currentPath().size();
     std::string currentPath = std::string(QDir::currentPath().toUtf8().data());
     
+    std::string modelname = object.modelName;
     if(std::string::npos != object.modelName.find(currentPath))
-        info << object.modelName.substr(currentPathLength) << " ";
+        modelname = object.modelName.substr(currentPathLength);
     else
-        info << object.modelName << " ";
+        modelname = object.modelName;
+    if(modelname[0] != '/')
+        info << '/';
+    info << modelname << " ";
 
     std::string texture = object.textureName.ObjectName;
     if(texture.empty())
         texture = "NO_TEXTURE";
+    else if(std::string::npos != object.textureName.ObjectName.find(currentPath))
+        texture = object.textureName.ObjectName.substr(currentPathLength);
+    if(texture[0] != '/' && texture != "NO_TEXTURE")
+        info << '/';
     info << texture << " ";
 
     texture = object.textureName.material.M1;
     if(texture.empty())
         texture = "NO_TEXTURE";
+    else if(std::string::npos != object.textureName.material.M1.find(currentPath))
+        texture = object.textureName.material.M1.substr(currentPathLength);
+    if(texture[0] != '/' && texture != "NO_TEXTURE")
+        info << '/';
     info << texture << " ";
 
     texture = object.textureName.material.M2;
     if(texture.empty())
         texture = "NO_TEXTURE";
+    else if(std::string::npos != object.textureName.material.M2.find(currentPath))
+        texture = object.textureName.material.M2.substr(currentPathLength);
+    if(texture[0] != '/' && texture != "NO_TEXTURE")
+        info << '/';
     info << texture << " ";
 
     texture = object.textureName.material.M3;
     if(texture.empty())
         texture = "NO_TEXTURE";
+    else if(std::string::npos != object.textureName.material.M3.find(currentPath))
+        texture = object.textureName.material.M3.substr(currentPathLength);
+    if(texture[0] != '/' && texture != "NO_TEXTURE")
+        info << '/';
     info << texture << " ";
 
     texture = object.textureName.material.M4;
     if(texture.empty())
         texture = "NO_TEXTURE";
+    else if(std::string::npos != object.textureName.material.M4.find(currentPath))
+        texture = object.textureName.material.M4.substr(currentPathLength);
+    if(texture[0] != '/' && texture != "NO_TEXTURE")
+        info << '/';
     info << texture << " ";
 
     info << object.textureName.color.c1.x << " ";
