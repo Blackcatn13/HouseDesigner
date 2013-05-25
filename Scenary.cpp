@@ -605,7 +605,9 @@ bool CScenary::getStairCollition(CPoint3D s, int rotation)
     return (getStair2WallCollision(s, rotation) || getStair2ObjectCollision(s, rotation) || getStair2StairCollision(s, rotation));
 }
 
-ModelInfo CScenary::getPickedObject(float x, float y, float z, size_t &index)
+
+
+ModelInfo CScenary::getPickedObject3D(float x, float y, float z, size_t &index)
 {
     ModelInfo model;
     //Pickable wall
@@ -643,7 +645,6 @@ ModelInfo CScenary::getPickedObject(float x, float y, float z, size_t &index)
             return model;
         }
     }
-
 
     //Pickable Stair
     for (size_t i = 0; i < m_PickableStair.size(); ++i)

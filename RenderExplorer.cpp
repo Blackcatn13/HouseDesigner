@@ -100,7 +100,7 @@ void RenderExplorer::mousePressEvent(QMouseEvent *event)
     WY = floor((WY*2)/2 + 0.5);
     WZ = floor((WZ*2)/2 + 0.5);
     qDebug() << WX << " " << WY << " " << WZ;
-    ModelInfo pickedModel = CScenary::getInstance()->getPickedObject(WX, WY, WZ, indx);
+    ModelInfo pickedModel = CScenary::getInstance()->getPickedObject3D(WX, WY, WZ, indx);
     if (indx != -1)
     {
         selectedModel = pickedModel;

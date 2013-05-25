@@ -162,7 +162,7 @@ public:
     void deleteFloor(int x, int z, int floor);
 
     bool getStairCollition(CPoint3D s, int rotation);
-    ModelInfo getPickedObject(float x, float y, float z, size_t &index);
+    ModelInfo getPickedObject3D(float x, float y, float z, size_t &index);
 private:
     CScenary(QObject *parent = 0);
     /*

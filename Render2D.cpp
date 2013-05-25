@@ -178,14 +178,27 @@ void Render2D::mousePressEvent(QMouseEvent *event)
         }
         break;
     case SELECTING:
+    {
         float WX;
         float WY;
         float WZ;
+        size_t indx;
         getWorldMouseCoord(x,y, WX, WZ);
         WX = floor((WX*2)/2 + 0.5);
         WY = floor((WY*2)/2 + 0.5);
         WZ = floor((WZ*2)/2 + 0.5);
         qDebug() << "X coord: " << WX << "Y coord: " << WZ;
+        ModelInfo pickedModel = CScenary::getInstance()->getPickedObject3D(WX, 0.0f,  WZ, indx);
+        if (indx != -1)
+        {
+//            selectedModel = pickedModel;
+//            selectedPosition = indx;
+//            emit changeTab();
+            //Now we get de pickedModel (info of the picked model) and own index (indx);
+            qDebug() << "pickedModel" << pickedModel.modelName.c_str() << "type" << pickedModel.type << "index" << indx;
+            //qDebug() << "Index" << indx;
+        }
+    }
         break;
     case DELETING:
         break;
@@ -353,7 +366,6 @@ void Render2D::DrawInverseQuad1()
 
 void Render2D::MoveQuad(float wx, float wz)
 {
-    CScenary *scenary = CScenary::getInstance();
     int rtx = (int)wx;
     int rty = (int)wz;
     firstTile.x = rtx;
