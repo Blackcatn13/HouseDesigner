@@ -124,7 +124,12 @@ std::string CProjectManager::getInfoFromObject(int currentFloor, ModelInfo objec
     info << object.scale.z << " ";
 
     int currentPathLength = QDir::currentPath().size();
-    info << object.modelName.substr(currentPathLength) << " ";
+    std::string currentPath = std::string(QDir::currentPath().toUtf8().data());
+    
+    if(std::string::npos != object.modelName.find(currentPath))
+        info << object.modelName.substr(currentPathLength) << " ";
+    else
+        info << object.modelName << " ";
 
     std::string texture = object.textureName.ObjectName;
     if(texture.empty())
