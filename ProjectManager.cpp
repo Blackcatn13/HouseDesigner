@@ -123,6 +123,12 @@ std::string CProjectManager::getInfoFromObject(int currentFloor, ModelInfo objec
     info << object.scale.y << " ";
     info << object.scale.z << " ";
 
+    info << object.center.x << " ";
+    info << object.center.y << " ";
+    info << object.center.z << " ";
+
+    info << object.radius << " ";
+
     int currentPathLength = QDir::currentPath().size();
     std::string currentPath = std::string(QDir::currentPath().toUtf8().data());
     
@@ -178,6 +184,12 @@ ModelInfo CProjectManager::getObjectFromInfo(std::string line, int &currentFloor
     iss >> info.scale.x;
     iss >> info.scale.y;
     iss >> info.scale.z;
+
+    iss >> info.center.x;
+    iss >> info.center.y;
+    iss >> info.center.z;
+
+    iss >> info.radius;
 
     std::string model, texture;
     iss >> model;
