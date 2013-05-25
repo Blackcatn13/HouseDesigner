@@ -113,7 +113,7 @@ bool CScenary::Draw()
             }
             //Add pickable object to vector.
             m_PickableWall.push_back(std::make_pair(model, i));
-            //shader->UseActiveShader(model);
+            shader->UseActiveShader(model);
             glPushMatrix();
                 glColor3f(0,1,0);
                 glTranslatef(model.position.x, model.position.y, model.position.z);
@@ -123,7 +123,7 @@ bool CScenary::Draw()
                 glScalef(model.scale.x, model.scale.y, model.scale.z);
                 modelManager->Draw(model.modelName);
             glPopMatrix();
-            //shader->ReleaseActiveShader();
+            shader->ReleaseActiveShader();
         }
     }
 
@@ -198,7 +198,7 @@ void CScenary::DrawFloor()
                     glRotatef(model.rotation.x, 1, 0 ,0);
                     glRotatef(model.rotation.y, 0, 1 ,0);
                     glRotatef(model.rotation.z, 0, 0 ,1);
-                    glScalef(model.scale.x, model.scale.y, model.scale.z);
+                    glScalef(m_gridMaxX, model.scale.y, -m_gridMaxZ);
                     modelManager->Draw(model.modelName);
                 glPopMatrix();
                 //shader->ReleaseActiveShader();
@@ -237,7 +237,7 @@ void CScenary::DrawCeil()
                     glRotatef(model.rotation.x, 1, 0 ,0);
                     glRotatef(model.rotation.y, 0, 1 ,0);
                     glRotatef(model.rotation.z, 0, 0 ,1);
-                    glScalef(model.scale.x, model.scale.y, model.scale.z);
+                    glScalef(m_gridMaxX, model.scale.y, -m_gridMaxZ);
                     modelManager->Draw(model.modelName);
                 glPopMatrix();
                 //shader->ReleaseActiveShader();
@@ -275,7 +275,7 @@ void CScenary::DrawStairs()
             {
                 //Add pickable object to vector.
                 m_PickableStair.push_back(std::make_pair(model, i));
-                //shader->UseActiveShader(model);
+                shader->UseActiveShader(model);
                 glPushMatrix();
                     glColor3f(0, 0, 1);
                     glTranslatef(model.position.x, model.position.y, model.position.z);
@@ -285,7 +285,7 @@ void CScenary::DrawStairs()
                     glScalef(model.scale.x, model.scale.y, model.scale.z);
                     modelManager->Draw(model.modelName);
                 glPopMatrix();
-                //shader->ReleaseActiveShader();
+                shader->ReleaseActiveShader();
             }
         }
     }
@@ -532,19 +532,13 @@ void CScenary::fillFloor()
     {
         if(m_FloorModels[i].size() == 0)
         {
-            for(int x = 0; x < m_gridMaxX; ++x)
-            {
-                for(int z = 1; z <= m_gridMaxZ; ++z)
-                {
-                    ModelInfo mi;
-                    mi.rotation = CPoint3D();
-                    mi.scale = CPoint3D(1,1,1);
-                    mi.type = FLOOR;
-                    mi.modelName = "Models/FloorPad.obj";
-                    mi.position = CPoint3D(x, i*HEIGTH, z);
-                    m_FloorModels[i].push_back(mi);
-                }
-            }
+            ModelInfo mi;
+            mi.rotation = CPoint3D();
+            mi.scale = CPoint3D(1,1,1);
+            mi.type = FLOOR;
+            mi.modelName = "Models/FloorPad.obj";
+            mi.position = CPoint3D(0, i*HEIGTH, 0);
+            m_FloorModels[i].push_back(mi);
         }
     }
 }
