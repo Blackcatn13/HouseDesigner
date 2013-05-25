@@ -23,7 +23,6 @@ CScenary::CScenary(QObject*)
     m_nFloors = 0;
     addNewFloor();
     m_sphereDebug = false;
-    m_pickingDebug = true;
 }
 
 CScenary::~CScenary(void)

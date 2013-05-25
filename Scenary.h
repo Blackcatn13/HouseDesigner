@@ -248,7 +248,6 @@ private:
     //Debug frustrum culling.
     int m_printM;
     bool m_sphereDebug;
-    bool m_pickingDebug;
 signals:
     void setNameModel(string name);
 };
