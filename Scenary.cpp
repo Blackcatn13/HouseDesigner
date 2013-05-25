@@ -99,6 +99,14 @@ bool CScenary::Draw()
         ModelInfo model = m_WallModels[activeFloor][i];
         CPoint3D realSize = CModelManager::GetInstance()->getModelRealSize(model.modelName);
         CPoint3D spherePos;
+        if (model.rotation.y == 270)
+            spherePos = CPoint3D(model.position.x+realSize.z/2.f,
+                                 model.position.y+realSize.y/2.f,
+                                 model.position.z+realSize.x/2.f);
+        else
+            spherePos = CPoint3D(model.position.x+realSize.x/2.f,
+                                 model.position.y+realSize.y/2.f,
+                                 model.position.z+realSize.z/2.f);
         if (camType != FP)
             drawModel = true;
         else
@@ -600,11 +608,9 @@ bool CScenary::getStairCollition(CPoint3D s, int rotation)
 ModelInfo CScenary::getPickedObject(float x, float y, float z, size_t &index)
 {
     ModelInfo model;
-    size_t indx;
 
     for (size_t i = 0; i < m_PickableWall.size(); ++i)
     {
-        model = m_PickableWall[i].first;
         if (pow(x-model.position.x,2) + pow(y-model.position.y,2)
                 + pow(y-model.position.y,2) <= pow(model.radius,2))
         {
