@@ -35,11 +35,12 @@ bool CProjectManager::SaveMap(string fileName)
     ofstream file;
     file.open(fileName.c_str());
     int totalFloors = walls.size();
+    int currentFloor = 0;
 
     file << totalFloors << endl;
     file << scenary->getGridMaxX() << " " << scenary->getGridMaxZ()<< endl;
 
-    for(int currentFloor = 0; currentFloor < totalFloors; ++currentFloor)
+    for(; currentFloor < totalFloors; ++currentFloor)
     {
         for(int index = 0; index < walls[currentFloor].size(); ++index)
             file << getInfoFromObject(currentFloor, walls[currentFloor][index]) << endl;
@@ -49,6 +50,11 @@ bool CProjectManager::SaveMap(string fileName)
             file << getInfoFromObject(currentFloor, stairs[currentFloor][index]) << endl;
         for(int index = 0; index < floors[currentFloor].size(); ++index)
             file << getInfoFromObject(currentFloor, floors[currentFloor][index]) << endl;
+    }
+    for(int index = 0; index < floors[currentFloor].size(); ++index)
+    {
+        currentFloor;
+        file << getInfoFromObject(currentFloor, floors[currentFloor][index]) << endl;
     }
     file.close();
 
@@ -83,6 +89,7 @@ bool CProjectManager::LoadMap(string fileName)
             stairs.push_back( vector<ModelInfo>());
             floors.push_back( vector<ModelInfo>());
         }
+        floors.push_back( vector<ModelInfo>());
 
         while(getline(file, line))
         {
@@ -162,6 +169,19 @@ std::string CProjectManager::getInfoFromObject(int currentFloor, ModelInfo objec
         texture = "NO_TEXTURE";
     info << texture << " ";
 
+    info << object.textureName.color.c1.x << " ";
+    info << object.textureName.color.c1.y << " ";
+    info << object.textureName.color.c1.z << " ";
+    info << object.textureName.color.c2.x << " ";
+    info << object.textureName.color.c2.y << " ";
+    info << object.textureName.color.c2.z << " ";
+    info << object.textureName.color.c3.x << " ";
+    info << object.textureName.color.c3.y << " ";
+    info << object.textureName.color.c3.z << " ";
+    info << object.textureName.color.c4.x << " ";
+    info << object.textureName.color.c4.y << " ";
+    info << object.textureName.color.c4.z << " ";
+
     info << object.type;
 
     return info.str();
@@ -217,6 +237,19 @@ ModelInfo CProjectManager::getObjectFromInfo(std::string line, int &currentFloor
     iss >> texture;
     if(texture != "NO_TEXTURE")
         info.textureName.material.M4 = QDir::currentPath().toUtf8().constData() + texture;
+
+    iss >> info.textureName.color.c1.x;
+    iss >> info.textureName.color.c1.y;
+    iss >> info.textureName.color.c1.z;
+    iss >> info.textureName.color.c2.x;
+    iss >> info.textureName.color.c2.y;
+    iss >> info.textureName.color.c2.z;
+    iss >> info.textureName.color.c3.x;
+    iss >> info.textureName.color.c3.y;
+    iss >> info.textureName.color.c3.z;
+    iss >> info.textureName.color.c4.x;
+    iss >> info.textureName.color.c4.y;
+    iss >> info.textureName.color.c4.z;
 
     int type;
     iss >> type;
