@@ -163,6 +163,7 @@ public:
 
     bool getStairCollition(CPoint3D s, int rotation);
     ModelInfo getPickedObject(float x, float y, float z, size_t &index);
+    void ChangeModelInfo(ModelInfo mi, size_t pos);
 private:
     CScenary(QObject *parent = 0);
     /*
@@ -231,7 +232,6 @@ private:
     bool getObject2StairCollision(ModelInfo mi);
 
     bool getWall2StairCollision(ModelInfo mi);
-
     
     /*
         Actual max X grid value

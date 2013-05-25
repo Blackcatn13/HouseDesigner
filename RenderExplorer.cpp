@@ -4,11 +4,13 @@
 #include "Camera.h"
 #include <qcursor.h>
 #include <qwidget.h>
+#include "Shadermanager.h"
 
 RenderExplorer::RenderExplorer()
 {
     camera = CameraManager::GetInstance()->GetCamera(FP);
     fly = false;
+    mouseMove = true;
 }
 
 RenderExplorer::~RenderExplorer()
@@ -19,6 +21,7 @@ RenderExplorer::~RenderExplorer()
 
 void RenderExplorer::Draw()
 {
+    CShaderManager::GetInstance()->setShader(TEXTURE);
     camera->update();
     CScenary * scene = CScenary::getInstance();
     scene->DrawAxis();
@@ -119,15 +122,19 @@ void RenderExplorer::mouseReleaseEvent(QMouseEvent *event)
 
 void RenderExplorer::mouseMoveEvent(QMouseEvent *event, int x, int y)
 {
+    
     float yaw, pitch;
-    Point2D mousePos(event->pos().x(), event->pos().y());
+    if(mouseMove)
+    {
+        Point2D mousePos(event->pos().x(), event->pos().y());
 
-    Point2D mouseRelPos(mousePos.x - width/2, mousePos.y - heigth/2);
-    yaw = mouseRelPos.x *0.1;
-    pitch = -mouseRelPos.y * 0.1;
-    camera->AddYawAndPitch(yaw, pitch);
+        Point2D mouseRelPos(mousePos.x - width/2, mousePos.y - heigth/2);
+        yaw = mouseRelPos.x *0.1;
+        pitch = -mouseRelPos.y * 0.1;
+        camera->AddYawAndPitch(yaw, pitch);
 
-    QCursor::setPos(QPoint(x,y));
+        QCursor::setPos(QPoint(x,y));
+    }
 }
 
 void RenderExplorer::getWorldMouseCoord(int x, int y, float &wx, float &wy, float &wz)
@@ -150,4 +157,33 @@ void RenderExplorer::getWorldMouseCoord(int x, int y, float &wx, float &wy, floa
     wx = rx;
     wy = ry;
     wz = rz;
+}
+
+void RenderExplorer::setMouseMove(bool m)
+{
+    mouseMove = m;
+}
+
+void RenderExplorer::changeModelTexture(ModelInfo mi, int pos)
+{
+    switch(pos)
+    {
+    case 1:
+        selectedModel.textureName.color.c1 = mi.textureName.color.c1;
+        selectedModel.textureName.material.M1 = mi.textureName.material.M1;
+        break;
+    case 2:
+        selectedModel.textureName.color.c2 = mi.textureName.color.c2;
+        selectedModel.textureName.material.M2 = mi.textureName.material.M2;
+        break;
+    case 3:
+        selectedModel.textureName.color.c3 = mi.textureName.color.c3;
+        selectedModel.textureName.material.M3 = mi.textureName.material.M3;
+        break;
+    case 4:
+        selectedModel.textureName.color.c4 = mi.textureName.color.c4;
+        selectedModel.textureName.material.M4 = mi.textureName.material.M4;
+        break;
+    }
+    CScenary::getInstance()->ChangeModelInfo(selectedModel, selectedPosition);
 }

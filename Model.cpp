@@ -10,6 +10,7 @@ CModel::CModel(void)
     size = CPoint3D();
     center = CPoint3D(0,0,0);
     radius = 0;
+    listName = 0;
 }
 
 
@@ -28,7 +29,14 @@ bool CModel::LoadModel(string modelName)
 
 bool CModel::Draw()
 {
-    RecursiveRender(scene->mRootNode);
+    if(!glIsList(listName))
+    {
+        listName = glGenLists(1);
+        glNewList(listName, GL_COMPILE);
+        RecursiveRender(scene->mRootNode);
+        glEndList();
+    }
+    glCallList(listName);
     return true;
 }
 
