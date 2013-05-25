@@ -182,17 +182,25 @@ void CScenary::DrawFloor()
         for(size_t i = 0; i < m_FloorModels[activeFloor].size(); ++i)
         {
             ModelInfo model = m_FloorModels[activeFloor][i];
+            CModelManager::GetInstance()->getModelSize(model.modelName);
+            float rad = CModelManager::GetInstance()->getModelRadius(model.modelName);
+            CPoint3D center = CModelManager::GetInstance()->getModelCenter(model.modelName);
             if (camType != FP)
                 drawModel = true;
             else
             {
-                //FIXME: Control drawing of ceil and floor.
-                drawModel = true;
-                //drawModel = CFrustrumManager::GetInstance()->sphereInFrustum(
-                            //model.position, model.radius);
+                drawModel = CFrustrumManager::GetInstance()->sphereInFrustum(
+                            model.position+center, rad);
             }
             if(drawModel)
             {
+//                if (m_sphereDebug)
+//                {
+//                    glPushMatrix();
+//                        glTranslatef(model.position.x + center.x, model.position.y + center.y, model.position.z + center.z);
+//                        glutWireSphere(rad, 16, 16);
+//                    glPopMatrix();
+//                }
                 //Add pickable object to vector.
                 m_PickableFloor.push_back(std::make_pair(model, i));
                 //shader->UseActiveShader(model);
@@ -267,7 +275,7 @@ void CScenary::DrawStairs()
                 drawModel = true;
             else
                 drawModel = CFrustrumManager::GetInstance()->sphereInFrustum(
-                            model.position, 1);
+                            model.position, 0.5f);
             if (m_sphereDebug)
             {
                 glPushMatrix();
