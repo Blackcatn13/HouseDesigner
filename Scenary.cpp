@@ -292,7 +292,7 @@ void CScenary::DrawStairs()
                 drawModel = true;
             else
                 drawModel = CFrustrumManager::GetInstance()->sphereInFrustum(
-                            model.position, 0.5f);
+                            model.position, 1.f);
             if (m_sphereDebug)
             {
                 glPushMatrix();
@@ -612,7 +612,7 @@ ModelInfo CScenary::getPickedObject(float x, float y, float z, size_t &index)
     //Pickable wall
     for (size_t i = 0; i < m_PickableWall.size(); ++i)
     {
-        ModelInfo model = m_WallModels[activeFloor][i];
+        ModelInfo model = m_PickableWall[i].first;
         CModelManager::GetInstance()->getModelSize(model.modelName);
         CPoint3D realSize = CModelManager::GetInstance()->getModelRealSize(model.modelName);
         CPoint3D spherePos;
@@ -624,16 +624,8 @@ ModelInfo CScenary::getPickedObject(float x, float y, float z, size_t &index)
             spherePos = CPoint3D(model.position.x+realSize.x/2.f,
                                  model.position.y+realSize.y/2.f,
                                  model.position.z+realSize.z/2.f);
-        if (m_pickingDebug)
-        {
-            glPushMatrix();
-                glTranslatef(spherePos.x, spherePos.y, spherePos.z);
-                glutWireSphere(model.radius, 16, 16);
-            glPopMatrix();
-            qDebug() << "Posx: " << spherePos.x << "Posy: " << spherePos.y << "Posz: " << spherePos.z;
-        }
         if (pow(x-spherePos.x,2) + pow(y-spherePos.y,2)
-                + pow(y-spherePos.z,2) <= pow(model.radius,2))
+                + pow(z-spherePos.z,2) <= pow(model.radius,2))
         {
             index = m_PickableWall[i].second;
             return model;
@@ -644,8 +636,9 @@ ModelInfo CScenary::getPickedObject(float x, float y, float z, size_t &index)
     for (size_t i = 0; i < m_PickableObject.size(); ++i)
     {
         model = m_PickableObject[i].first;
-        if (pow(x-model.position.x,2) + pow(y-model.position.y,2)
-                + pow(y-model.position.z,2) <= pow(model.radius,2))
+        CPoint3D spherePos = model.position + model.center;
+        if (pow(x-spherePos.x,2) + pow(y-spherePos.y,2)
+                + pow(z-spherePos.z,2) <= pow(model.radius,2))
         {
             index = m_PickableObject[i].second;
             return model;
@@ -658,7 +651,7 @@ ModelInfo CScenary::getPickedObject(float x, float y, float z, size_t &index)
     {
         model = m_PickableStair[i].first;
         if (pow(x-model.position.x,2) + pow(y-model.position.y,2)
-                + pow(y-model.position.z,2) <= pow(model.radius,2))
+                + pow(z-model.position.z,2) <= pow(model.radius,2))
         {
             index = m_PickableStair[i].second;
             return model;
@@ -666,17 +659,17 @@ ModelInfo CScenary::getPickedObject(float x, float y, float z, size_t &index)
     }
 
     //Pickable Floor
-    for (size_t i = 0; i < m_PickableFloor.size(); ++i)
-    {
-        model = m_PickableFloor[i].first;
-        CPoint3D absoluteCenter = model.position + model.center;
-        if (pow(x-absoluteCenter.x,2) + pow(y-absoluteCenter.y,2)
-                + pow(y-absoluteCenter.z,2) <= pow(model.radius,2))
-        {
-            index = m_PickableFloor[i].second;
-            return model;
-        }
-    }
+//    for (size_t i = 0; i < m_PickableFloor.size(); ++i)
+//    {
+//        model = m_PickableFloor[i].first;
+//        CPoint3D absoluteCenter = model.position + model.center;
+//        if (pow(x-absoluteCenter.x,2) + pow(y-absoluteCenter.y,2)
+//                + pow(z-absoluteCenter.z,2) <= pow(model.radius,2))
+//        {
+//            index = m_PickableFloor[i].second;
+//            return model;
+//        }
+//    }
     index = -1;
     return ModelInfo();
 }
