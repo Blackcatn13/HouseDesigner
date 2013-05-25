@@ -21,9 +21,9 @@ CameraOrtho::~CameraOrtho()
 {
 }
 
-void CameraOrtho::setProjection(int w, int h)
+void CameraOrtho::setProjection(int, int)
 {
-    glViewport(0, 0, w, h);
+    glViewport(0, 0, INIT_WIDTH, INIT_HEIGHT);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(-0.1, 10 - orthoZoom, -0.1, 10 - orthoZoom, 0.01, 1000);

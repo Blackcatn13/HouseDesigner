@@ -122,11 +122,10 @@ bool CScenary::Draw()
                 glRotatef(model.rotation.z, 0, 0 ,1);
                 glScalef(model.scale.x, model.scale.y, model.scale.z);
                 modelManager->Draw(model.modelName);
-            glPopMatrix();
-            shader->ReleaseActiveShader();
+            glPopMatrix(); 
         }
     }
-
+    shader->ReleaseActiveShader();
     m_PickableObject.clear();
     for(size_t i = 0; i < m_ObjectModels[activeFloor].size(); ++i)
     {
@@ -159,9 +158,9 @@ bool CScenary::Draw()
                 glScalef(model.scale.x, model.scale.y, model.scale.z);
                 modelManager->Draw(model.modelName);
             glPopMatrix();
-            shader->ReleaseActiveShader();
         }
     }
+    shader->ReleaseActiveShader();
     return true;
 }
 
@@ -191,7 +190,7 @@ void CScenary::DrawFloor()
             {
                 //Add pickable object to vector.
                 m_PickableFloor.push_back(std::make_pair(model, i));
-                //shader->UseActiveShader(model);
+                shader->UseActiveShader(model);
                 glPushMatrix();
                     glColor3f(1,1,0);
                     glTranslatef(model.position.x, model.position.y, model.position.z);
@@ -201,7 +200,7 @@ void CScenary::DrawFloor()
                     glScalef(m_gridMaxX, model.scale.y, -m_gridMaxZ);
                     modelManager->Draw(model.modelName);
                 glPopMatrix();
-                //shader->ReleaseActiveShader();
+                shader->ReleaseActiveShader();
             }
         }
     }
@@ -230,7 +229,7 @@ void CScenary::DrawCeil()
             }
             if(drawModel)
             {
-                //shader->UseActiveShader(model);
+                shader->UseActiveShader(model);
                 glPushMatrix();
                     glColor3f(1,0,1);
                     glTranslatef(model.position.x, model.position.y, model.position.z);
@@ -240,7 +239,7 @@ void CScenary::DrawCeil()
                     glScalef(m_gridMaxX, model.scale.y, -m_gridMaxZ);
                     modelManager->Draw(model.modelName);
                 glPopMatrix();
-                //shader->ReleaseActiveShader();
+                shader->ReleaseActiveShader();
             }
         }
     }
@@ -537,6 +536,8 @@ void CScenary::fillFloor()
             mi.scale = CPoint3D(1,1,1);
             mi.type = FLOOR;
             mi.modelName = "Models/FloorPad.obj";
+            mi.textureName.material.M1 = "BaseTextures/floor.jpg";
+            mi.textureName.color.c1 = CPoint3D(1,1,1);
             mi.position = CPoint3D(0, i*HEIGTH, 0);
             m_FloorModels[i].push_back(mi);
         }

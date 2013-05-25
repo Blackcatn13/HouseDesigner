@@ -9,6 +9,7 @@ CShaderManager::CShaderManager(void)
     //m_ShadersName[LIGHTSHADER] = "Shaders/phong";
     m_ShadersName[TEXTURE] = "Shaders/mask";
     m_ShadersName[SIMPLE] = "Shaders/texture";
+    m_ShadersName[ONETEXTURE] = "Shaders/onetexture";
     //selShader init.
     m_SelShader = NOSHADER;
 }
@@ -67,6 +68,12 @@ bool CShaderManager::setShader(sType type)
 void CShaderManager::UseActiveShader(ModelInfo mi)
 {
     //m_ShaderP->link();
+    if(mi.type == WALL || mi.type == FLOOR)
+    {
+        if(m_SelShader != ONETEXTURE)
+            setShader(ONETEXTURE);
+    }
+
     bool r;
     r = m_ShaderP->bind();
     if(!r)
@@ -83,9 +90,14 @@ void CShaderManager::UseActiveShader(ModelInfo mi)
         glActiveTexture(GL_TEXTURE1);
         CTextureManager::GetInstance()->Bind(PATHTEXTURES + mi.textureName.ObjectName + OVER);
         m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("over"), 1);
-        
         break;
+    case ONETEXTURE:
+        glActiveTexture(GL_TEXTURE0);
+        CTextureManager::GetInstance()->Bind(mi.textureName.material.M1);
+        m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("base"), 0);
 
+        m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("m1color"), mi.textureName.color.c1.x, mi.textureName.color.c1.y, mi.textureName.color.c1.z, 0);
+        break;
     case TEXTURE:
         glActiveTexture(GL_TEXTURE0);
         CTextureManager::GetInstance()->Bind(PATHTEXTURES + mi.textureName.ObjectName + PNG);
@@ -120,7 +132,6 @@ void CShaderManager::UseActiveShader(ModelInfo mi)
         m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("c2"), mi.textureName.color.c2.x, mi.textureName.color.c2.y, mi.textureName.color.c2.z, 0);
         m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("c3"), mi.textureName.color.c3.x, mi.textureName.color.c3.y, mi.textureName.color.c3.z, 0);
         m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("c4"), mi.textureName.color.c4.x, mi.textureName.color.c4.y, mi.textureName.color.c4.z, 0);
-
         break;
     }
 }
