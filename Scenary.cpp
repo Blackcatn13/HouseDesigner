@@ -231,17 +231,25 @@ void CScenary::DrawCeil()
         for(size_t i = 0; i < m_FloorModels[activeFloor + 1].size(); ++i)
         {
             ModelInfo model = m_FloorModels[activeFloor + 1][i];
+            CModelManager::GetInstance()->getModelSize(model.modelName);
+            float rad = CModelManager::GetInstance()->getModelRadius(model.modelName);
+            CPoint3D center = CModelManager::GetInstance()->getModelCenter(model.modelName);
             if (camType != FP)
                 drawModel = true;
             else
             {
-                //FIXME: Control drawing of ceil and floor.
-                drawModel = true;
-                //drawModel = CFrustrumManager::GetInstance()->sphereInFrustum(
-                            //model.position - 2, model.radius);
+                drawModel = CFrustrumManager::GetInstance()->sphereInFrustum(
+                            model.position+center, rad);
             }
             if(drawModel)
             {
+//                if (m_sphereDebug)
+//                {
+//                    glPushMatrix();
+//                        glTranslatef(model.position.x + center.x, model.position.y + center.y, model.position.z + center.z);
+//                        glutWireSphere(rad, 16, 16);
+//                    glPopMatrix();
+//                }
                 //shader->UseActiveShader(model);
                 glPushMatrix();
                     glColor3f(1,0,1);
