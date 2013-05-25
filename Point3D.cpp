@@ -98,3 +98,8 @@ CPoint3D CPoint3D::operator/(const float val)
 {
     return CPoint3D(x/val, y/val, z/val);
 }
+
+bool CPoint3D::operator ==(const float val)
+{
+    return (x==val && y==val && z==val);
+}
