@@ -17,7 +17,7 @@ RenderManager::RenderManager(QObject*)
     // Afegir els inserts per els renders que falten un cop creats.
 
     // Resize all the render modes camera.
-    SetProjection(INIT_WIDTH, INIT_HEIGHT, EDITOR_2D);
+    //SetProjection(INIT_WIDTH, INIT_HEIGHT, EDITOR_2D)
 
 }
 

@@ -70,6 +70,7 @@ void GLWidget::initializeGL()
     CShaderManager::GetInstance()->setShaderProgram(shader);
     CShaderManager::GetInstance()->CompileShaders(this->context());
     CShaderManager::GetInstance()->setShader(TEXTURE);
+    RenderManager::GetInstance()->GetRenderMode(EDITOR_2D)->SetCameraProjection(INIT_WIDTH, INIT_HEIGHT);
 
 }
 

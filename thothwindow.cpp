@@ -43,8 +43,10 @@ ThothWindow::ThothWindow(QWidget *parent) :
     connect(ui->SldG, SIGNAL(valueChanged(int)), SLOT(onColorChanged()));
     connect(ui->SldB, SIGNAL(valueChanged(int)), SLOT(onColorChanged()));
     onColorChanged();
+    CScenary::getInstance();
     connect(CScenary::getInstance(), SIGNAL(setNameModel(string)), SLOT(getModelName(string)));
     connect(RenderManager::GetInstance(), SIGNAL(sendChangeTab()), SLOT(changeTab()));
+    RenderManager::GetInstance()->GetRenderMode(EDITOR_2D)->SetCameraProjection(INIT_WIDTH, INIT_HEIGHT);
 }
 
 ThothWindow::~ThothWindow()
@@ -77,10 +79,6 @@ void ThothWindow::on_pushButton_4_clicked()
                 CScenary::getInstance()->setActiveModel(info.canonicalFilePath().toStdString());
                 CScenary::getInstance()->setActiveType(STAIR);
             }
-            string path = info.canonicalFilePath().toStdString();
-            int namesize = path.find_last_of('.') - path.find_last_of('/');
-            string name = path.substr(path.find_last_of('/') + 1, namesize - 1);
-            message->setText(QString("Selected model: ").append(QString(name.c_str())));
         }
     }
     ui->contextGL->setFocus();
@@ -112,10 +110,6 @@ void ThothWindow::on_pushButton_clicked()
             qDebug("Create model with path: %s", qPrintable(info.absoluteFilePath()));
             CScenary::getInstance()->setActiveModel(info.canonicalFilePath().toStdString());
                 CScenary::getInstance()->setActiveType(OBJECT);
-            string path = info.canonicalFilePath().toStdString();
-            int namesize = path.find_last_of('.') - path.find_last_of('/');
-            string name = path.substr(path.find_last_of('/') + 1, namesize - 1);
-            message->setText(QString("Selected model: ").append(QString(name.c_str())));
         }
     }
     ui->contextGL->setFocus();
@@ -219,4 +213,5 @@ void ThothWindow::getModelName(string path)
 void ThothWindow::changeTab()
 {
     ui->tabWidget->setCurrentWidget(ui->decorate_tab);
+    ui->tabWidget->grabMouse();
 }
