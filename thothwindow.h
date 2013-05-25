@@ -6,7 +6,9 @@
 #include <QtGui>
 #include "TreeFile.h"
 #include <qcolor.h>
+#include "Util.h"
 
+using namespace std;
 namespace Ui {
 class ThothWindow;
 }
@@ -25,12 +27,16 @@ public:
     ~ThothWindow();
 signals:
     void colorChanged(QColor arg);
+    void changeMouseMove(bool);
+    void changeCursor(Qt::CursorShape);
+    void newModel(ModelInfo, int);
 private slots:
     void on_pushButton_7_clicked();
     void on_pushButton_6_clicked();
     void on_pushButton_5_clicked();
     void on_pushButton_4_clicked();
     void on_pushButton_clicked();
+    void on_colorButton_clicked();
 
     void on_pushButton_2_clicked();
     void actionSave_project_triggered();
@@ -41,7 +47,7 @@ private slots:
     void on_floorBox_valueChanged(int arg1);
 
     void onColorChanged();
-    void getModelName(std::string name);
+    void getModelName(string name);
     void changeTab();
 
 private:
@@ -54,6 +60,7 @@ private:
     QColor m_color;
     QLabel *message;
     QLabel *popUp;
+    std::string textureName;
 };
 
 #endif // THOTHWINDOW_H

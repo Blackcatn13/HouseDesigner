@@ -12,6 +12,8 @@ GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent)
 {
     setMouseTracking(true);
     actualMode = EDITOR_2D;
+    cursor = Qt::ArrowCursor;
+    connect(this, SIGNAL(setMouseMove(bool)), RenderManager::GetInstance()->GetRenderMode(EXPLORER), SLOT(setMouseMove(bool)));
 }
 
 GLWidget::~GLWidget()
@@ -101,7 +103,7 @@ void GLWidget::paintGL()
 
     // Call the draw function of the actual render Mode.
     RenderManager* RM = RenderManager::GetInstance();
-    switch (actualMode)
+    /*switch (actualMode)
     {
     case EXPLORER:
     case EXPLORER_ISO:
@@ -109,7 +111,8 @@ void GLWidget::paintGL()
         break;
     case EDITOR_2D:
         setCursor(Qt::ArrowCursor);
-    }
+    }*/
+    setCursor(cursor);
     RM->GetRenderMode(actualMode)->Draw();
 
 }
@@ -167,12 +170,15 @@ void GLWidget::keyPressEvent(QKeyEvent* event)
         actualMode = EXPLORER;
         cm->setCurrentCamera(FP);
         RM->GetRenderMode(actualMode)->SetCameraProjection(width, heigth);
+        cursor = Qt::CrossCursor;
+        emit setMouseMove(true);
     }
     else if(event->key() == Qt::Key_P)
     {
         actualMode = EDITOR_2D;
         cm->setCurrentCamera(ORTHOGONAL);
         RM->GetRenderMode(actualMode)->SetCameraProjection(width, heigth);
+        cursor = Qt::ArrowCursor;
     }
     else if(event->key() == Qt::Key_C)
     {
@@ -185,4 +191,19 @@ void GLWidget::keyPressEvent(QKeyEvent* event)
     }
 
     //updateGL();
+}
+
+void GLWidget::changeCursor(Qt::CursorShape cur)
+{
+    cursor = cur;
+}
+
+void GLWidget::enterEvent(QEvent *event)
+{
+    if(actualMode == EXPLORER)
+    {
+        emit setMouseMove(true);
+        cursor = Qt::CrossCursor;
+        this->setFocus();
+    }
 }

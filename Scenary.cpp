@@ -149,7 +149,7 @@ bool CScenary::Draw()
                     glutWireSphere(model.radius, 16, 16);
                 glPopMatrix();
             }
-            //shader->UseActiveShader(model);
+            shader->UseActiveShader(model);
             glPushMatrix();
                 glColor3f(1,0,0);
                 glTranslatef(model.position.x, model.position.y, model.position.z);
@@ -159,7 +159,7 @@ bool CScenary::Draw()
                 glScalef(model.scale.x, model.scale.y, model.scale.z);
                 modelManager->Draw(model.modelName);
             glPopMatrix();
-            //shader->ReleaseActiveShader();
+            shader->ReleaseActiveShader();
         }
     }
     return true;
@@ -540,7 +540,7 @@ void CScenary::fillFloor()
                     mi.rotation = CPoint3D();
                     mi.scale = CPoint3D(1,1,1);
                     mi.type = FLOOR;
-                    mi.modelName = "Models/Sin_t_tulo.obj";
+                    mi.modelName = "Models/FloorPad.obj";
                     mi.position = CPoint3D(x, i*HEIGTH, z);
                     m_FloorModels[i].push_back(mi);
                 }
@@ -869,4 +869,23 @@ bool CScenary::getWall2StairCollision(ModelInfo mi)
         }
     }
     return false;
+}
+
+void CScenary::ChangeModelInfo(ModelInfo mi, size_t pos)
+{
+    switch(mi.type)
+    {
+    case WALL:
+        m_WallModels[activeFloor][pos] = mi;
+        break;
+    case STAIR:
+        m_StairModels[activeFloor][pos] = mi;
+        break;
+    case OBJECT:
+        m_ObjectModels[activeFloor][pos] = mi;
+        break;
+    case FLOOR:
+        m_FloorModels[activeFloor][pos] = mi;
+        break;
+    }
 }

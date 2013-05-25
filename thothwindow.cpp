@@ -22,9 +22,11 @@ ThothWindow::ThothWindow(QWidget *parent) :
     ui->contextGL->setFocusPolicy(Qt::StrongFocus);
     ui->contextGL->setFocus();
     message = new QLabel(this);
-    ui->statusBar->showMessage("Ready");
+    popUp = new QLabel(this);
+    ui->statusBar->addWidget(popUp);
     ui->statusBar->addPermanentWidget(message);
     message->setText("No model selected");
+    ui->statusBar->showMessage("Ready", 5000);
     //Tree file.
 
     //treeview of tabs
@@ -43,10 +45,14 @@ ThothWindow::ThothWindow(QWidget *parent) :
     connect(ui->SldG, SIGNAL(valueChanged(int)), SLOT(onColorChanged()));
     connect(ui->SldB, SIGNAL(valueChanged(int)), SLOT(onColorChanged()));
     onColorChanged();
-    CScenary::getInstance();
     connect(CScenary::getInstance(), SIGNAL(setNameModel(string)), SLOT(getModelName(string)));
     connect(RenderManager::GetInstance(), SIGNAL(sendChangeTab()), SLOT(changeTab()));
     RenderManager::GetInstance()->GetRenderMode(EDITOR_2D)->SetCameraProjection(INIT_WIDTH, INIT_HEIGHT);
+    connect(this, SIGNAL(changeMouseMove(bool)), RenderManager::GetInstance()->GetRenderMode(EXPLORER), SLOT(setMouseMove(bool)));
+    connect(this, SIGNAL(changeCursor(Qt::CursorShape)), ui->contextGL, SLOT(changeCursor(Qt::CursorShape)));
+    connect(ui->ColorButton, SIGNAL(clicked(bool)), SLOT(on_colorButton_clicked()));
+    connect(this, SIGNAL(newModel(ModelInfo, int)), RenderManager::GetInstance()->GetRenderMode(EXPLORER), SLOT(changeModelTexture(ModelInfo, int)));
+
 }
 
 ThothWindow::~ThothWindow()
@@ -133,14 +139,21 @@ void ThothWindow::on_pushButton_6_clicked()
 {
     //Select decorate model
     QModelIndex indx = ui->treeViewDecorate->currentIndex();
-    if(indx.isValid())
+    QFileInfo info = m_decorateModel->fileInfo(indx);
+    if(info.isFile())
     {
-        if(m_decorateModel->fileInfo(indx).isFile())
+        if(info.suffix() == QString("jpg") || info.suffix() == QString("png") ||info.suffix() == QString("gif") ||
+            info.suffix() == QString("jpeg") || info.suffix() == QString("bmp") ||info.suffix() == QString("pbm") ||
+            info.suffix() == QString("pgm") || info.suffix() == QString("tiff") || info.suffix() == QString("xbm") ||
+            info.suffix() == QString("xpm"))
         {
-            qDebug("Create model with path: %s", qPrintable(m_decorateModel->fileInfo(indx).absoluteFilePath()));
+            qDebug("Get texture with path: %s", qPrintable(info.absoluteFilePath()));
+            textureName = info.canonicalFilePath().toStdString();
+            int namesize = textureName.find_last_of('.') - textureName.find_last_of('/');
+            string name = textureName.substr(textureName.find_last_of('/') + 1, namesize - 1);
+            message->setText(QString("Selected texture :").append(QString(name.c_str())));
         }
     }
-    ui->contextGL->setFocus();
 }
 
 void ThothWindow::on_pushButton_7_clicked()
@@ -149,12 +162,13 @@ void ThothWindow::on_pushButton_7_clicked()
     QModelIndex indx = ui->treeViewDecorate->currentIndex();
     if(indx.isValid())
     {
-        if(m_decorateModel->fileInfo(indx).isFile())
+        if(textureName.compare("") != 0)
         {
-            qDebug("Delete model with path: %s", qPrintable(m_decorateModel->fileInfo(indx).absoluteFilePath()));
+            textureName = "";
+            message->setText(QString("No texture selected"));
+            ui->statusBar->showMessage("Texture unselected...", 2000);
         }
     }
-    ui->contextGL->setFocus();
 }
 
 void ThothWindow::actionSave_project_triggered()
@@ -213,5 +227,52 @@ void ThothWindow::getModelName(string path)
 void ThothWindow::changeTab()
 {
     ui->tabWidget->setCurrentWidget(ui->decorate_tab);
-    //ui->tabWidget->grabMouse();
+    emit changeMouseMove(false);
+    emit changeCursor(Qt::ArrowCursor);
+}
+
+void ThothWindow::on_colorButton_clicked()
+{
+    ModelInfo mi;
+    int pos = ui->buttonGroup->checkedId();
+    int texture;
+    popUp->setText("");
+    if(pos != -1)
+    {
+        switch(pos)
+        {
+        case -2:
+            qDebug() << "Pressed 1";
+            mi.textureName.color.c1 = CPoint3D(m_color.red()/255.f, m_color.green()/255.f, m_color.blue()/255.f);
+            mi.textureName.material.M1 = textureName;
+            texture = 1;
+            break;
+        case -4:
+            qDebug() << "Pressed 2";
+            mi.textureName.color.c2 = CPoint3D(m_color.red()/255.f, m_color.green()/255.f, m_color.blue()/255.f);
+            mi.textureName.material.M2 = textureName;
+            texture = 2;
+            break;
+        case -3:
+            qDebug() << "Pressed 3";
+            mi.textureName.color.c3 = CPoint3D(m_color.red()/255.f, m_color.green()/255.f, m_color.blue()/255.f);
+            mi.textureName.material.M3 = textureName;
+            texture = 3;
+            break;
+        case -5:
+            qDebug() << "Pressed 4";
+            mi.textureName.color.c4 = CPoint3D(m_color.red()/255.f, m_color.green()/255.f, m_color.blue()/255.f);
+            mi.textureName.material.M4 = textureName;
+            texture = 4;
+            break;
+
+        }
+        ui->statusBar->showMessage("Changing texture to the objet...", 2000);
+        emit newModel(mi, texture);
+    }
+    else
+    {
+        popUp->setText("Select in which texture you want to put it");
+    }
+
 }

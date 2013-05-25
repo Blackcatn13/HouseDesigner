@@ -13,7 +13,8 @@ class GLWidget : public QGLWidget {
 public:
     GLWidget(QWidget *parent = NULL);
     ~GLWidget();
-
+public slots:
+    void changeCursor(Qt::CursorShape);
 protected:
     void initializeGL();
     void resizeGL(int w, int h);
@@ -23,12 +24,15 @@ protected:
     void wheelEvent(QWheelEvent *event);
     void keyPressEvent(QKeyEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
-
+    void enterEvent(QEvent *event);
 private:
     Modes actualMode;
     float width;
     float heigth;
     QGLShaderProgram *shader;
+    Qt::CursorShape cursor;
+signals:
+    void setMouseMove(bool);
 };
 
 #endif  /* _GLWIDGET_H */
