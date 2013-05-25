@@ -101,6 +101,20 @@ CPoint3D CModelManager::getModelSize(string modelName)
     return CPoint3D();
 }
 
+CPoint3D CModelManager::getModelRealSize(string modelName)
+{
+    MapModel::iterator modelIterator;
+    modelIterator = m_Models.find(modelName);
+    if(modelIterator != m_Models.end())
+        return modelIterator->second->getRealSize();
+    else
+    {
+        if(LoadModel(modelName))
+            return getModelRealSize(modelName);
+    }
+    return CPoint3D();
+}
+
 CPoint3D CModelManager::getModelCenter(string modelName)
 {
     MapModel::iterator modelIterator;

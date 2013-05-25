@@ -397,8 +397,6 @@ void Render2D::AddObject()
     ii.textureName.ObjectName = name;
     ii.rotation = CPoint3D(0, rotation * 90, 0);
     ii.position = CPoint3D((firstTile.x + secondTile.x) / 2, scenary->getHeightForModels(), (firstTile.y + secondTile.y) / 2);
-    //FIXME: Remove de debug print
-    //qDebug() << "Position: " << ii.position.x << ii.position.y << ii.position.z;
     ii.center = CModelManager::GetInstance()->getModelCenter(ii.modelName);
     ii.radius = CModelManager::GetInstance()->getModelRadius(ii.modelName);
     ii.textureName.color.c1 = CPoint3D(0.5, 0.5, 0.5);
@@ -419,9 +417,11 @@ void Render2D::AddWall()
     ModelInfo ii;
     ii.modelName = scenary->getActiveModel();
     ii.type = t;
-    ii.center = CModelManager::GetInstance()->getModelCenter(ii.modelName);
-    ii.radius = CModelManager::GetInstance()->getModelRadius(ii.modelName);
-    int angle;
+    CModelManager *cm = CModelManager::GetInstance();
+    //Don't remove getmodelsize! it's needed to calculate the center and radius.
+    cm->getModelSize(ii.modelName);
+    ii.center = cm->getModelCenter(ii.modelName);
+    ii.radius = cm->getModelRadius(ii.modelName);
     int start, end;
     if(firstTile.x == secondTile.x)
     {

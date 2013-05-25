@@ -32,8 +32,7 @@ SOURCES += Camera.cpp \
     Texture.cpp \
     Shadermanager.cpp \
     Plane.cpp \
-    FrustrumManager.cpp \
-    Vec3.cpp
+    FrustrumManager.cpp
 HEADERS += Camera.h \
     GLWidget.h \
     Illumination.h \
@@ -59,7 +58,6 @@ HEADERS += Camera.h \
     Shadermanager.h \
     Plane.h \
     FrustrumManager.h \
-    Vec3.h \
     lcdrange.h
 FORMS += thothwindow.ui
 OTHER_FILES += simple.vert \

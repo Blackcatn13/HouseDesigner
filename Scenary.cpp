@@ -22,7 +22,7 @@ CScenary::CScenary(QObject*)
     activeFloor = 0;
     m_nFloors = 0;
     addNewFloor();
-    m_sphereDebug = false;
+    m_sphereDebug = true;
 }
 
 CScenary::~CScenary(void)
@@ -97,18 +97,22 @@ bool CScenary::Draw()
     for(size_t i = 0; i < m_WallModels[activeFloor].size(); ++i)
     {
         ModelInfo model = m_WallModels[activeFloor][i];
+        CPoint3D realSize = CModelManager::GetInstance()->getModelRealSize(model.modelName);
+        CPoint3D spherePos;
         if (camType != FP)
             drawModel = true;
         else
+        {
             drawModel = CFrustrumManager::GetInstance()->sphereInFrustum(
-                        model.position, 3);
+                        spherePos, 3);
+        }
         if(drawModel)
         {
             if (m_sphereDebug)
             {
                 glPushMatrix();
-                    glTranslatef(model.position.x, model.position.y, model.position.z);
-                    glutWireSphere(3, 16, 16);
+                    glTranslatef(spherePos.x, spherePos.y, spherePos.z);
+                    glutWireSphere(model.radius, 16, 16);
                 glPopMatrix();
             }
             //Add pickable object to vector.
@@ -135,7 +139,7 @@ bool CScenary::Draw()
             drawModel = true;
         else
             drawModel = CFrustrumManager::GetInstance()->sphereInFrustum(
-                        model.position, model.radius);
+                        CPoint3D(model.position.x + model.center.x, model.position.y + model.center.y, model.position.z + model.center.z), model.radius);
         if(drawModel)
         {
             //Add pickable object to vector.
@@ -145,7 +149,7 @@ bool CScenary::Draw()
             if (m_sphereDebug)
             {
                 glPushMatrix();
-                    glTranslatef(model.position.x, model.position.y, model.position.z);
+                    glTranslatef(model.position.x + model.center.x, model.position.y + model.center.y, model.position.z + model.center.z);
                     glutWireSphere(model.radius, 16, 16);
                 glPopMatrix();
             }

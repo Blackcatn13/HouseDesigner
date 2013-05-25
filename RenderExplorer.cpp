@@ -107,7 +107,7 @@ void RenderExplorer::mousePressEvent(QMouseEvent *event)
         selectedPosition = indx;
         emit changeTab();
         //Now we get de pickedModel (info of the picked model) and own index (indx);
-        //qDebug() << "pickedModel" << pickedModel.modelName.c_str() << "type" << pickedModel.type;
+        qDebug() << "pickedModel" << pickedModel.modelName.c_str() << "type" << pickedModel.type;
         //qDebug() << "Index" << indx;
     }
 }
