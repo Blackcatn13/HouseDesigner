@@ -608,61 +608,65 @@ bool CScenary::getStairCollition(CPoint3D s, int rotation)
 ModelInfo CScenary::getPickedObject(float x, float y, float z, size_t &index)
 {
     ModelInfo model;
-
+    //Pickable wall
     for (size_t i = 0; i < m_PickableWall.size(); ++i)
     {
-        if (pow(x-model.position.x,2) + pow(y-model.position.y,2)
-                + pow(y-model.position.y,2) <= pow(model.radius,2))
+        ModelInfo model = m_WallModels[activeFloor][i];
+        CPoint3D realSize = CModelManager::GetInstance()->getModelRealSize(model.modelName);
+        CPoint3D spherePos;
+        if (model.rotation.y == 270)
+            spherePos = CPoint3D(model.position.x+realSize.z/2.f,
+                                 model.position.y+realSize.y/2.f,
+                                 model.position.z+realSize.x/2.f);
+        else
+            spherePos = CPoint3D(model.position.x+realSize.x/2.f,
+                                 model.position.y+realSize.y/2.f,
+                                 model.position.z+realSize.z/2.f);
+        if (pow(x-spherePos.x,2) + pow(y-spherePos.y,2)
+                + pow(y-spherePos.z,2) <= pow(model.radius,2))
         {
             index = m_PickableWall[i].second;
             return model;
         }
     }
 
+    //Pickable Objects
     for (size_t i = 0; i < m_PickableObject.size(); ++i)
     {
         model = m_PickableObject[i].first;
         if (pow(x-model.position.x,2) + pow(y-model.position.y,2)
-                + pow(y-model.position.y,2) <= pow(model.radius,2))
+                + pow(y-model.position.z,2) <= pow(model.radius,2))
         {
             index = m_PickableObject[i].second;
             return model;
         }
     }
 
-    for (size_t i = 0; i < m_PickableObject.size(); ++i)
-    {
-        model = m_PickableObject[i].first;
-        if (pow(x-model.position.x,2) + pow(y-model.position.y,2)
-                + pow(y-model.position.y,2) <= pow(model.radius,2))
-        {
-            index = m_PickableObject[i].second;
-            return model;
-        }
-    }
 
-    for (size_t i = 0; i < m_PickableFloor.size(); ++i)
-    {
-        model = m_PickableFloor[i].first;
-        if (pow(x-model.position.x,2) + pow(y-model.position.y,2)
-                + pow(y-model.position.y,2) <= pow(model.radius,2))
-        {
-            index = m_PickableFloor[i].second;
-            return model;
-        }
-    }
-
+    //Pickable Stair
     for (size_t i = 0; i < m_PickableStair.size(); ++i)
     {
         model = m_PickableStair[i].first;
         if (pow(x-model.position.x,2) + pow(y-model.position.y,2)
-                + pow(y-model.position.y,2) <= pow(model.radius,2))
+                + pow(y-model.position.z,2) <= pow(model.radius,2))
         {
             index = m_PickableStair[i].second;
             return model;
         }
     }
 
+    //Pickable Floor
+    for (size_t i = 0; i < m_PickableFloor.size(); ++i)
+    {
+        model = m_PickableFloor[i].first;
+        CPoint3D absoluteCenter = model.position + model.center;
+        if (pow(x-absoluteCenter.x,2) + pow(y-absoluteCenter.y,2)
+                + pow(y-absoluteCenter.z,2) <= pow(model.radius,2))
+        {
+            index = m_PickableFloor[i].second;
+            return model;
+        }
+    }
     index = -1;
     return ModelInfo();
 }
