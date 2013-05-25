@@ -213,5 +213,5 @@ void ThothWindow::getModelName(string path)
 void ThothWindow::changeTab()
 {
     ui->tabWidget->setCurrentWidget(ui->decorate_tab);
-    ui->tabWidget->grabMouse();
+    //ui->tabWidget->grabMouse();
 }

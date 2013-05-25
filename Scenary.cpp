@@ -113,7 +113,7 @@ bool CScenary::Draw()
             }
             //Add pickable object to vector.
             m_PickableWall.push_back(std::make_pair(model, i));
-            shader->UseActiveShader(model);
+            //shader->UseActiveShader(model);
             glPushMatrix();
                 glColor3f(0,1,0);
                 glTranslatef(model.position.x, model.position.y, model.position.z);
@@ -123,7 +123,7 @@ bool CScenary::Draw()
                 glScalef(model.scale.x, model.scale.y, model.scale.z);
                 modelManager->Draw(model.modelName);
             glPopMatrix();
-            shader->ReleaseActiveShader();
+            //shader->ReleaseActiveShader();
         }
     }
 
@@ -149,7 +149,7 @@ bool CScenary::Draw()
                     glutWireSphere(model.radius, 16, 16);
                 glPopMatrix();
             }
-            shader->UseActiveShader(model);
+            //shader->UseActiveShader(model);
             glPushMatrix();
                 glColor3f(1,0,0);
                 glTranslatef(model.position.x, model.position.y, model.position.z);
@@ -159,7 +159,7 @@ bool CScenary::Draw()
                 glScalef(model.scale.x, model.scale.y, model.scale.z);
                 modelManager->Draw(model.modelName);
             glPopMatrix();
-            shader->ReleaseActiveShader();
+            //shader->ReleaseActiveShader();
         }
     }
     return true;
@@ -275,7 +275,7 @@ void CScenary::DrawStairs()
             {
                 //Add pickable object to vector.
                 m_PickableStair.push_back(std::make_pair(model, i));
-                shader->UseActiveShader(model);
+                //shader->UseActiveShader(model);
                 glPushMatrix();
                     glColor3f(0, 0, 1);
                     glTranslatef(model.position.x, model.position.y, model.position.z);
@@ -285,7 +285,7 @@ void CScenary::DrawStairs()
                     glScalef(model.scale.x, model.scale.y, model.scale.z);
                     modelManager->Draw(model.modelName);
                 glPopMatrix();
-                shader->ReleaseActiveShader();
+                //shader->ReleaseActiveShader();
             }
         }
     }
