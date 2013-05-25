@@ -18,6 +18,7 @@ public:
 private:
     QImage texture;
     GLuint m_Name;
+    bool hasAlpha;
 };
 
 #endif // TEXTURE_H

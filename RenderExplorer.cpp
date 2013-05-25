@@ -21,7 +21,6 @@ RenderExplorer::~RenderExplorer()
 
 void RenderExplorer::Draw()
 {
-    CShaderManager::GetInstance()->setShader(TEXTURE);
     camera->update();
     CScenary * scene = CScenary::getInstance();
     scene->DrawAxis();
@@ -29,8 +28,7 @@ void RenderExplorer::Draw()
     scene->DrawStairs();
     scene->Draw();
     scene->DrawFloor();
-    scene->DrawCeil();
-    
+    scene->DrawCeil(); 
 }
 
 void RenderExplorer::Update()

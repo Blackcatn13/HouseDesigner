@@ -71,7 +71,7 @@ void GLWidget::initializeGL()
     shader = new QGLShaderProgram(this->context());
     CShaderManager::GetInstance()->setShaderProgram(shader);
     CShaderManager::GetInstance()->CompileShaders(this->context());
-    CShaderManager::GetInstance()->setShader(TEXTURE);
+    CShaderManager::GetInstance()->setShader(SIMPLE);
     RenderManager::GetInstance()->GetRenderMode(EDITOR_2D)->SetCameraProjection(INIT_WIDTH, INIT_HEIGHT);
 
 }
@@ -172,9 +172,11 @@ void GLWidget::keyPressEvent(QKeyEvent* event)
         RM->GetRenderMode(actualMode)->SetCameraProjection(width, heigth);
         cursor = Qt::CrossCursor;
         emit setMouseMove(true);
+        CShaderManager::GetInstance()->setShader(TEXTURE);
     }
     else if(event->key() == Qt::Key_P)
     {
+        CShaderManager::GetInstance()->setShader(SIMPLE);
         actualMode = EDITOR_2D;
         cm->setCurrentCamera(ORTHOGONAL);
         RM->GetRenderMode(actualMode)->SetCameraProjection(width, heigth);

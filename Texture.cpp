@@ -4,6 +4,7 @@
 
 CTexture::CTexture(void)
 {
+    hasAlpha = false;
     m_Name = 0;
 }
 
@@ -16,7 +17,7 @@ bool CTexture::LoadTexture(string textureName)
 {
     if(!texture.load(textureName.c_str()))
         return false;
-    qDebug() << "The texture: " << textureName.c_str() << " alpha chanels is " << texture.hasAlphaChannel();
+    hasAlpha = texture.hasAlphaChannel();
     texture = QGLWidget::convertToGLFormat(texture);
     if(texture.isNull())
         return false;
@@ -36,7 +37,7 @@ bool CTexture::LoadTexture(string textureName)
 bool CTexture::Bind()
 {
     glBindTexture(GL_TEXTURE_2D, m_Name);
-    return true;
+    return hasAlpha;
 }
 
 void CTexture::CleanUp()

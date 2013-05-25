@@ -22,7 +22,6 @@ Render2D::~Render2D()
 
 void Render2D::Draw()
 {
-    CShaderManager::GetInstance()->setShader(SIMPLE);
     camera->update();
     CScenary * scene = CScenary::getInstance();
     scene->DrawAxis();

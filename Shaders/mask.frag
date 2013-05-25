@@ -10,6 +10,7 @@ uniform vec4 c1;
 uniform vec4 c2;
 uniform vec4 c3;
 uniform vec4 c4;
+uniform bool alpha;
 
 void main()
 {
@@ -24,7 +25,8 @@ void main()
   vec4 finalColor = mix(baseColor, m1Color, maskColor.r);
   finalColor = mix(finalColor, m2Color, maskColor.g);
   finalColor = mix(finalColor, m3Color, maskColor.b);
-  finalColor = mix(finalColor, m4Color, maskColor.a);
+  if(alpha)
+    finalColor = mix(finalColor, m4Color, maskColor.a);
   finalColor = mix(finalColor, overColor, overColor.a);
 
   gl_FragColor = finalColor;
