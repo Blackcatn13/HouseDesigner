@@ -183,12 +183,12 @@ void Render2D::mousePressEvent(QMouseEvent *event)
         float WY;
         float WZ;
         size_t indx;
-        getWorldMouseCoord(x,y, WX, WZ);
-        WX = floor((WX*2)/2 + 0.5);
-        WY = floor((WY*2)/2 + 0.5);
-        WZ = floor((WZ*2)/2 + 0.5);
-        qDebug() << "X coord: " << WX << "Y coord: " << WZ;
-        ModelInfo pickedModel = CScenary::getInstance()->getPickedObject3D(WX, 0.0f,  WZ, indx);
+        getWorldMouseCoord(x,y, WX, WY);
+        WX = floor((WX*2 + 0.5))/2;
+        WY = floor((WY*2 + 0.5))/2;
+        WZ = floor((WZ*2 + 0.5))/2;
+        qDebug() << "X coord: " << WX << "Y coord: " << WY;
+        ModelInfo pickedModel = CScenary::getInstance()->getPickedObject3D(WX, 0,  WY, indx);
         if (indx != -1)
         {
 //            selectedModel = pickedModel;
