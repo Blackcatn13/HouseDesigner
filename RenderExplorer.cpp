@@ -4,6 +4,7 @@
 #include "Camera.h"
 #include <qcursor.h>
 #include <qwidget.h>
+#include "Shadermanager.h"
 
 RenderExplorer::RenderExplorer()
 {
@@ -20,6 +21,7 @@ RenderExplorer::~RenderExplorer()
 
 void RenderExplorer::Draw()
 {
+    CShaderManager::GetInstance()->setShader(TEXTURE);
     camera->update();
     CScenary * scene = CScenary::getInstance();
     scene->DrawAxis();

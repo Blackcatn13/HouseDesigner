@@ -36,7 +36,7 @@ private:
     CPoint3D size;
     CPoint3D center;
     float    radius;
-
+    GLuint listName;
 };
 
 #endif

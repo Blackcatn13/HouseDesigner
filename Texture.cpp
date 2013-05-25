@@ -16,6 +16,7 @@ bool CTexture::LoadTexture(string textureName)
 {
     if(!texture.load(textureName.c_str()))
         return false;
+    qDebug() << "The texture: " << textureName.c_str() << " alpha chanels is " << texture.hasAlphaChannel();
     texture = QGLWidget::convertToGLFormat(texture);
     if(texture.isNull())
         return false;
