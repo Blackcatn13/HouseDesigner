@@ -10,6 +10,7 @@
 #include <qtimer.h>
 #include <qpalette.h>
 #include "RenderManager.h"
+#include "Render.h"
 
 #define TICK_PER_SECOND 1000/40
 
@@ -79,6 +80,7 @@ void ThothWindow::on_pushButton_4_clicked()
                 CScenary::getInstance()->setActiveModel(info.canonicalFilePath().toStdString());
                 CScenary::getInstance()->setActiveType(STAIR);
             }
+            RenderManager::GetInstance()->GetRenderMode(EDITOR_2D)->setEditMode(INSERTING);
         }
     }
     ui->contextGL->setFocus();
@@ -109,7 +111,8 @@ void ThothWindow::on_pushButton_clicked()
         {
             qDebug("Create model with path: %s", qPrintable(info.absoluteFilePath()));
             CScenary::getInstance()->setActiveModel(info.canonicalFilePath().toStdString());
-                CScenary::getInstance()->setActiveType(OBJECT);
+            CScenary::getInstance()->setActiveType(OBJECT);
+            RenderManager::GetInstance()->GetRenderMode(EDITOR_2D)->setEditMode(INSERTING);
         }
     }
     ui->contextGL->setFocus();
@@ -207,7 +210,9 @@ void ThothWindow::getModelName(string path)
     if(name.compare("") == 0)
         message->setText("No model selected");
     else
+    {
         message->setText(QString("Selected model: ").append(QString(name.c_str())));
+    }
 }
 
 void ThothWindow::changeTab()

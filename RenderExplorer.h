@@ -32,6 +32,7 @@ private:
     ModelInfo selectedModel;
     int selectedPosition;
     void getWorldMouseCoord(int x, int y, float &wx, float &wy, float &wz);
+    void setEditMode(EditModes em){return;}
 signals:
     void changeTab();
 };

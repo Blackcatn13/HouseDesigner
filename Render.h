@@ -17,6 +17,7 @@ public:
     void virtual mousePressEvent(QMouseEvent *event) = 0;
     void virtual mouseReleaseEvent(QMouseEvent *event) = 0;
     void virtual mouseMoveEvent(QMouseEvent *event, int x, int y) = 0;
+    void virtual setEditMode(EditModes em) = 0;
     Render(QObject* p = 0);
     ~Render();
 };
