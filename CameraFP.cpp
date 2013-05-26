@@ -14,6 +14,7 @@ CameraFP::CameraFP()
     position = CPoint3D(-5, 1.5, 0);
     dir = CPoint3D(0, 0, 0);
     up = CPoint3D(0,1,0);
+    flying = false;
 }
 
 void CameraFP::setProjection(int w, int h)
@@ -55,12 +56,13 @@ void CameraFP::update()
 
 void CameraFP::move(float f, float s, bool fly)
 {
+    flying = fly;
     CPoint3D addPos = CPoint3D();
     float yaw = toRad(m_yaw);
     float p = toRad(m_pitch);
     addPos.x = f * cos(yaw) * cos(p) + s * cos(yaw - PI_2);
     addPos.z = f * sin(yaw) * cos(p) + s * sin(yaw - PI_2);
-    if (fly)
+    if (flying)
         addPos.y = sin(p);
     
     position += addPos;
@@ -81,16 +83,8 @@ void CameraFP::AddYawAndPitch(float yaw, float pitch)
         m_yaw -= 360;
 }
 
-
-
-
-    //Whole planes can be computed using normal vector and the center point.
-    //This is more efficient than use 3 points to calculate the plane.
-//    plane[TOP].setNormalPoint(((nc + Y * mNearHeight) - position) * X, nc + Y * mNearHeight);
-//    plane[BOTTOM].setNormalPoint(X * ((nc - Y * mNearHeight) - position), nc - Y * mNearHeight);
-
-//    plane[LEFT].setNormalPoint(((nc - X * mNearWidth) - position) * Y,nc-X*mNearWidth);
-//    plane[RIGHT].setNormalPoint(Y * ((nc + X * mNearWidth) - position), nc + X * mNearWidth);
-
-//    plane[NEAR].setNormalPoint(Z*-1, nc);
-//    plane[FAR].setNormalPoint(Z, fc);
+void CameraFP::AddDistance(float d)
+{
+    if(!flying)
+        position.y += d;
+}

@@ -32,7 +32,7 @@ using namespace std;
 #include <math.h>
 #include <QDebug>
 
-
+#define FLOOR_HEIGHT 3
 #define INIT_WIDTH 800
 #define INIT_HEIGHT 600
 #define STAIR_HEIGHT 0.75f

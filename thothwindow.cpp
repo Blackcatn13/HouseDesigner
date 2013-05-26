@@ -24,8 +24,14 @@ ThothWindow::ThothWindow(QWidget *parent) :
     ui->contextGL->setFocus();
     message = new QLabel(this);
     popUp = new QLabel(this);
+    mode = new QLabel(this);
+    picked = new QLabel(this);
+
     ui->statusBar->addWidget(popUp);
+    ui->statusBar->addPermanentWidget(picked);
+    ui->statusBar->addPermanentWidget(mode);
     ui->statusBar->addPermanentWidget(message);
+    mode->setText("Selecting");
     message->setText("No model selected");
     ui->statusBar->showMessage("Ready", 5000);
     //Tree file.
@@ -56,6 +62,13 @@ ThothWindow::ThothWindow(QWidget *parent) :
     connect(ui->actionOpen_project, SIGNAL(triggered()), this, SLOT(actionOpen_project_triggered()));
     connect(CScenary::getInstance(), SIGNAL(setNameModel(string)), SLOT(getModelName(string)));
     connect(RenderManager::GetInstance(), SIGNAL(sendChangeTab()), SLOT(changeTab()));
+    connect(CScenary::getInstance(), SIGNAL(activeFloorChanged(int)), ui->floorBox, SLOT(setValue(int)));
+    connect(RenderManager::GetInstance()->GetRenderMode(EDITOR_2D), SIGNAL(changedMode(string)), SLOT(getModeName(string)));
+    connect(RenderManager::GetInstance()->GetRenderMode(EDITOR_2D), SIGNAL(pickedInfo(string)), SLOT(getPicked(string)));
+    connect(RenderManager::GetInstance()->GetRenderMode(EXPLORER), SIGNAL(pickedInfo(string)), SLOT(getPicked(string)));
+    connect(RenderManager::GetInstance()->GetRenderMode(EXPLORER), SIGNAL(setMessage(string, int)), SLOT(getMessage(string, int)));
+    connect(RenderManager::GetInstance()->GetRenderMode(EDITOR_2D), SIGNAL(setMessage(string, int)), SLOT(getMessage(string, int)));
+    connect(CScenary::getInstance(), SIGNAL(setMessage(string, int)), SLOT(getMessage(string, int)));
 }
 
 ThothWindow::~ThothWindow()
@@ -294,4 +307,19 @@ void ThothWindow::on_colorButton_clicked()
     {
         popUp->setText("Select in which texture you want to put it");
     }
+}
+
+void ThothWindow::getModeName(string m)
+{
+    mode->setText(QString(m.c_str()));
+}
+
+void ThothWindow::getPicked(string p)
+{
+    picked->setText(QString(p.c_str()));
+}
+
+void ThothWindow::getMessage(string m, int s)
+{
+    ui->statusBar->showMessage(QString(m.c_str()), s);
 }

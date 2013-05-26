@@ -39,6 +39,8 @@ bool RenderExplorer::KeyEvent(int key)
 {
     bool update = true;
     Point2D move;
+    move.x = 0;
+    move.y = 0;
     switch(key)
     {
     case Qt::Key_A:
@@ -57,17 +59,28 @@ bool RenderExplorer::KeyEvent(int key)
         fly = !fly;
         break;
     case Qt::Key_PageDown:
+    case Qt::Key_Down:
+    case Qt::Key_Minus:
         {
             int floor = CScenary::getInstance()->getCurrentFloor();
             if(floor > 0)
+            {
                 CScenary::getInstance()->ChangeFloor(floor - 1);
+                camera->AddDistance(-FLOOR_HEIGHT);
+            }
             break;
         }
     case Qt::Key_PageUp:
+    case Qt::Key_Up:
+    case Qt::Key_Plus:
         {
             int floor = CScenary::getInstance()->getCurrentFloor();
             if(floor < CScenary::getMaxFloors() - 1)
+            {
                 CScenary::getInstance()->ChangeFloor(floor + 1);
+                camera->AddDistance(FLOOR_HEIGHT);
+            }
+
             break;
         }
     default:
@@ -96,20 +109,13 @@ void RenderExplorer::mousePressEvent(QMouseEvent *event)
     float WZ;
     getWorldMouseCoord(event->x(),event->y(), WX, WY, WZ);
     size_t indx;
-    //Round nearest middle.
-    //WX = floor((WX*2)/2 + 0.5);
-    //WY = floor((WY*2)/2 + 0.5);
-    //WZ = floor((WZ*2)/2 + 0.5);
-    qDebug() << WX << " " << WY << " " << WZ;
     ModelInfo pickedModel = CScenary::getInstance()->getPickedObject3D(WX, WY, WZ, indx);
     if (indx != -1)
     {
         selectedModel = pickedModel;
         selectedPosition = indx;
         emit changeTab();
-        //Now we get de pickedModel (info of the picked model) and own index (indx);
-        qDebug() << "pickedModel" << pickedModel.textureName.ObjectName.c_str() << "type" << pickedModel.type << "index" << indx;
-        //qDebug() << "Index" << indx;
+        emit pickedInfo("Picked " + selectedModel.textureName.ObjectName);
     }
 }
 

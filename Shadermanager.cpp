@@ -86,6 +86,13 @@ void CShaderManager::UseActiveShader(ModelInfo mi)
         m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("m1color"), mi.textureName.color.c1.x, mi.textureName.color.c1.y, mi.textureName.color.c1.z, 0);
         break;
     case TEXTURE:
+        int r,g,b,a;
+        r = g = b = a = 0;
+        if(mi.textureName.material.M1.compare("")) r=1;
+        if(mi.textureName.material.M2.compare("")) g=1;
+        if(mi.textureName.material.M3.compare("")) b=1;
+        if(mi.textureName.material.M4.compare("")) a=1;
+
         glActiveTexture(GL_TEXTURE0);
         CTextureManager::GetInstance()->Bind(PATHTEXTURES + mi.textureName.ObjectName + PNG);
         m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("base"), 0);
@@ -114,7 +121,7 @@ void CShaderManager::UseActiveShader(ModelInfo mi)
         bool alpha = CTextureManager::GetInstance()->Bind(PATHTEXTURES + mi.textureName.ObjectName + MASK);
         m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("mask"), 6);
         m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("alpha"), alpha);
-
+        m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("maskN"), r, g, b, a);
         m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("c1"), mi.textureName.color.c1.x, mi.textureName.color.c1.y, mi.textureName.color.c1.z, 0);
         m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("c2"), mi.textureName.color.c2.x, mi.textureName.color.c2.y, mi.textureName.color.c2.z, 0);
         m_ShaderP->setUniformValue(m_ShaderP->uniformLocation("c3"), mi.textureName.color.c3.x, mi.textureName.color.c3.y, mi.textureName.color.c3.z, 0);
