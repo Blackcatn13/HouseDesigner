@@ -36,6 +36,8 @@ private:
     void setEditMode(EditModes em){return;}
 signals:
     void changeTab();
+    void setMessage(string, int);
+    void pickedInfo(string);
 public slots:
     void setMouseMove(bool);
     void changeModelTexture(ModelInfo, int);

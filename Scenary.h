@@ -180,7 +180,7 @@ public:
     void setFloors(vector< vector<ModelInfo> > floors) {m_FloorModels = floors;}
     void setStairs(vector< vector<ModelInfo> > stairs) {m_StairModels = stairs;}
     ModelInfo getPickedObject3D(float x, float y, float z, size_t &index);
-
+    void DeleteModel(ModelInfo mi, size_t pos);
 private:
     CScenary(QObject *parent = 0);
     /*
@@ -267,6 +267,8 @@ private:
     bool m_sphereDebug;
 signals:
     void setNameModel(string name);
+    void activeFloorChanged(int);
+    void setMessage(string, int);
 };
 
 #endif

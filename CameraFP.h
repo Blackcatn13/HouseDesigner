@@ -19,7 +19,7 @@ public:
     void setProjection(int w,int h);
     void update();
     void move(float f, float s, bool fly);
-    void AddDistance(float) {;}
+    void AddDistance(float);
     float getZoom() {return 1;}
     void AddYawAndPitch(float yaw, float pitch);
     Views getCameraType(){return FP;}
@@ -28,6 +28,7 @@ private:
     float mAngle;
     CPoint3D position, dir, up;
     float Cnear,Cfar;
+    bool flying;
 };
 
 #endif // CAMERA_FP_H

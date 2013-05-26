@@ -10,6 +10,7 @@ class Camera;
 
 class Render2D : public Render
 {
+    Q_OBJECT
 public:
     Render2D();
     ~Render2D();
@@ -51,6 +52,12 @@ private:
     void FirstClickObject(float wx, float wz);
     void FirstClickStair(float wx, float wz);
     EditModes actualEditMode;
+    ModelInfo selectedModel;
+    int selectedPosition;
+signals:
+    void changedMode(string mode);
+    void pickedInfo(string);
+    void setMessage(string, int);
 };
 
 #endif

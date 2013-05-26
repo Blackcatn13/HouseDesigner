@@ -10,7 +10,7 @@ Render2D::Render2D()
 {
     camera = CameraManager::GetInstance()->GetCamera(ORTHOGONAL);
     clicked = false;
-    actualEditMode = INSERTING;
+    actualEditMode = SELECTING;
     rotation = 0;
 }
 
@@ -64,6 +64,8 @@ bool Render2D::KeyEvent(int key)
     Types t = scenary->getActiveType();
     bool update = true;
     Point2D move;
+    move.x = 0;
+    move.y = 0;
     switch(key)
     {
     case Qt::Key_A:
@@ -118,8 +120,23 @@ bool Render2D::KeyEvent(int key)
             scenary->setActiveModel("");
             scenary->setActiveType(NEITHER);
             actualEditMode = SELECTING;
+            emit changedMode("Selecting");
         }
         break;
+    case Qt::Key_Delete:
+    case Qt::Key_Backspace:
+        {
+            if(actualEditMode == SELECTING)
+            {
+                scenary->DeleteModel(selectedModel, selectedPosition);
+                emit setMessage("Deleting model " + selectedModel.textureName.ObjectName, 3000);
+            }
+            else
+            {
+                actualEditMode = DELETING;
+                emit changedMode("Deleting");
+            }
+        }
     default:
         update = false;
     }
@@ -178,29 +195,39 @@ void Render2D::mousePressEvent(QMouseEvent *event)
         }
         break;
     case SELECTING:
-    {
-        float WX;
-        float WY;
-        float WZ;
-        size_t indx;
-        getWorldMouseCoord(x,y, WX, WY);
-        //WX = floor((WX*2 + 0.5))/2;
-        //WY = floor((WY*2 + 0.5))/2;
-        //WZ = floor((WZ*2 + 0.5))/2;
-        qDebug() << "X coord: " << WX << "Y coord: " << WY;
-        ModelInfo pickedModel = CScenary::getInstance()->getPickedObject3D(WX, 0,  WY, indx);
-        if (indx != -1)
         {
-//            selectedModel = pickedModel;
-//            selectedPosition = indx;
-//            emit changeTab();
-            //Now we get de pickedModel (info of the picked model) and own index (indx);
-            qDebug() << "pickedModel" << pickedModel.modelName.c_str() << "type" << pickedModel.type << "index" << indx;
-            //qDebug() << "Index" << indx;
+            float WX;
+            float WY;
+            float WZ;
+            size_t indx;
+            getWorldMouseCoord(x,y, WX, WY);
+            ModelInfo pickedModel = CScenary::getInstance()->getPickedObject3D(WX, 0,  WY, indx);
+            if (indx != -1)
+            {
+                selectedModel = pickedModel;
+                selectedPosition = indx;
+                emit pickedInfo("Picked " + selectedModel.textureName.ObjectName);
+                //Now we get de pickedModel (info of the picked model) and own index (indx);
+            } 
         }
-    }
         break;
     case DELETING:
+        {
+            float WX;
+            float WY;
+            float WZ;
+            size_t indx;
+            getWorldMouseCoord(x,y, WX, WY);
+            ModelInfo pickedModel = CScenary::getInstance()->getPickedObject3D(WX, 0,  WY, indx);
+            if (indx != -1)
+            {
+                selectedModel = pickedModel;
+                selectedPosition = indx;
+                emit pickedInfo("Picked " + selectedModel.textureName.ObjectName);
+                scenary->DeleteModel(selectedModel, selectedPosition);
+                emit setMessage("Deleting model " + selectedModel.textureName.ObjectName, 3000);
+            }
+        }
         break;
     }
 }
@@ -435,6 +462,9 @@ void Render2D::AddWall()
     ModelInfo ii;
     ii.modelName = scenary->getActiveModel();
     ii.type = t;
+    int namesize = ii.modelName.find_last_of('.') - ii.modelName.find_last_of('/');
+    string name = ii.modelName.substr(ii.modelName.find_last_of('/') + 1, namesize - 1);
+    ii.textureName.ObjectName = name;
     CModelManager *cm = CModelManager::GetInstance();
     //Don't remove getmodelsize! it's needed to calculate the center and radius.
     cm->getModelSize(ii.modelName);
@@ -534,6 +564,18 @@ void Render2D::FirstClickWall(float wx, float wz)
 void Render2D::setEditMode(EditModes em)
 {
     actualEditMode = em;
+    switch(actualEditMode)
+    {
+    case SELECTING:
+        emit changedMode("Selecting");
+        break;
+    case INSERTING:
+        emit changedMode("Inserting");
+        break;
+    case DELETING:
+        emit changedMode("Deleting");
+        break;
+    }
 }
 
 void Render2D::FirstClickStair(float wx, float wz)
@@ -563,6 +605,9 @@ void Render2D::AddStair()
     ModelInfo m = ModelInfo();
     m.rotation = CPoint3D(0, rotation * 90, 0);
     m.type = t;
+    int namesize = m.modelName.find_last_of('.') - m.modelName.find_last_of('/');
+    string name = m.modelName.substr(m.modelName.find_last_of('/') + 1, namesize - 1);
+    m.textureName.ObjectName = name;
     m.modelName = scenary->getActiveModel();
     CModelManager::GetInstance()->getModelSize(m.modelName);
     m.center = CModelManager::GetInstance()->getModelCenter(m.modelName);

@@ -50,7 +50,9 @@ private slots:
     void onColorChanged();
     void getModelName(string name);
     void changeTab();
-
+    void getModeName(string m);
+    void getMessage(string m, int s);
+    void getPicked(string);
 private:
     Ui::ThothWindow     *ui;
     QDirModel           *treeModel;
@@ -61,6 +63,8 @@ private:
     QColor m_color;
     QLabel *message;
     QLabel *popUp;
+    QLabel *mode;
+    QLabel *picked;
     std::string textureName;
 };
 

@@ -11,6 +11,7 @@ uniform vec4 c2;
 uniform vec4 c3;
 uniform vec4 c4;
 uniform bool alpha;
+uniform vec4 maskN;
 
 void main()
 {
@@ -21,12 +22,18 @@ void main()
   vec4 m3Color = texture2D(m3, texture_coord) * c3;
   vec4 m4Color = texture2D(m4, texture_coord) * c4;
   vec4 maskColor = texture2D(mask, texture_coord);
-
-  vec4 finalColor = mix(baseColor, m1Color, maskColor.r);
-  finalColor = mix(finalColor, m2Color, maskColor.g);
-  finalColor = mix(finalColor, m3Color, maskColor.b);
+  vec4 finalColor = baseColor;
+  if(maskN.r == 1)
+    finalColor = mix(finalColor, m1Color, maskColor.r);
+  if(maskN.g == 1)
+    finalColor = mix(finalColor, m2Color, maskColor.g);
+  if(maskN.b == 1)
+    finalColor = mix(finalColor, m3Color, maskColor.b);
   if(alpha)
-    finalColor = mix(finalColor, m4Color, maskColor.a);
+  {
+    if(maskN.a == 1)
+      finalColor = mix(finalColor, m4Color, maskColor.a);
+  }
   finalColor = mix(finalColor, overColor, overColor.a);
 
   gl_FragColor = finalColor;

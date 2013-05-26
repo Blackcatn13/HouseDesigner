@@ -55,7 +55,10 @@ void CScenary::addNewFloor()
 
 void CScenary::ChangeFloor(int newFloor)
 {
+    if(newFloor > m_nFloors - 1)
+       addNewFloor();
     activeFloor = newFloor;
+    emit activeFloorChanged(activeFloor + 1);
 }
 
 bool CScenary::addModel(ModelInfo m_Info)
@@ -547,6 +550,7 @@ void CScenary::fillFloor()
             mi.scale = CPoint3D(1,1,1);
             mi.type = FLOOR;
             mi.modelName = "Models/FloorPad.obj";
+            mi.textureName.ObjectName = "FloorPad";
             mi.textureName.material.M1 = "BaseTextures/floor.jpg";
             mi.textureName.color.c1 = CPoint3D(1,1,1);
             mi.position = CPoint3D(0, i*HEIGTH, 0);
@@ -924,6 +928,22 @@ void CScenary::ChangeModelInfo(ModelInfo mi, size_t pos)
         break;
     case FLOOR:
         m_FloorModels[activeFloor][pos] = mi;
+        break;
+    }
+}
+
+void CScenary::DeleteModel(ModelInfo mi, size_t pos)
+{
+    switch(mi.type)
+    {
+    case WALL:
+        m_WallModels[activeFloor].erase(m_WallModels[activeFloor].begin() + pos);
+        break;
+    case STAIR:
+        m_StairModels[activeFloor].erase(m_StairModels[activeFloor].begin() + pos);
+        break;
+    case OBJECT:
+        m_ObjectModels[activeFloor].erase(m_ObjectModels[activeFloor].begin() + pos);
         break;
     }
 }
