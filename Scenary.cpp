@@ -197,7 +197,6 @@ void CScenary::DrawFloor()
             {
                 drawModel = CFrustrumManager::GetInstance()->sphereInFrustum(
                             model.position+center, rad);
-                qDebug() << rad;
             }
             if(drawModel)
             {
@@ -672,16 +671,17 @@ ModelInfo CScenary::getPickedObject3D(float x, float y, float z, size_t &index)
     }
 
     //Pickable Floor
-    qDebug() << m_PickableFloor.size();
-    model = m_PickableFloor[0].first;
-    CPoint3D center = CPoint3D(m_gridMaxX/2, 0, m_gridMaxZ/2);
-    CPoint3D absoluteCenter = model.position - center;
-    float rad = max(m_gridMaxX/2, m_gridMaxZ/2);
-    //Pickable Floor only for 2D Plane --> Y = 0.
-    if (pow(x-absoluteCenter.x,2) + pow(z-absoluteCenter.z,2) <= pow(rad,2))
+    if (m_PickableFloor.size() > 0)
     {
-        index = m_PickableFloor[0].second;
-        return model;
+        model = m_PickableFloor[0].first;
+        CPoint3D absoluteCenter = CPoint3D(m_gridMaxX/2, 0, m_gridMaxZ/2);
+        float rad = sqrt(pow(m_gridMaxX/2.f,2) + pow(m_gridMaxZ/2.f,2));
+        //Pickable Floor only for 2D Plane --> Y = 0.
+        if (pow(x-absoluteCenter.x,2) + pow(z-absoluteCenter.z,2) <= pow(rad,2))
+        {
+            index = m_PickableFloor[0].second;
+            return model;
+        }
     }
     index = -1;
     return ModelInfo();
