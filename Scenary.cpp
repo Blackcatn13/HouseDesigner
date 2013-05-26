@@ -46,7 +46,7 @@ void CScenary::addNewFloor()
             m_FloorModels.push_back( vector<ModelInfo>());
         m_FloorModels.push_back( vector<ModelInfo>());
         m_StairModels.push_back( vector<ModelInfo>());
-        fillFloor(); 
+        fillFloor();
         m_nFloors += 1;
 
         //TODO: Add scenaryMat to use it with more than 1 floor.
@@ -134,7 +134,7 @@ bool CScenary::Draw()
                 glRotatef(model.rotation.z, 0, 0 ,1);
                 glScalef(model.scale.x, model.scale.y, model.scale.z);
                 modelManager->Draw(model.modelName);
-            glPopMatrix(); 
+            glPopMatrix();
         }
     }
     shader->ReleaseActiveShader();
@@ -189,27 +189,26 @@ void CScenary::DrawFloor()
         for(size_t i = 0; i < m_FloorModels[activeFloor].size(); ++i)
         {
             ModelInfo model = m_FloorModels[activeFloor][i];
-            CModelManager::GetInstance()->getModelSize(model.modelName);
-            float rad = CModelManager::GetInstance()->getModelRadius(model.modelName) + 0.2;
-            CPoint3D center = CModelManager::GetInstance()->getModelCenter(model.modelName);
+            float rad = sqrt(pow(m_gridMaxX/2,2) + pow(m_gridMaxZ/2,2));
+            CPoint3D center = CPoint3D(m_gridMaxX/2, 0, m_gridMaxZ/2);
             if (camType != FP)
                 drawModel = true;
             else
             {
                 drawModel = CFrustrumManager::GetInstance()->sphereInFrustum(
                             model.position+center, rad);
+                qDebug() << rad;
             }
             if(drawModel)
             {
-//                if (m_sphereDebug)
-//                {
-//                    glPushMatrix();
-//                        glTranslatef(model.position.x + center.x, model.position.y + center.y, model.position.z + center.z);
-//                        glutWireSphere(rad, 16, 16);
-//                    glPopMatrix();
-//                }
-                //Add pickable object to vector.
                 m_PickableFloor.push_back(std::make_pair(model, i));
+                if (true)
+                {
+                    glPushMatrix();
+                        glTranslatef(model.position.x + center.x, model.position.y + center.y, model.position.z + center.z);
+                        glutWireSphere(rad, 16, 16);
+                    glPopMatrix();
+                }
                 shader->UseActiveShader(model);
                 glPushMatrix();
                     glColor3f(1,1,0);
@@ -269,7 +268,7 @@ void CScenary::DrawCeil()
 void CScenary::DrawStairs()
 {
     CModelManager *modelManager = CModelManager::GetInstance();
-    Camera *cam = CameraManager::GetInstance()->getCurrentCamera();        
+    Camera *cam = CameraManager::GetInstance()->getCurrentCamera();
     Views camType = cam->getCameraType();
     CShaderManager *shader = CShaderManager::GetInstance();
     bool drawModel = true;
@@ -416,7 +415,7 @@ bool CScenary::getWall2ObjectCollision(ModelInfo mi)
         if(maux.rotation == CPoint3D(0, 90, 0) || maux.rotation == CPoint3D(0, 270, 0))
         {
             CPoint3D aux = size;
-            size = CPoint3D(aux.z, aux.y, aux.x); 
+            size = CPoint3D(aux.z, aux.y, aux.x);
         }
         if(mi.rotation == CPoint3D(0, 180, 0))
         {
@@ -458,13 +457,13 @@ bool CScenary::getObject2ObjectCollision(ModelInfo mi)
         if(maux.rotation == CPoint3D(0, 90, 0) || maux.rotation == CPoint3D(0, 270, 0))
         {
             aux = size1;
-            size1 = CPoint3D(aux.z, aux.y, aux.x); 
+            size1 = CPoint3D(aux.z, aux.y, aux.x);
         }
         size2 = modelM->getModelSize(mi.modelName);
         if(mi.rotation == CPoint3D(0, 90, 0) || mi.rotation == CPoint3D(0, 270, 0))
         {
             aux = size2;
-            size2 = CPoint3D(aux.z, aux.y, aux.x); 
+            size2 = CPoint3D(aux.z, aux.y, aux.x);
         }
         if(!((mi.position.x - size2.x/2 >= maux.position.x + size1.x/2) ||
             (mi.position.x + size2.x/2 <= maux.position.x - size1.x/2) ||
@@ -509,7 +508,7 @@ bool CScenary::getObject2WallCollision(ModelInfo mi)
         if(mi.rotation == CPoint3D(0, 90, 0) || mi.rotation == CPoint3D(0, 270, 0))
         {
             CPoint3D aux = size;
-            size = CPoint3D(aux.z, aux.y, aux.x); 
+            size = CPoint3D(aux.z, aux.y, aux.x);
         }
         if(maux.rotation == CPoint3D(0, 180, 0))
         {
@@ -659,8 +658,8 @@ ModelInfo CScenary::getPickedObject3D(float x, float y, float z, size_t &index)
         bool cond = false;
         //2D picking
         if (y == 0)
-            //If model picking the sphere would be of radius 0.5
-            cond = pow(x-model.position.x,2) + pow(z-model.position.z,2) <= pow(model.radius*2,2);
+            //If model picking the sphere would be of radius, not radius*2
+            cond = pow(x-model.position.x,2) + pow(z-model.position.z,2) <= pow(model.radius,2);
         //3D picking
         else
             cond = pow(x-model.position.x,2) + pow(y-model.position.y,2)
@@ -673,17 +672,17 @@ ModelInfo CScenary::getPickedObject3D(float x, float y, float z, size_t &index)
     }
 
     //Pickable Floor
-//    for (size_t i = 0; i < m_PickableFloor.size(); ++i)
-//    {
-//        model = m_PickableFloor[i].first;
-//        CPoint3D absoluteCenter = model.position + model.center;
-//        if (pow(x-absoluteCenter.x,2) + pow(y-absoluteCenter.y,2)
-//                + pow(z-absoluteCenter.z,2) <= pow(model.radius,2))
-//        {
-//            index = m_PickableFloor[i].second;
-//            return model;
-//        }
-//    }
+    qDebug() << m_PickableFloor.size();
+    model = m_PickableFloor[0].first;
+    CPoint3D center = CPoint3D(m_gridMaxX/2, 0, m_gridMaxZ/2);
+    CPoint3D absoluteCenter = model.position - center;
+    float rad = max(m_gridMaxX/2, m_gridMaxZ/2);
+    //Pickable Floor only for 2D Plane --> Y = 0.
+    if (pow(x-absoluteCenter.x,2) + pow(z-absoluteCenter.z,2) <= pow(rad,2))
+    {
+        index = m_PickableFloor[0].second;
+        return model;
+    }
     index = -1;
     return ModelInfo();
 }
@@ -710,7 +709,7 @@ bool CScenary::getStair2WallCollision(CPoint3D s, int rotation)
                     (posaux.z > s.z + size.z) ||
                     (posaux.z < s.z)))
                     return true;
-            }   
+            }
             break;
         case 1:
             size = CPoint3D(STAIR_WIDTH, 0, STAIR_DEEP);
@@ -772,7 +771,7 @@ bool CScenary::getStair2StairCollision(CPoint3D s, int rotation)
                 (posaux.x + STAIR_WIDTH <= s.x) ||
                 (posaux.z > s.z + size.z) ||
                 (posaux.z + STAIR_WIDTH <= s.z)))
-                return true;  
+                return true;
             break;
         case 1:
             size = CPoint3D(STAIR_WIDTH, 0, STAIR_DEEP);
@@ -803,7 +802,7 @@ bool CScenary::getStair2StairCollision(CPoint3D s, int rotation)
 }
 
 bool CScenary::getStair2ObjectCollision(CPoint3D s, int rotation)
-{ 
+{
     CModelManager *modelM = CModelManager::GetInstance();
     CPoint3D size;
     CPoint3D size1;
@@ -817,7 +816,7 @@ bool CScenary::getStair2ObjectCollision(CPoint3D s, int rotation)
         if(maux.rotation == CPoint3D(0, 90, 0) || maux.rotation == CPoint3D(0, 270, 0))
         {
             CPoint3D aux = size;
-            size1 = CPoint3D(aux.z, aux.y, aux.x); 
+            size1 = CPoint3D(aux.z, aux.y, aux.x);
         }
         switch (rotation)
         {
@@ -827,7 +826,7 @@ bool CScenary::getStair2ObjectCollision(CPoint3D s, int rotation)
                 (posaux.x + size1.x/2 <= s.x) ||
                 (posaux.z - size1.z/2>= s.z + size.z) ||
                 (posaux.z + size1.z/2 <= s.z)))
-                return true;  
+                return true;
             break;
         case 1:
             size = CPoint3D(STAIR_WIDTH, 0, STAIR_DEEP);
@@ -872,7 +871,7 @@ bool CScenary::getObject2StairCollision(ModelInfo mi)
         if(mi.rotation == CPoint3D(0, 90, 0) || mi.rotation == CPoint3D(0, 270, 0))
         {
             aux = size2;
-            size2 = CPoint3D(aux.z, aux.y, aux.x); 
+            size2 = CPoint3D(aux.z, aux.y, aux.x);
         }
         if(!((mi.position.x - size2.x/2 >= maux.position.x + size1.x) ||
             (mi.position.x + size2.x/2 <= maux.position.x) ||
