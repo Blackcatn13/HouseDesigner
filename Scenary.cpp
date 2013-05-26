@@ -97,18 +97,30 @@ bool CScenary::Draw()
     for(size_t i = 0; i < m_WallModels[activeFloor].size(); ++i)
     {
         ModelInfo model = m_WallModels[activeFloor][i];
+        CPoint3D realSize = CModelManager::GetInstance()->getModelRealSize(model.modelName);
+        CPoint3D spherePos;
+        if (model.rotation.y == 270)
+            spherePos = CPoint3D(model.position.x+realSize.z/2.f,
+                                 model.position.y+realSize.y/2.f,
+                                 model.position.z+realSize.x/2.f);
+        else
+            spherePos = CPoint3D(model.position.x+realSize.x/2.f,
+                                 model.position.y+realSize.y/2.f,
+                                 model.position.z+realSize.z/2.f);
         if (camType != FP)
             drawModel = true;
         else
+        {
             drawModel = CFrustrumManager::GetInstance()->sphereInFrustum(
-                        model.position, 3);
+                        spherePos, 3);
+        }
         if(drawModel)
         {
             if (m_sphereDebug)
             {
                 glPushMatrix();
-                    glTranslatef(model.position.x, model.position.y, model.position.z);
-                    glutWireSphere(3, 16, 16);
+                    glTranslatef(spherePos.x, spherePos.y, spherePos.z);
+                    glutWireSphere(model.radius, 16, 16);
                 glPopMatrix();
             }
             //Add pickable object to vector.
@@ -134,7 +146,7 @@ bool CScenary::Draw()
             drawModel = true;
         else
             drawModel = CFrustrumManager::GetInstance()->sphereInFrustum(
-                        model.position, model.radius);
+                        CPoint3D(model.position.x + model.center.x, model.position.y + model.center.y, model.position.z + model.center.z), model.radius);
         if(drawModel)
         {
             //Add pickable object to vector.
@@ -144,7 +156,7 @@ bool CScenary::Draw()
             if (m_sphereDebug)
             {
                 glPushMatrix();
-                    glTranslatef(model.position.x, model.position.y, model.position.z);
+                    glTranslatef(model.position.x + model.center.x, model.position.y + model.center.y, model.position.z + model.center.z);
                     glutWireSphere(model.radius, 16, 16);
                 glPopMatrix();
             }
@@ -177,17 +189,25 @@ void CScenary::DrawFloor()
         for(size_t i = 0; i < m_FloorModels[activeFloor].size(); ++i)
         {
             ModelInfo model = m_FloorModels[activeFloor][i];
+            CModelManager::GetInstance()->getModelSize(model.modelName);
+            float rad = CModelManager::GetInstance()->getModelRadius(model.modelName) + 0.2;
+            CPoint3D center = CModelManager::GetInstance()->getModelCenter(model.modelName);
             if (camType != FP)
                 drawModel = true;
             else
             {
-                //FIXME: Control drawing of ceil and floor.
-                drawModel = true;
-                //drawModel = CFrustrumManager::GetInstance()->sphereInFrustum(
-                            //model.position, model.radius);
+                drawModel = CFrustrumManager::GetInstance()->sphereInFrustum(
+                            model.position+center, rad);
             }
             if(drawModel)
             {
+//                if (m_sphereDebug)
+//                {
+//                    glPushMatrix();
+//                        glTranslatef(model.position.x + center.x, model.position.y + center.y, model.position.z + center.z);
+//                        glutWireSphere(rad, 16, 16);
+//                    glPopMatrix();
+//                }
                 //Add pickable object to vector.
                 m_PickableFloor.push_back(std::make_pair(model, i));
                 shader->UseActiveShader(model);
@@ -218,14 +238,15 @@ void CScenary::DrawCeil()
         for(size_t i = 0; i < m_FloorModels[activeFloor + 1].size(); ++i)
         {
             ModelInfo model = m_FloorModels[activeFloor + 1][i];
+            CModelManager::GetInstance()->getModelSize(model.modelName);
+            float rad = CModelManager::GetInstance()->getModelRadius(model.modelName) + 0.2;
+            CPoint3D center = CModelManager::GetInstance()->getModelCenter(model.modelName);
             if (camType != FP)
                 drawModel = true;
             else
             {
-                //FIXME: Control drawing of ceil and floor.
-                drawModel = true;
-                //drawModel = CFrustrumManager::GetInstance()->sphereInFrustum(
-                            //model.position - 2, model.radius);
+                drawModel = CFrustrumManager::GetInstance()->sphereInFrustum(
+                            model.position+center, rad);
             }
             if(drawModel)
             {
@@ -248,7 +269,7 @@ void CScenary::DrawCeil()
 void CScenary::DrawStairs()
 {
     CModelManager *modelManager = CModelManager::GetInstance();
-    Camera *cam = CameraManager::GetInstance()->getCurrentCamera();
+    Camera *cam = CameraManager::GetInstance()->getCurrentCamera();        
     Views camType = cam->getCameraType();
     CShaderManager *shader = CShaderManager::GetInstance();
     bool drawModel = true;
@@ -262,12 +283,12 @@ void CScenary::DrawStairs()
                 drawModel = true;
             else
                 drawModel = CFrustrumManager::GetInstance()->sphereInFrustum(
-                            model.position, 1);
+                            model.position, model.radius*2);
             if (m_sphereDebug)
             {
                 glPushMatrix();
                     glTranslatef(model.position.x, model.position.y, model.position.z);
-                    glutWireSphere(2, 16, 16);
+                    glutWireSphere(model.radius*2, 16, 16);
                 glPopMatrix();
             }
             if(drawModel)
@@ -572,66 +593,97 @@ bool CScenary::getStairCollition(CPoint3D s, int rotation)
     return (getStair2WallCollision(s, rotation) || getStair2ObjectCollision(s, rotation) || getStair2StairCollision(s, rotation));
 }
 
-ModelInfo CScenary::getPickedObject(float x, float y, float z, size_t &index)
+
+ModelInfo CScenary::getPickedObject3D(float x, float y, float z, size_t &index)
 {
     ModelInfo model;
-    size_t indx;
-
+    //Pickable wall
     for (size_t i = 0; i < m_PickableWall.size(); ++i)
     {
         model = m_PickableWall[i].first;
-        if (pow(x-model.position.x,2) + pow(y-model.position.y,2)
-                + pow(y-model.position.y,2) <= pow(model.radius,2))
+        CModelManager::GetInstance()->getModelSize(model.modelName);
+        CPoint3D realSize = CModelManager::GetInstance()->getModelRealSize(model.modelName);
+        CPoint3D spherePos;
+        if (model.rotation.y == 270)
+            spherePos = CPoint3D(model.position.x+realSize.z/2.f,
+                                 model.position.y+realSize.y/2.f,
+                                 model.position.z+realSize.x/2.f);
+        else
+            spherePos = CPoint3D(model.position.x+realSize.x/2.f,
+                                 model.position.y+realSize.y/2.f,
+                                 model.position.z+realSize.z/2.f);
+        bool cond = false;
+        //2D picking
+        if (y == 0)
+        {
+            //If model picking the sphere would be of radius 0.5
+            cond = pow(x-spherePos.x,2) + pow(z-spherePos.z,2)
+                    <= pow(0.5,2);
+        }
+        //3D picking
+        else
+            cond = pow(x-spherePos.x,2) + pow(y-spherePos.y,2)
+                    + pow(z-spherePos.z,2) <= pow(model.radius,2);
+        if (cond)
         {
             index = m_PickableWall[i].second;
             return model;
         }
     }
 
+    //Pickable Objects
     for (size_t i = 0; i < m_PickableObject.size(); ++i)
     {
         model = m_PickableObject[i].first;
-        if (pow(x-model.position.x,2) + pow(y-model.position.y,2)
-                + pow(y-model.position.y,2) <= pow(model.radius,2))
+        CPoint3D spherePos = model.position + model.center;
+        bool cond = false;
+        //2D picking
+        if (y == 0)
+            cond = pow(x-spherePos.x,2) + pow(z-spherePos.z,2)
+                    <= pow(model.radius,2);
+        //3D picking
+        else
+            cond = pow(x-spherePos.x,2) + pow(y-spherePos.y,2)
+                    + pow(z-spherePos.z,2) <= pow(model.radius,2);
+        if (cond)
         {
             index = m_PickableObject[i].second;
             return model;
         }
     }
 
-    for (size_t i = 0; i < m_PickableObject.size(); ++i)
-    {
-        model = m_PickableObject[i].first;
-        if (pow(x-model.position.x,2) + pow(y-model.position.y,2)
-                + pow(y-model.position.y,2) <= pow(model.radius,2))
-        {
-            index = m_PickableObject[i].second;
-            return model;
-        }
-    }
-
-    for (size_t i = 0; i < m_PickableFloor.size(); ++i)
-    {
-        model = m_PickableFloor[i].first;
-        if (pow(x-model.position.x,2) + pow(y-model.position.y,2)
-                + pow(y-model.position.y,2) <= pow(model.radius,2))
-        {
-            index = m_PickableFloor[i].second;
-            return model;
-        }
-    }
-
+    //Pickable Stair
     for (size_t i = 0; i < m_PickableStair.size(); ++i)
     {
         model = m_PickableStair[i].first;
-        if (pow(x-model.position.x,2) + pow(y-model.position.y,2)
-                + pow(y-model.position.y,2) <= pow(model.radius,2))
+        bool cond = false;
+        //2D picking
+        if (y == 0)
+            //If model picking the sphere would be of radius 0.5
+            cond = pow(x-model.position.x,2) + pow(z-model.position.z,2) <= pow(model.radius*2,2);
+        //3D picking
+        else
+            cond = pow(x-model.position.x,2) + pow(y-model.position.y,2)
+                    + pow(z-model.position.z,2) <= pow(model.radius*2,2);
+        if (cond)
         {
             index = m_PickableStair[i].second;
             return model;
         }
     }
 
+    //Pickable Floor
+//    for (size_t i = 0; i < m_PickableFloor.size(); ++i)
+//    {
+//        model = m_PickableFloor[i].first;
+//        CPoint3D absoluteCenter = model.position + model.center;
+//        if (pow(x-absoluteCenter.x,2) + pow(y-absoluteCenter.y,2)
+//                + pow(z-absoluteCenter.z,2) <= pow(model.radius,2))
+//        {
+//            index = m_PickableFloor[i].second;
+//            return model;
+//        }
+//    }
     index = -1;
     return ModelInfo();
 }

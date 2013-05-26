@@ -23,6 +23,7 @@ public:
     CPoint3D getModelBBMin(string modelName);
     CPoint3D getModelBBMax(string modelName);
     CPoint3D getModelSize(string modelName);
+    CPoint3D getModelRealSize(string modelName);
     CPoint3D getModelCenter(string modelName);
     float getModelRadius(string modelName);
     void CleanUp();

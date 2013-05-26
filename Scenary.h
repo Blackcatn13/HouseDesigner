@@ -173,15 +173,13 @@ public:
     void deleteFloor(int x, int z, int floor);
 
     bool getStairCollition(CPoint3D s, int rotation);
-
-    ModelInfo getPickedObject(float x, float y, float z, size_t &index);
-
     void ChangeModelInfo(ModelInfo mi, size_t pos);
 
     void setWalls(vector< vector<ModelInfo> > walls) {m_WallModels = walls;}
     void setObjects(vector< vector<ModelInfo> > objects) {m_ObjectModels = objects;}
     void setFloors(vector< vector<ModelInfo> > floors) {m_FloorModels = floors;}
     void setStairs(vector< vector<ModelInfo> > stairs) {m_StairModels = stairs;}
+    ModelInfo getPickedObject3D(float x, float y, float z, size_t &index);
 
 private:
     CScenary(QObject *parent = 0);

@@ -123,6 +123,7 @@ void CModel::CalculateBBAndSize(aiNode* node)
                 BBMax.x = get_max(BBMax.x, tmp.x);
                 BBMax.y = get_max(BBMax.y, tmp.y);
                 BBMax.z = get_max(BBMax.z, tmp.z);
+
             }
         }
     }
@@ -133,15 +134,6 @@ void CModel::CalculateBBAndSize(aiNode* node)
         //BBMin = CPoint3D(FLT_MAX, FLT_MAX, FLT_MAX);
         //BBMax = CPoint3D(FLT_MIN, FLT_MIN, FLT_MIN);
     }
-    //Calculate center of the model using BB values calculated before.
-    center = (BBMax + BBMin) / 2.f;
-    //Calculate radius of the model;
-    float auxX = pow((BBMax.x - center.x),2.f);
-    float auxY = pow((BBMax.y - center.y), 2.f);
-    float auxZ = pow((BBMax.z - center.z), 2.f);
-    radius = sqrt(auxX + auxY + auxZ);
-    //qDebug() << "Model Center: " << center.x << " " << center.y << " " << center.z;
-    //qDebug() << "Model Radius: " << radius;
 }
 
 CPoint3D CModel::getSize()
@@ -149,9 +141,26 @@ CPoint3D CModel::getSize()
     if(size == CPoint3D())
     {
         CalculateBBAndSize(scene->mRootNode);
-        size.x = ceil(BBMax.x - BBMin.x);
-        size.y = ceil(BBMax.y - BBMin.y);
-        size.z = ceil(BBMax.z - BBMin.z);
+        realSize = BBMax - BBMin;
+        size.x = ceil(realSize.x);
+        size.y = ceil(realSize.y);
+        size.z = ceil(realSize.z);
     }
     return size;
+}
+
+CPoint3D CModel::getCenter()
+{
+    center = (BBMax + BBMin) / 2.f;
+    return center;
+}
+
+float CModel::getRadius()
+{
+    //Calculate radius of the model;
+    float distX = BBMax.x - center.x;
+    float distY = BBMax.y - center.y;
+    float distZ = BBMax.z - center.z;
+    radius = max(max(distX, distY), distZ);
+    return radius;
 }

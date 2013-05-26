@@ -33,6 +33,7 @@ private:
     int selectedPosition;
     void getWorldMouseCoord(int x, int y, float &wx, float &wy, float &wz);
     bool mouseMove;
+    void setEditMode(EditModes em){return;}
 signals:
     void changeTab();
 public slots:
