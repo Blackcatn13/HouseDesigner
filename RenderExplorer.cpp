@@ -97,9 +97,9 @@ void RenderExplorer::mousePressEvent(QMouseEvent *event)
     getWorldMouseCoord(event->x(),event->y(), WX, WY, WZ);
     size_t indx;
     //Round nearest middle.
-    WX = floor((WX*2)/2 + 0.5);
-    WY = floor((WY*2)/2 + 0.5);
-    WZ = floor((WZ*2)/2 + 0.5);
+    //WX = floor((WX*2)/2 + 0.5);
+    //WY = floor((WY*2)/2 + 0.5);
+    //WZ = floor((WZ*2)/2 + 0.5);
     qDebug() << WX << " " << WY << " " << WZ;
     ModelInfo pickedModel = CScenary::getInstance()->getPickedObject3D(WX, WY, WZ, indx);
     if (indx != -1)
@@ -108,7 +108,7 @@ void RenderExplorer::mousePressEvent(QMouseEvent *event)
         selectedPosition = indx;
         emit changeTab();
         //Now we get de pickedModel (info of the picked model) and own index (indx);
-        qDebug() << "pickedModel" << pickedModel.modelName.c_str() << "type" << pickedModel.type << "index" << indx;
+        qDebug() << "pickedModel" << pickedModel.textureName.ObjectName.c_str() << "type" << pickedModel.type << "index" << indx;
         //qDebug() << "Index" << indx;
     }
 }
