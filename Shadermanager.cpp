@@ -27,20 +27,13 @@ CShaderManager* CShaderManager::GetInstance()
 
 void CShaderManager::CleanUp()
 {
-    if(m_ShaderP != NULL)
+    for(ProgramMap::iterator it = m_ProgramShaders.begin(); it != m_ProgramShaders.end(); ++it)
     {
-        m_ShaderP->removeAllShaders();
-        delete m_ShaderP;
+        it->second->removeAllShaders();
+        delete m_ProgramShaders[it->first];
     }
 
-    for(MapNames::iterator it = m_ShadersName.begin(); it != m_ShadersName.end(); ++it)
-    {
-        delete m_VertexShaders[it->first];
-        delete m_FragmentShaders[it->first];
-    }
-
-    m_VertexShaders.clear();
-    m_FragmentShaders.clear();
+    m_ProgramShaders.clear();
     m_ShadersName.clear();
 
     if(m_ShaderManager != NULL)
@@ -49,20 +42,8 @@ void CShaderManager::CleanUp()
 
 bool CShaderManager::setShader(sType type)
 {
-    MapNames::iterator ShaderIter;
-    ShaderIter = m_ShadersName.find(type);
-    if (ShaderIter != m_ShadersName.end())
-    {
-        m_SelShader = type;
-        if(m_SelShader != NOSHADER)
-        {
-            m_ShaderP->removeAllShaders();
-            m_ShaderP->addShader(m_FragmentShaders[m_SelShader]);
-            m_ShaderP->addShader(m_VertexShaders[m_SelShader]);
-        }
-        return true;
-    }
-    return false;
+    m_SelShader = type;
+    return true;
 }
 
 void CShaderManager::UseActiveShader(ModelInfo mi)
@@ -71,9 +52,21 @@ void CShaderManager::UseActiveShader(ModelInfo mi)
     if(mi.type == WALL || mi.type == FLOOR)
     {
         if(m_SelShader != ONETEXTURE)
+        {
             setShader(ONETEXTURE);
+            qDebug() << "Changing to ONETEXTURE";
+        }
+    }
+    if(mi.type == OBJECT)
+    {
+        if(m_SelShader != TEXTURE)
+        {
+            setShader(TEXTURE);
+            qDebug() << "Changing to TEXTURE";
+        }
     }
 
+    QGLShaderProgram *m_ShaderP = m_ProgramShaders[m_SelShader];
     bool r;
     r = m_ShaderP->bind();
     if(!r)
@@ -139,7 +132,7 @@ void CShaderManager::UseActiveShader(ModelInfo mi)
 void CShaderManager::ReleaseActiveShader()
 {
     glDisable(GL_TEXTURE_2D);
-    m_ShaderP->release();
+    m_ProgramShaders[m_SelShader]->release();
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, 0);
     glActiveTexture(GL_TEXTURE1);
@@ -156,21 +149,29 @@ void CShaderManager::ReleaseActiveShader()
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void CShaderManager::CompileShaders(const QGLContext *c)
+void CShaderManager::initShaders(const QGLContext* sc, sType type)
 {
+    m_ShaderC = sc;
+    m_SelShader = type;
+    m_ProgramShaders[SIMPLE] = new QGLShaderProgram(m_ShaderC);
+    m_ProgramShaders[TEXTURE] = new QGLShaderProgram(m_ShaderC);
+    m_ProgramShaders[ONETEXTURE] = new QGLShaderProgram(m_ShaderC);
+
     bool r;
     // Create Shaders and compile it for best performance.
     for (MapNames::iterator it = m_ShadersName.begin(); it != m_ShadersName.end(); ++it)
     {
-        QGLShader *Fshader = new QGLShader(QGLShader::Fragment, c);
+        QGLShader *Fshader = new QGLShader(QGLShader::Fragment, m_ShaderC);
         r = Fshader->compileSourceFile(QString(it->second.c_str()) + ".frag");
         if(!r)
             qDebug() << "Fragment: " << Fshader->log();
-        QGLShader *Vshader = new QGLShader(QGLShader::Vertex, c);
+        QGLShader *Vshader = new QGLShader(QGLShader::Vertex, m_ShaderC);
         r = Vshader->compileSourceFile(QString(it->second.c_str()) + ".vert");
         if(!r)
             qDebug() << "Vertex: " << Vshader->log();
-        m_FragmentShaders[it->first] = Fshader;
-        m_VertexShaders[it->first] = Vshader;
+        // Add the shaders to the program
+        m_ProgramShaders[it->first]->addShader(Vshader);
+        m_ProgramShaders[it->first]->addShader(Fshader);
+        m_ProgramShaders[it->first]->link();
     }
 }

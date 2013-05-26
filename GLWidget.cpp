@@ -68,10 +68,7 @@ void GLWidget::initializeGL()
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
 
-    shader = new QGLShaderProgram(this->context());
-    CShaderManager::GetInstance()->setShaderProgram(shader);
-    CShaderManager::GetInstance()->CompileShaders(this->context());
-    CShaderManager::GetInstance()->setShader(SIMPLE);
+    CShaderManager::GetInstance()->initShaders(this->context(), SIMPLE);
     RenderManager::GetInstance()->GetRenderMode(EDITOR_2D)->SetCameraProjection(INIT_WIDTH, INIT_HEIGHT);
 
 }
