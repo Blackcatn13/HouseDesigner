@@ -236,9 +236,8 @@ void CScenary::DrawCeil()
         for(size_t i = 0; i < m_FloorModels[activeFloor + 1].size(); ++i)
         {
             ModelInfo model = m_FloorModels[activeFloor + 1][i];
-            CModelManager::GetInstance()->getModelSize(model.modelName);
-            float rad = CModelManager::GetInstance()->getModelRadius(model.modelName) + 0.2;
-            CPoint3D center = CModelManager::GetInstance()->getModelCenter(model.modelName);
+            float rad = sqrt(pow(m_gridMaxX/2.f,2) + pow(m_gridMaxZ/2.f,2));
+            CPoint3D center = CPoint3D(m_gridMaxX/2, 0, m_gridMaxZ/2);
             if (camType != FP)
                 drawModel = true;
             else
