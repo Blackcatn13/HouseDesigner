@@ -418,6 +418,7 @@ void Render2D::AddObject()
     ii.textureName.ObjectName = name;
     ii.rotation = CPoint3D(0, rotation * 90, 0);
     ii.position = CPoint3D((firstTile.x + secondTile.x) / 2, scenary->getHeightForModels(), (firstTile.y + secondTile.y) / 2);
+    CModelManager::GetInstance()->getModelSize(ii.modelName);
     ii.center = CModelManager::GetInstance()->getModelCenter(ii.modelName);
     ii.radius = CModelManager::GetInstance()->getModelRadius(ii.modelName);
     ii.textureName.color.c1 = CPoint3D(0.5, 0.5, 0.5);
