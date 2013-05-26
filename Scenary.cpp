@@ -603,11 +603,16 @@ ModelInfo CScenary::getPickedObject3D(float x, float y, float z, size_t &index)
                                  model.position.y+realSize.y/2.f,
                                  model.position.z+realSize.z/2.f);
         CPoint3D point = spherePos - CPoint3D(x, y, z);
+        float r;
         // 2D piking
         if(y == 0)
+        {
             point.y = 0;
+            r = pow(0.5, 2);
+        }
+        else
+            r = pow(model.radius, 2);
         float pos = point.Dot(point);
-        float r = pow(model.radius, 2);
         if(pos <= r)
         {
             index = m_PickableWall[i].second;
@@ -621,11 +626,17 @@ ModelInfo CScenary::getPickedObject3D(float x, float y, float z, size_t &index)
         model = m_PickableObject[i].first;
         CPoint3D spherePos = model.position + model.center;
         CPoint3D point = spherePos - CPoint3D(x, y, z);
+        float r;
         // 2D piking
         if(y == 0)
+        {
             point.y = 0;
+            r = model.radius;
+        }
+        else
+            r = model.radius*2;
         float pos = point.Dot(point);
-        float r = pow(model.radius, 2);
+        r = pow(r, 2);
         if(pos <= r)
         {
             index = m_PickableObject[i].second;
