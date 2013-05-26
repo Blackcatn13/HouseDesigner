@@ -673,11 +673,11 @@ ModelInfo CScenary::getPickedObject3D(float x, float y, float z, size_t &index)
         //2D picking
         if (y == 0)
             //If model picking the sphere would be of radius 0.5
-            cond = pow(x-model.position.x,2) + pow(z-model.position.z,2) <= pow(model.radius,2);
+            cond = pow(x-model.position.x,2) + pow(z-model.position.z,2) <= pow(1,2);
         //3D picking
         else
             cond = pow(x-model.position.x,2) + pow(y-model.position.y,2)
-                    + pow(z-model.position.z,2) <= pow(model.radius,2);
+                    + pow(z-model.position.z,2) <= pow(1,2);
         if (cond)
         {
             index = m_PickableStair[i].second;
