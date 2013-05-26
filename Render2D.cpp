@@ -568,6 +568,7 @@ void Render2D::AddStair()
     m.rotation = CPoint3D(0, rotation * 90, 0);
     m.type = t;
     m.modelName = scenary->getActiveModel();
+    CModelManager::GetInstance()->getModelSize(m.modelName);
     m.center = CModelManager::GetInstance()->getModelCenter(m.modelName);
     m.radius = CModelManager::GetInstance()->getModelRadius(m.modelName);
     CPoint3D position;
