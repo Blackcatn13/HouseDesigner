@@ -52,18 +52,12 @@ void CShaderManager::UseActiveShader(ModelInfo mi)
     if(mi.type == WALL || mi.type == FLOOR)
     {
         if(m_SelShader != ONETEXTURE)
-        {
             setShader(ONETEXTURE);
-            qDebug() << "Changing to ONETEXTURE";
-        }
     }
     if(mi.type == OBJECT)
     {
         if(m_SelShader != TEXTURE)
-        {
             setShader(TEXTURE);
-            qDebug() << "Changing to TEXTURE";
-        }
     }
 
     QGLShaderProgram *m_ShaderP = m_ProgramShaders[m_SelShader];

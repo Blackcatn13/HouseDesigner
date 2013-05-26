@@ -135,9 +135,9 @@ bool CScenary::Draw()
                 glScalef(model.scale.x, model.scale.y, model.scale.z);
                 modelManager->Draw(model.modelName);
             glPopMatrix();
+            shader->ReleaseActiveShader();
         }
     }
-    shader->ReleaseActiveShader();
     m_PickableObject.clear();
     for(size_t i = 0; i < m_ObjectModels[activeFloor].size(); ++i)
     {
@@ -170,9 +170,9 @@ bool CScenary::Draw()
                 glScalef(model.scale.x, model.scale.y, model.scale.z);
                 modelManager->Draw(model.modelName);
             glPopMatrix();
+            shader->ReleaseActiveShader();
         }
     }
-    shader->ReleaseActiveShader();
     return true;
 }
 
@@ -189,7 +189,7 @@ void CScenary::DrawFloor()
         for(size_t i = 0; i < m_FloorModels[activeFloor].size(); ++i)
         {
             ModelInfo model = m_FloorModels[activeFloor][i];
-            float rad = sqrt(pow(m_gridMaxX/2,2) + pow(m_gridMaxZ/2,2));
+            float rad = sqrt(pow(m_gridMaxX/2.f,2) + pow(m_gridMaxZ/2.f,2));
             CPoint3D center = CPoint3D(m_gridMaxX/2, 0, m_gridMaxZ/2);
             if (camType != FP)
                 drawModel = true;
