@@ -277,7 +277,7 @@ void CScenary::DrawCeil()
 void CScenary::DrawStairs()
 {
     CModelManager *modelManager = CModelManager::GetInstance();
-    Camera *cam = CameraManager::GetInstance()->getCurrentCamera();
+    Camera *cam = CameraManager::GetInstance()->getCurrentCamera();        
     Views camType = cam->getCameraType();
     CShaderManager *shader = CShaderManager::GetInstance();
     bool drawModel = true;
@@ -291,12 +291,12 @@ void CScenary::DrawStairs()
                 drawModel = true;
             else
                 drawModel = CFrustrumManager::GetInstance()->sphereInFrustum(
-                            model.position, 1.f);
+                            model.position, model.radius*2);
             if (m_sphereDebug)
             {
                 glPushMatrix();
                     glTranslatef(model.position.x, model.position.y, model.position.z);
-                    glutWireSphere(2, 16, 16);
+                    glutWireSphere(model.radius*2, 16, 16);
                 glPopMatrix();
             }
             if(drawModel)
@@ -673,11 +673,11 @@ ModelInfo CScenary::getPickedObject3D(float x, float y, float z, size_t &index)
         //2D picking
         if (y == 0)
             //If model picking the sphere would be of radius 0.5
-            cond = pow(x-model.position.x,2) + pow(z-model.position.z,2) <= pow(1,2);
+            cond = pow(x-model.position.x,2) + pow(z-model.position.z,2) <= pow(model.radius*2,2);
         //3D picking
         else
             cond = pow(x-model.position.x,2) + pow(y-model.position.y,2)
-                    + pow(z-model.position.z,2) <= pow(1,2);
+                    + pow(z-model.position.z,2) <= pow(model.radius*2,2);
         if (cond)
         {
             index = m_PickableStair[i].second;
