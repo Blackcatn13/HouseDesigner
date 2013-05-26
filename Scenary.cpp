@@ -613,7 +613,7 @@ ModelInfo CScenary::getPickedObject3D(float x, float y, float z, size_t &index)
     //Pickable wall
     for (size_t i = 0; i < m_PickableWall.size(); ++i)
     {
-        ModelInfo model = m_PickableWall[i].first;
+        model = m_PickableWall[i].first;
         CModelManager::GetInstance()->getModelSize(model.modelName);
         CPoint3D realSize = CModelManager::GetInstance()->getModelRealSize(model.modelName);
         CPoint3D spherePos;
@@ -625,8 +625,19 @@ ModelInfo CScenary::getPickedObject3D(float x, float y, float z, size_t &index)
             spherePos = CPoint3D(model.position.x+realSize.x/2.f,
                                  model.position.y+realSize.y/2.f,
                                  model.position.z+realSize.z/2.f);
-        if (pow(x-spherePos.x,2) + pow(y-spherePos.y,2)
-                + pow(z-spherePos.z,2) <= pow(model.radius,2))
+        bool cond = false;
+        //2D picking
+        if (y == 0)
+        {
+            //If model picking the sphere would be of radius 0.5
+            cond = pow(x-spherePos.x,2) + pow(z-spherePos.z,2)
+                    <= pow(0.5,2);
+        }
+        //3D picking
+        else
+            cond = pow(x-spherePos.x,2) + pow(y-spherePos.y,2)
+                    + pow(z-spherePos.z,2) <= pow(model.radius,2);
+        if (cond)
         {
             index = m_PickableWall[i].second;
             return model;
@@ -638,8 +649,16 @@ ModelInfo CScenary::getPickedObject3D(float x, float y, float z, size_t &index)
     {
         model = m_PickableObject[i].first;
         CPoint3D spherePos = model.position + model.center;
-        if (pow(x-spherePos.x,2) + pow(y-spherePos.y,2)
-                + pow(z-spherePos.z,2) <= pow(model.radius,2))
+        bool cond = false;
+        //2D picking
+        if (y == 0)
+            cond = pow(x-spherePos.x,2) + pow(z-spherePos.z,2)
+                    <= pow(model.radius,2);
+        //3D picking
+        else
+            cond = pow(x-spherePos.x,2) + pow(y-spherePos.y,2)
+                    + pow(z-spherePos.z,2) <= pow(model.radius,2);
+        if (cond)
         {
             index = m_PickableObject[i].second;
             return model;
@@ -650,8 +669,16 @@ ModelInfo CScenary::getPickedObject3D(float x, float y, float z, size_t &index)
     for (size_t i = 0; i < m_PickableStair.size(); ++i)
     {
         model = m_PickableStair[i].first;
-        if (pow(x-model.position.x,2) + pow(y-model.position.y,2)
-                + pow(z-model.position.z,2) <= pow(model.radius,2))
+        bool cond = false;
+        //2D picking
+        if (y == 0)
+            //If model picking the sphere would be of radius 0.5
+            cond = pow(x-model.position.x,2) + pow(z-model.position.z,2) <= pow(model.radius,2);
+        //3D picking
+        else
+            cond = pow(x-model.position.x,2) + pow(y-model.position.y,2)
+                    + pow(z-model.position.z,2) <= pow(model.radius,2);
+        if (cond)
         {
             index = m_PickableStair[i].second;
             return model;
